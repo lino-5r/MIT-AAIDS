@@ -1,0 +1,16 @@
+# Dataset (large; host separately or use Drive — GitHub limit 100MB)
+*.h5
+SVHN_single_grey1.h5
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# OS / editor
+.DS_Store
+Thumbs.db
