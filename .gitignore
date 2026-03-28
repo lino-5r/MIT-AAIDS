@@ -1,15 +1,36 @@
-# Dataset (large; host separately or use Drive — GitHub limit 100MB)
+# --- Track in git: *.ipynb and text/tabular data (e.g. *.csv, *.json) ---
+# --- Do not track binaries / large blobs ---
+
+# Documents (binary)
+*.pdf
+*.docx
+*.doc
+*.pptx
+*.xlsx
+
+# HDF5 / ML binary data (use Drive or release assets, not git)
 *.h5
-SVHN_single_grey1.h5
+*.hdf5
+
+# Python / pickles / arrays
+__pycache__/
+*.py[cod]
+*.pkl
+*.pickle
+*.npy
+*.npz
+.venv/
+venv/
+
+# Images (optional — remove lines below if you want figures in repo)
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
 
 # Jupyter
 .ipynb_checkpoints/
-
-# Python
-__pycache__/
-*.py[cod]
-.venv/
-venv/
 
 # OS / editor
 .DS_Store
