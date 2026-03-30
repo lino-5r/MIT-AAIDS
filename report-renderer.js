@@ -977,12 +977,8 @@
   function renderCoverInner(d, dateStr) {
     return (
       '<header class="cover">\n' +
-      '      <div class="cover-shapes" aria-hidden="true"></div>\n' +
       '      <div class="cover-inner">\n' +
       '        <div class="cover-brand">\n' +
-      '          <a class="brand-logo-link" href="#toc" title="Great Learning">\n' +
-      '            <img class="brand-logo-img" src="assets/greatlearning-brand.svg" alt="Great Learning" />\n' +
-      "          </a>\n" +
       "        </div>\n" +
       '        <div class="cover-title-block">\n' +
       "          <h1>" +
@@ -1030,7 +1026,6 @@
     }
     return (
       '    <div class="report-brand">\n' +
-      '      <img class="report-brand-logo" src="assets/greatlearning-brand.svg" alt="Great Learning" />\n' +
       '      <div class="report-brand-meta">\n' +
       "        <strong>" +
       escapeHtml(d.brand_strong) +

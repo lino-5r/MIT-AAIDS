@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SVHN Digit Recognition — Deep Learning Report</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gl-blue: #006bd9;
+      --gl-blue-dark: #1b23b0;
+      --ink: #111111;
+      --gray-bg: #f4f6f9;
+      --gray-text: #3a3f47;
+      --gray-muted: #6b7280;
+      --callout-bg: linear-gradient(135deg, #f0f6ff 0%, #eef2fb 100%);
+      --border: #d5dde8;
+      --navy: var(--gl-blue-dark);
+      --navy-dark: #141a6e;
+      --sidebar-w: 290px;
+      --content-max: 54rem;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Inter, "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.5;
+      color: var(--ink);
+      background: #f0f2f5;
+    }
+
+    /* ===== OUTER FLEX WRAPPER (centers sidebar + content together) ===== */
+    .web-wrapper {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      max-width: calc(var(--content-max) + var(--sidebar-w) + 20px);
+      margin: 0 auto;
+      min-height: 100vh;
+    }
+
+    /* ===== SIDEBAR NAV ===== */
+    .sidebar-toggle {
+      display: none;
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      z-index: 1100;
+      background: var(--gl-blue-dark);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+      line-height: 1;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      flex-shrink: 0;
+      width: var(--sidebar-w);
+      height: 100vh;
+      overflow-y: auto;
+      background: #fff;
+      border-right: 1px solid var(--border);
+      box-shadow: 2px 0 12px rgba(0,0,0,0.06);
+      z-index: 1000;
+      padding: 0 0 2rem;
+      transition: transform 0.25s ease;
+    }
+
+    .sidebar-logo {
+      display: block;
+      padding: 1.15rem 1.25rem 0.9rem;
+      border-bottom: 1px solid rgba(0, 107, 217, 0.15);
+      margin-bottom: 0.25rem;
+      line-height: 0;
+    }
+
+    .sidebar-logo img {
+      display: block;
+      height: 36px;
+      width: auto;
+      max-width: 100%;
+    }
+
+    .sidebar-title {
+      font-family: Nunito, Inter, sans-serif;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--gl-blue-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0.85rem 1.25rem 0.6rem;
+      margin: 0;
+      border-bottom: 2px solid var(--gl-blue);
+    }
+
+    .sidebar-nav {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar-nav li {
+      margin: 0;
+    }
+
+    .sidebar-nav a {
+      display: block;
+      padding: 0.5rem 1.25rem;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--gray-text);
+      text-decoration: none;
+      border-left: 3px solid transparent;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+
+    .sidebar-nav a:hover {
+      background: var(--gray-bg);
+      color: var(--gl-blue-dark);
+    }
+
+    .sidebar-nav a.active {
+      background: rgba(0, 107, 217, 0.07);
+      border-left-color: var(--gl-blue);
+      color: var(--gl-blue-dark);
+      font-weight: 700;
+    }
+
+    .web-content {
+      flex: 1;
+      min-width: 0;
+      min-height: 100vh;
+    }
+
+    /* Mobile: sidebar off-screen by default */
+    @media (max-width: 960px) {
+      .web-wrapper { display: block; }
+      .sidebar-toggle { display: block; }
+
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        transform: translateX(-100%);
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.3);
+        z-index: 999;
+      }
+      .sidebar-overlay.visible {
+        display: block;
+      }
+    }
+
+    /* ===== REPORT CONTENT ===== */
+    .sheet {
+      background: #fff;
+      box-shadow: 0 2px 14px rgba(0, 0, 0, 0.08);
+    }
+
+    .cover-sheet {
+      padding: 2.5rem 2.25rem 2rem;
+      margin-bottom: 0;
+    }
+
+    .cover {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 38px 0 0 20px;
+      position: relative;
+      overflow: visible;
+    }
+
+    .cover-inner {
+      position: relative;
+      z-index: 1;
+      padding: 0;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .cover-title-block {
+      flex: 1;
+      max-width: 36rem;
+      background: unset;
+    }
+
+    .cover h1 {
+      margin: 0 0 0.35em;
+      font-family: Nunito, Inter, sans-serif;
+      font-size: 2.35rem;
+      font-weight: 800;
+      color: var(--gl-blue-dark);
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+
+    .cover .subtitle {
+      font-family: Nunito, Inter, sans-serif;
+      font-size: 1.15rem;
+      color: var(--gl-blue);
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .cover-client {
+      margin: 18px 0 0;
+      padding-left: 0;
+      font-size: 0.92rem;
+      color: var(--gray-muted);
+      font-weight: 500;
+      letter-spacing: 0.01em;
+    }
+
+    .cover-footer {
+      margin-top: 2rem;
+      padding-top: 13px;
+      padding-left: 0;
+      font-size: 0.82rem;
+      color: var(--gray-muted);
+      border-top: 1px solid var(--border);
+      padding-bottom: 15px;
+    }
+
+    .report-brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(0, 107, 217, 0.18);
+    }
+
+    .report-brand-logo {
+      display: block;
+      height: 40px;
+      width: auto;
+      max-width: 220px;
+      background: transparent;
+      padding: 0.2rem 0.35rem 0.2rem 0;
+    }
+
+    .report-brand-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+      font-size: 0.78rem;
+      color: var(--gray-muted);
+      line-height: 1.3;
+    }
+
+    .report-brand-meta strong {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: 0.02em;
+    }
+
+    .page {
+      padding: 1.5rem 2.25rem 3rem;
+    }
+
+    .page.cover-page {
+      padding: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    /* Hide the inline TOC block — sidebar replaces it */
+    .toc-block { display: none; }
+
+    /* Logo moved to sidebar; hide the cover duplicate */
+    .cover-brand { display: none; }
+
+    .chapter-wrap {
+      margin: 2.5rem -2.25rem 2rem;
+      width: calc(100% + 4.5rem);
+      max-width: none;
+    }
+
+    .chapter {
+      background: linear-gradient(105deg, var(--gl-blue-dark) 0%, #252db8 48%, var(--gl-blue) 100%);
+      color: #fff;
+      padding: 1rem 2.25rem 1.05rem;
+      margin: 0;
+      box-shadow: 0 2px 12px rgba(27, 35, 176, 0.2);
+    }
+
+    .chapter-label {
+      font-family: Inter, sans-serif;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      opacity: 0.88;
+      margin-bottom: 0.3rem;
+    }
+
+    .chapter h2 {
+      font-family: Nunito, Inter, sans-serif;
+      margin: 0;
+      font-size: 1.38rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    /* ----- Typography ----- */
+    h3 {
+      font-family: Nunito, Inter, sans-serif;
+      color: var(--gl-blue-dark);
+      font-size: 1.12rem;
+      font-weight: 700;
+      margin: 1.75rem 0 0.65rem;
+      padding-top: 0.35rem;
+      border-top: 1px solid var(--border);
+    }
+
+    h3:first-of-type {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    h4 {
+      font-family: Nunito, Inter, sans-serif;
+      color: var(--gl-blue-dark);
+      font-size: 1.02rem;
+      font-weight: 700;
+      margin: 1.25rem 0 0.5rem;
+    }
+
+    h3.ann2-subhead {
+      font-family: Nunito, Inter, sans-serif;
+      color: var(--gl-blue-dark);
+      font-size: 1.06rem;
+      font-weight: 700;
+      margin: 1.5rem 0 0.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+
+    p {
+      margin: 0.65rem 0;
+      color: var(--gray-text);
+    }
+
+    ul {
+      margin: 0.5rem 0 1rem;
+      padding-left: 1.25rem;
+      color: var(--gray-text);
+    }
+
+    li { margin: 0.35rem 0; }
+
+    /* ----- Table ----- */
+    table.report-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    table.report-table thead {
+      background: linear-gradient(180deg, var(--gl-blue-dark) 0%, #1e2699 100%);
+      color: #fff;
+    }
+
+    table.report-table th,
+    table.report-table td {
+      padding: 0.65rem 0.75rem;
+      text-align: left;
+      vertical-align: top;
+      border: 1px solid var(--border);
+    }
+
+    table.report-table tbody tr:nth-child(even) { background: var(--gray-bg); }
+    table.report-table tbody tr:nth-child(odd) { background: #fff; }
+
+    #table-models th:nth-child(1),
+    #table-models td:nth-child(1) { white-space: nowrap; }
+    #table-models th:nth-child(3),
+    #table-models td:nth-child(3) { width: 1%; white-space: nowrap; }
+
+    .caption {
+      font-size: 0.85rem;
+      color: var(--gray-muted);
+      margin: -0.5rem 0 1.5rem;
+      text-align: center;
+    }
+
+    .caption.md-content { color: var(--gray-muted); }
+    .caption.md-content p { margin: 0.35rem 0 0; text-align: center; color: inherit; }
+    .caption.md-content p:first-child { margin-top: 0; }
+
+    .callout {
+      background: var(--callout-bg);
+      border: 1px solid rgba(0, 107, 217, 0.22);
+      border-left: 4px solid var(--gl-blue);
+      border-radius: 4px;
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+    }
+
+    .callout > strong {
+      font-family: Nunito, Inter, sans-serif;
+      color: var(--gl-blue-dark);
+      display: block;
+      font-size: 1.05rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .callout-body { color: var(--gray-text); }
+
+    .md-content { color: var(--gray-text); }
+    .md-content strong, .md-content em, .md-content b, .md-content i { display: inline; }
+    .md-content em, .md-content i { font-style: italic; }
+    .md-content strong, .md-content b { font-weight: 600; }
+    .md-content p { margin: 0.65rem 0; }
+    .md-content p:first-child { margin-top: 0; }
+    .md-content p:last-child { margin-bottom: 0; }
+    .md-content ul, .md-content ol { margin: 0.5rem 0 1rem; padding-left: 1.25rem; text-align: left; }
+    .md-content code { font-size: 0.9em; background: rgba(0,0,0,0.06); padding: 0.1em 0.35em; border-radius: 3px; }
+    .md-content pre { text-align: left; overflow-x: auto; padding: 0.75rem 1rem; background: rgba(0,0,0,0.05); border-radius: 4px; font-size: 0.88rem; }
+
+    .md-content table { width: 100%; max-width: 100%; border-collapse: collapse; font-size: 0.86rem; margin: 0.75rem 0 1rem; line-height: 1.35; }
+    .md-content table thead { background: rgba(0, 107, 217, 0.08); }
+    .md-content table th, .md-content table td { border: 1px solid var(--border); padding: 0.4rem 0.55rem; text-align: right; vertical-align: middle; }
+    .md-content table th:first-child, .md-content table td:first-child { text-align: left; }
+    .md-content table tbody tr:nth-child(even) { background: rgba(0,0,0,0.02); }
+    .md-content a[href^="http"] { color: var(--gl-blue); text-decoration: underline; }
+
+    .figure-box > .figure-caption { text-align: center; margin: 0.85rem 0 0; color: var(--gray-muted); font-size: 0.92rem; line-height: 1.45; }
+    .figure-box .figure-caption.md-content { text-align: center; margin-top: 0.85rem; color: var(--gray-muted); font-size: 0.92rem; }
+    .figure-box .figure-caption.md-content p { margin: 0.35rem 0 0; text-align: center; }
+    .figure-box .figure-caption.md-content p:first-child { margin-top: 0; }
+
+    .figure-box {
+      background: var(--gray-bg);
+      border: 1px dashed rgba(0, 107, 217, 0.35);
+      border-radius: 6px;
+      padding: 2rem 1rem;
+      text-align: center;
+      color: var(--gray-muted);
+      font-size: 0.9rem;
+      margin: 1rem 0;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
+    }
+
+    .figure-box img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+
+    .figure-box:has(.figure-svg-wrap) {
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 0.5rem 0;
+      color: var(--gray-text);
+    }
+
+    .figure-svg-wrap { display: block; width: 100%; max-width: 100%; margin: 0 auto; line-height: 0; }
+    .figure-svg-wrap svg { max-width: 100%; height: auto; display: block; margin: 0 auto; vertical-align: middle; }
+
+    .appendix-note { font-size: 0.9rem; color: var(--gray-text); }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .cover h1 { font-size: 1.6rem; }
+      .page { padding: 1rem 1rem 2rem; }
+      .chapter-wrap { margin-left: -1rem; margin-right: -1rem; width: calc(100% + 2rem); }
+      .chapter { padding-left: 1rem; padding-right: 1rem; }
+      .cover-sheet { padding: 1.5rem 1rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar toggle (mobile) -->
+  <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle navigation">&#9776;</button>
+
+  <!-- Overlay for mobile sidebar -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <div class="web-wrapper">
+    <!-- Sticky sidebar TOC — logo + nav populated by JS after render -->
+    <nav class="sidebar" id="sidebar">
+      <a class="sidebar-logo" id="sidebar-logo" href="#" title="Great Learning">
+        <img src="assets/greatlearning-brand.svg" alt="Great Learning" />
+      </a>
+      <div class="sidebar-title">Contents</div>
+      <ul class="sidebar-nav" id="sidebar-nav"></ul>
+    </nav>
+
+    <!-- Report content -->
+    <div class="web-content">
+      <div id="report-load-error" style="display:none;max-width:40rem;margin:2rem auto;padding:1.25rem;font-family:Inter,system-ui,sans-serif;background:#fff8e6;border:1px solid #e6c35c;border-radius:8px;color:#5c4d00;line-height:1.5;"></div>
+
+      <div id="report-cover" class="page cover-page sheet cover-sheet"></div>
+      <main id="report-main" class="page sheet body-sheet" hidden></main>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.8/dist/purify.min.js"></script>
+  <script src="report-renderer.js"></script>
+  <script>
+    (function () {
+      var REPORT_JSON_FILE = "report-contents.json";
+
+      var errEl = document.getElementById("report-load-error");
+      var cover = document.getElementById("report-cover");
+      var main  = document.getElementById("report-main");
+
+      function renderReport(data) {
+        var R = window.ReportRenderer;
+        var d = R.mergeData(data);
+        var dateStr = R.resolveDateString(d);
+        document.title = d.cover_title + " — Report";
+        cover.innerHTML = R.renderCoverInner(d, dateStr);
+        main.innerHTML = R.renderMainInner(d);
+        main.hidden = false;
+        R.refreshLiveDate(d);
+        buildSidebar();
+      }
+
+      /* ===== Sidebar: build from chapter headings ===== */
+      function buildSidebar() {
+        var nav = document.getElementById("sidebar-nav");
+        var chapters = document.querySelectorAll(".chapter-wrap");
+        nav.innerHTML = "";
+        chapters.forEach(function (wrap) {
+          var id = wrap.id;
+          var h2 = wrap.querySelector("h2");
+          if (!id || !h2) return;
+          var li = document.createElement("li");
+          var a = document.createElement("a");
+          a.href = "#" + id;
+          a.textContent = h2.textContent;
+          a.addEventListener("click", closeMobileSidebar);
+          li.appendChild(a);
+          nav.appendChild(li);
+        });
+        observeSections();
+      }
+
+      /* ===== Active-section highlighting via IntersectionObserver ===== */
+      function observeSections() {
+        var links = document.querySelectorAll("#sidebar-nav a");
+        if (!links.length) return;
+
+        var observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              links.forEach(function (a) { a.classList.remove("active"); });
+              var match = document.querySelector('#sidebar-nav a[href="#' + entry.target.id + '"]');
+              if (match) match.classList.add("active");
+            }
+          });
+        }, { rootMargin: "-10% 0px -80% 0px", threshold: 0 });
+
+        document.querySelectorAll(".chapter-wrap").forEach(function (el) {
+          observer.observe(el);
+        });
+      }
+
+      /* ===== Mobile sidebar open/close ===== */
+      var sidebar = document.getElementById("sidebar");
+      var overlay = document.getElementById("sidebar-overlay");
+      var toggle  = document.getElementById("sidebar-toggle");
+
+      function closeMobileSidebar() {
+        sidebar.classList.remove("open");
+        overlay.classList.remove("visible");
+      }
+
+      toggle.addEventListener("click", function () {
+        var open = sidebar.classList.toggle("open");
+        overlay.classList.toggle("visible", open);
+      });
+      overlay.addEventListener("click", closeMobileSidebar);
+
+      /* ===== Data loading (same as original) ===== */
+      function clearError() {
+        errEl.style.display = "none";
+        errEl.innerHTML = "";
+      }
+
+      function showError(msg, opts) {
+        opts = opts || {};
+        cover.innerHTML = "";
+        main.innerHTML = "";
+        main.hidden = true;
+        errEl.style.display = "block";
+        errEl.innerHTML = "";
+        var p = document.createElement("p");
+        p.textContent = msg;
+        errEl.appendChild(p);
+        var row = document.createElement("p");
+        row.style.marginTop = "0.75rem";
+        var input = document.createElement("input");
+        input.type = "file";
+        input.accept = ".json,application/json";
+        input.style.marginRight = "0.5rem";
+        input.addEventListener("change", function () {
+          var f = input.files && input.files[0];
+          if (!f) return;
+          var reader = new FileReader();
+          reader.onload = function () {
+            try { renderReport(JSON.parse(reader.result)); clearError(); }
+            catch (err) { alert("Could not parse JSON: " + err.message); }
+          };
+          reader.readAsText(f);
+        });
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = "Choose " + REPORT_JSON_FILE + "\u2026";
+        btn.style.font = "inherit";
+        btn.style.padding = "0.4rem 0.75rem";
+        btn.style.cursor = "pointer";
+        btn.addEventListener("click", function () { input.click(); });
+        row.appendChild(btn);
+        row.appendChild(document.createTextNode(" \u2014 load the file from your project folder."));
+        errEl.appendChild(row);
+        if (opts.showRetry) {
+          var retry = document.createElement("button");
+          retry.type = "button";
+          retry.textContent = "Try loading again";
+          retry.style.font = "inherit";
+          retry.style.padding = "0.4rem 0.75rem";
+          retry.style.marginTop = "0.75rem";
+          retry.style.cursor = "pointer";
+          retry.addEventListener("click", function () { tryFetch(); });
+          errEl.appendChild(retry);
+        }
+      }
+
+      function jsonUrl() {
+        return new URL(REPORT_JSON_FILE, window.location.href).href;
+      }
+
+      function tryFetch() {
+        clearError();
+        fetch(jsonUrl(), { cache: "no-store" })
+          .then(function (r) {
+            if (!r.ok) throw new Error("Server returned " + r.status);
+            return r.json();
+          })
+          .then(function (data) { renderReport(data); })
+          .catch(function (e) {
+            var isFile = window.location.protocol === "file:";
+            var hint = isFile
+              ? "Opened as file:// \u2014 browsers block loading " + REPORT_JSON_FILE + ". Use http://localhost or pick the file below."
+              : "Could not load " + jsonUrl() + ". Keep " + REPORT_JSON_FILE + " next to this HTML.";
+            showError(hint + " " + e.message, { showRetry: !isFile });
+          });
+      }
+
+      tryFetch();
+    })();
+  </script>
+</body>
+</html>
