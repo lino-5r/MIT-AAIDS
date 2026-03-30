@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SVHN Report — Content editor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gl: #006bd9;
+      --gl-dark: #1b23b0;
+      --bg: #eef1f6;
+      --card: #fff;
+      --border: #d5dde8;
+      --text: #1a1d23;
+      --muted: #5c6370;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, sans-serif;
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--text);
+      background: var(--bg);
+    }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: linear-gradient(105deg, var(--gl-dark) 0%, #2a32c4 50%, var(--gl) 100%);
+      color: #fff;
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem 1rem;
+      box-shadow: 0 2px 12px rgba(27, 35, 176, 0.25);
+    }
+    .topbar h1 {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 700;
+      flex: 1;
+      min-width: 12rem;
+    }
+    .topbar .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .topbar button,
+    .topbar label.file-btn {
+      font: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 0.45rem 0.85rem;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      cursor: pointer;
+    }
+    .topbar button:hover,
+    .topbar label.file-btn:hover {
+      background: rgba(255,255,255,0.22);
+    }
+    .topbar button.primary {
+      background: #fff;
+      color: var(--gl-dark);
+      border-color: #fff;
+    }
+    .topbar button.primary:hover {
+      filter: brightness(0.97);
+    }
+    .topbar input[type="file"] { display: none; }
+    .status {
+      font-size: 0.78rem;
+      opacity: 0.9;
+      width: 100%;
+      margin-top: 0.25rem;
+    }
+    .wrap {
+      max-width: 52rem;
+      margin: 0 auto;
+      padding: 1.25rem 1rem 3rem;
+    }
+    .hint {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: 0 0 1rem;
+    }
+    details.section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 0.75rem;
+      overflow: hidden;
+    }
+    details.section > summary {
+      list-style: none;
+      padding: 0.85rem 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: linear-gradient(180deg, #fafbfd 0%, #f4f6f9 100%);
+      border-bottom: 1px solid var(--border);
+    }
+    details.section > summary::-webkit-details-marker { display: none; }
+    details.section[open] > summary {
+      border-bottom: 1px solid var(--border);
+    }
+    .fields {
+      padding: 1rem 1rem 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+    label.field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #374151;
+    }
+    label.field span.h {
+      font-weight: 600;
+    }
+    .sub {
+      font-weight: 400;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    input[type="text"],
+    textarea {
+      font: inherit;
+      font-size: 0.92rem;
+      font-weight: 400;
+      padding: 0.5rem 0.65rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      width: 100%;
+      color: var(--text);
+    }
+    textarea {
+      min-height: 5rem;
+      resize: vertical;
+    }
+    textarea.tall { min-height: 8rem; }
+    textarea.short { min-height: 3rem; }
+    textarea.svg-paste {
+      min-height: 6.5rem;
+      font-family: ui-monospace, "Cascadia Code", "SF Mono", Menlo, monospace;
+      font-size: 0.78rem;
+      line-height: 1.35;
+    }
+
+    /* Center figure editor blocks (note / URL / SVG) under the section flow */
+    .fields .field.figure-field-group {
+      max-width: 40rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .fields .field.figure-field-group > .h:first-child {
+      display: block;
+      text-align: center;
+      margin-bottom: 0.65rem;
+    }
+
+    .fields .field.figure-field-group > label.field {
+      text-align: left;
+    }
+    .row2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    @media (max-width: 640px) {
+      .row2 { grid-template-columns: 1fr; }
+    }
+    .table-editor {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      font-size: 0.85rem;
+    }
+    .table-editor .tr {
+      display: grid;
+      grid-template-columns: 0.9fr 1.4fr 0.85fr;
+      gap: 0.5rem;
+      padding: 0.5rem 0.65rem;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .table-editor .tr:last-child { border-bottom: none; }
+    .table-editor .th {
+      font-weight: 700;
+      background: #f0f4fa;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--gl-dark);
+    }
+    .table-editor input {
+      width: 100%;
+      font: inherit;
+      padding: 0.35rem 0.45rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+    }
+    .toc-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .toc-row {
+      display: grid;
+      grid-template-columns: minmax(6.5rem, 9rem) 1fr 3.5rem;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .toc-row-anchor {
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-family: ui-monospace, Menlo, monospace;
+      line-height: 1.25;
+      word-break: break-word;
+    }
+    .toc-row input:nth-of-type(1) { font-size: 0.88rem; }
+    .sortable-sections-wrap { margin: 0; }
+    .sortable-section summary {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .drag-handle {
+      cursor: grab;
+      user-select: none;
+      color: var(--gl);
+      font-size: 1.1rem;
+      line-height: 1;
+      padding: 0.15rem 0.25rem;
+      flex-shrink: 0;
+    }
+    .drag-handle:active { cursor: grabbing; }
+    .sortable-ghost { opacity: 0.45; }
+    .section-summary-text { flex: 1; }
+    .table-toolbar {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .table-toolbar button {
+      font: inherit;
+      font-size: 0.82rem;
+      padding: 0.35rem 0.65rem;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      cursor: pointer;
+    }
+    .table-toolbar button:hover { background: #eef2f7; }
+    .table-row-remove {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.45rem;
+      color: #b91c1c;
+      border-color: #fecaca;
+      background: #fff;
+    }
+    .md-check {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-top: 0.35rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #4b5563;
+    }
+    .md-check input {
+      width: auto;
+      margin: 0;
+      flex-shrink: 0;
+    }
+    .md-check span {
+      font-weight: 500;
+      cursor: default;
+    }
+    .section-chapter-title-row {
+      margin-bottom: 0.5rem;
+    }
+    .section-chapter-title-row input {
+      font-weight: 600;
+      color: var(--gl-dark);
+    }
+    .sortable-fields-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .sortable-field-wrap {
+      margin: 0;
+    }
+    .field-drag-wrap {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 0.45rem;
+    }
+    .field-drag-handle {
+      cursor: grab;
+      user-select: none;
+      color: var(--gl);
+      font-size: 1rem;
+      line-height: 1.4;
+      padding: 0.35rem 0.2rem 0 0;
+      flex-shrink: 0;
+    }
+    .field-drag-handle:active {
+      cursor: grabbing;
+    }
+    .field-drag-wrap > .field,
+    .field-drag-wrap > div.field {
+      flex: 1;
+      min-width: 0;
+    }
+    .field-block-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #374151;
+      padding: 0.45rem 0;
+    }
+    .field-block-label .sub {
+      font-weight: 400;
+      color: var(--muted);
+    }
+    .field-ghost {
+      opacity: 0.55;
+    }
+    footer.form-foot {
+      margin-top: 2rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    footer.form-foot code { font-size: 0.85em; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <h1>SVHN report — content form</h1>
+    <div class="actions">
+      <button type="button" id="btn-defaults" title="Restore built-in defaults">Reset to defaults</button>
+      <button type="button" id="btn-reload-json" title="Fetch report-contents.json from the project">Reload from JSON</button>
+      <button type="button" id="btn-connect-json" title="Pick report-contents.json on disk (Chrome/Edge)">Connect JSON file…</button>
+      <button type="button" class="primary" id="btn-update-json">Update JSON</button>
+      <button type="button" id="btn-export-copy" title="Download a backup copy">Download JSON copy</button>
+      <label class="file-btn">Import JSON<input type="file" id="import-json" accept=".json,application/json" /></label>
+    </div>
+    <div class="status" id="status">Loading…</div>
+  </header>
+
+  <div class="wrap">
+    <p class="hint">
+      This form reads and writes <strong>report-contents.json</strong> next to this file. Open it
+      via a <strong>local web server</strong> (see footer) so the form can load the JSON. Edit fields, then click
+      <strong>Update JSON</strong> to save. Open <code>SVHN_Digit_Recognition_Report.html</code> in the same way and refresh it
+      to see changes. Use <strong>Connect JSON file…</strong> (Chrome/Edge) to save directly to a file you choose.
+      <strong>Body sections</strong> can be reordered with the ⋮⋮ handle; section numbers and the report TOC follow your order. Table 1 supports extra rows. Image fields accept a relative path or full URL (asset).
+      Check <strong>Render as Markdown</strong> for **bold**, lists, links, etc. (sanitized). Bold+italic: <code>***text***</code> on one line. If you use underscores, keep <code>___…___</code> on a single line — a line break inside can become a horizontal rule or show raw underscores.
+    </p>
+
+    <form id="report-form" autocomplete="off">
+      <details class="section" open>
+        <summary>Cover &amp; header strip</summary>
+        <div class="fields">
+          <label class="field"><span class="h">Report title (cover H1)</span>
+            <input type="text" name="cover_title" data-key="cover_title" />
+          </label>
+          <label class="field"><span class="h">Subtitle (cover)</span>
+            <input type="text" name="cover_subtitle" data-key="cover_subtitle" />
+          </label>
+          <label class="field"><span class="h">Case study / client line</span>
+            <input type="text" name="cover_client" data-key="cover_client" />
+          </label>
+          <div class="row2">
+            <label class="field"><span class="h">Inner header — bold line</span>
+              <input type="text" name="brand_strong" data-key="brand_strong" />
+            </label>
+            <label class="field"><span class="h">Inner header — second line</span>
+              <input type="text" name="brand_span" data-key="brand_span" />
+            </label>
+          </div>
+          <div class="row2">
+            <label class="field"><span class="h">Footer prefix <span class="sub">(before the date)</span></span>
+              <input type="text" name="cover_footer_prefix" data-key="cover_footer_prefix" />
+            </label>
+            <label class="field"><span class="h">Report date</span>
+              <select name="date_mode" data-key="date_mode" id="date_mode">
+                <option value="today">Today’s date (auto)</option>
+                <option value="fixed">Fixed date (text below)</option>
+              </select>
+            </label>
+          </div>
+          <label class="field"><span class="h">Fixed date text</span><span class="sub">Used when “Fixed date” is selected</span>
+            <input type="text" name="report_date_fixed" data-key="report_date_fixed" placeholder="March 28, 2026" />
+          </label>
+        </div>
+      </details>
+
+      <details class="section" open>
+        <summary>Table of contents</summary>
+        <div class="fields">
+          <p class="hint" style="margin:0">Order matches <strong>body sections</strong> below (drag the ⣿ handle to reorder). Each row targets the report anchor shown. Page numbers are hints for print.</p>
+          <div class="toc-grid" id="toc-inputs"></div>
+        </div>
+      </details>
+
+      <div id="sortable-sections">
+      <details class="section sortable-section" open data-section-id="business">
+        <summary><span class="drag-handle" title="Drag to reorder" aria-hidden="true">⣿</span><span class="section-summary-text">Section 1 — Business problem</span></summary>
+        <div class="fields">
+          <label class="field section-chapter-title-row"><span class="h">Chapter title (H2 &amp; TOC)</span>
+            <input type="text" class="section-chapter-title" data-toc-index="0" placeholder="Same as Table of Contents for this section" />
+          </label>
+          <div class="sortable-fields-container" data-section-id="business">
+            <div class="sortable-field-wrap" data-field-key="h3_intro">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <div class="field-block-label">Block: <strong>Introduction</strong> <span class="sub">(H3 heading)</span></div>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="intro_p1">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">Introduction — paragraph 1</span>
+                  <textarea class="tall" name="intro_p1" data-key="intro_p1"></textarea>
+                  <div class="md-check"><input type="checkbox" data-md-for="intro_p1" id="md_intro_p1" aria-label="Render as Markdown" />
+                  <span>Render as Markdown</span></div>
+                </label>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="intro_p2">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">Introduction — paragraph 2</span>
+                  <textarea class="tall" name="intro_p2" data-key="intro_p2"></textarea>
+                  <div class="md-check"><input type="checkbox" data-md-for="intro_p2" id="md_intro_p2" aria-label="Render as Markdown" />
+                  <span>Render as Markdown</span></div>
+                </label>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="h3_solution">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <div class="field-block-label">Block: <strong>Solution trials &amp; methodology</strong> <span class="sub">(H3 heading)</span></div>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="meth_p1">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">Solution trials — paragraph 1</span>
+                  <textarea name="meth_p1" data-key="meth_p1"></textarea>
+                  <div class="md-check"><input type="checkbox" data-md-for="meth_p1" id="md_meth_p1" aria-label="Render as Markdown" />
+                  <span>Render as Markdown</span></div>
+                </label>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="meth_p2">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">Solution trials — paragraph 2</span>
+                  <textarea name="meth_p2" data-key="meth_p2"></textarea>
+                  <div class="md-check"><input type="checkbox" data-md-for="meth_p2" id="md_meth_p2" aria-label="Render as Markdown" />
+                  <span>Render as Markdown</span></div>
+                </label>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="table_models">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <div class="field">
+                  <span class="h">Table 1 — models (add rows as needed)</span>
+                  <div class="table-toolbar" id="table-models-toolbar"></div>
+                  <div class="table-editor" id="table-models-editor"></div>
+                </div>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="caption_table1">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">Table 1 caption</span>
+                  <textarea name="caption_table1" data-key="caption_table1" rows="2"></textarea>
+                  <div class="md-check"><input type="checkbox" data-md-for="caption_table1" id="md_caption_table1" aria-label="Render as Markdown" />
+                  <span>Render as Markdown</span></div>
+                </label>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="callout_block">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <div class="field">
+                  <span class="h">Callout</span>
+                  <label class="field"><span class="h">Bold title</span>
+                    <input type="text" name="callout_title" data-key="callout_title" />
+                  </label>
+                  <label class="field"><span class="h">Body</span>
+                    <textarea class="tall" name="callout_body" data-key="callout_body"></textarea>
+                    <div class="md-check"><input type="checkbox" data-md-for="callout_body" id="md_callout_body" aria-label="Render as Markdown" />
+                    <span>Render as Markdown</span></div>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="section sortable-section" data-section-id="data">
+        <summary><span class="drag-handle" title="Drag to reorder" aria-hidden="true">⣿</span><span class="section-summary-text">Section 2 — Data overview</span></summary>
+        <div class="fields">
+          <label class="field section-chapter-title-row"><span class="h">Chapter title (H2 &amp; TOC)</span>
+            <input type="text" class="section-chapter-title" data-toc-index="1" placeholder="Same as Table of Contents for this section" />
+          </label>
+          <div class="sortable-fields-container" data-section-id="data">
+            <div class="sortable-field-wrap" data-field-key="data_intro">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">Opening paragraph</span>
+                  <textarea name="data_intro" data-key="data_intro"></textarea>
+                  <div class="md-check"><input type="checkbox" data-md-for="data_intro" id="md_data_intro" aria-label="Render as Markdown" />
+                  <span>Render as Markdown</span></div>
+                </label>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="data_bullets">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">Bullet list <span class="sub">one line per bullet (plain text; “Label:” optional)</span></span>
+                  <textarea class="tall" name="data_bullets" data-key="data_bullets"></textarea>
+                  <div class="md-check"><input type="checkbox" data-md-for="data_bullets" id="md_data_bullets" aria-label="Render as Markdown" />
+                  <span>Render as Markdown</span></div>
+                </label>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="data_closing">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">Closing paragraph</span>
+                  <textarea name="data_closing" data-key="data_closing"></textarea>
+                  <div class="md-check"><input type="checkbox" data-md-for="data_closing" id="md_data_closing" aria-label="Render as Markdown" />
+                  <span>Render as Markdown</span></div>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="section sortable-section" data-section-id="ann_prep">
+        <summary><span class="drag-handle" title="Drag to reorder" aria-hidden="true">⣿</span><span class="section-summary-text">Section 3 — ANN preprocessing</span></summary>
+        <div class="fields">
+          <label class="field section-chapter-title-row"><span class="h">Chapter title (H2 &amp; TOC)</span>
+            <input type="text" class="section-chapter-title" data-toc-index="2" placeholder="Same as Table of Contents for this section" />
+          </label>
+          <div class="sortable-fields-container" data-section-id="ann_prep">
+            <div class="sortable-field-wrap" data-field-key="ann_h4">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">Subheading (H4)</span>
+                  <input type="text" name="ann_h4" data-key="ann_h4" />
+                </label>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="ann_prep_bullets">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">Bullet list <span class="sub">one line per bullet</span></span>
+                  <textarea class="tall" name="ann_prep_bullets" data-key="ann_prep_bullets"></textarea>
+                  <div class="md-check"><input type="checkbox" data-md-for="ann_prep_bullets" id="md_ann_prep_bullets" aria-label="Render as Markdown" />
+                  <span>Render as Markdown</span></div>
+                </label>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="fig1_caption">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">Figure 1 caption</span>
+                  <input type="text" name="fig1_caption" data-key="fig1_caption" />
+                </label>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="fig1_figure">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <div class="field figure-field-group">
+                  <span class="h">Figure 1 — note &amp; image</span>
+                  <label class="field"><span class="h">Placeholder note (if no image)</span>
+                    <textarea name="fig1_note" data-key="fig1_note" class="short"></textarea>
+                    <div class="md-check"><input type="checkbox" data-md-for="fig1_note" id="md_fig1_note" aria-label="Render as Markdown" />
+                    <span>Render as Markdown</span></div>
+                  </label>
+                  <label class="field"><span class="h">Image asset URL <span class="sub">https://… or figures/plot.png</span></span>
+                    <input type="text" name="fig1_src" data-key="fig1_src" placeholder="https://… or figures/figure1_onehot.png" />
+                  </label>
+                  <label class="field"><span class="h">SVG markup <span class="sub">paste full <code>&lt;svg&gt;…&lt;/svg&gt;</code> or paths only; overrides URL</span></span>
+                    <textarea name="fig1_svg" data-key="fig1_svg" class="svg-paste" spellcheck="false" placeholder="Optional — inline SVG export from the notebook"></textarea>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="section sortable-section" data-section-id="ann_perf">
+        <summary><span class="drag-handle" title="Drag to reorder" aria-hidden="true">⣿</span><span class="section-summary-text">Section 4 — ANN performance</span></summary>
+        <div class="fields">
+          <label class="field section-chapter-title-row"><span class="h">Chapter title (H2 &amp; TOC)</span>
+            <input type="text" class="section-chapter-title" data-toc-index="3" placeholder="Same as Table of Contents for this section" />
+          </label>
+          <div class="sortable-fields-container" data-section-id="ann_perf">
+            <div class="sortable-field-wrap" data-field-key="ann_perf_diff">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">Differences between ANN models</span>
+                  <textarea name="ann_perf_diff" data-key="ann_perf_diff"></textarea>
+                  <div class="md-check"><input type="checkbox" data-md-for="ann_perf_diff" id="md_ann_perf_diff" aria-label="Render as Markdown" />
+                  <span>Render as Markdown</span></div>
+                </label>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="ann_arch_figure">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <div class="field figure-field-group">
+                  <span class="h">ANN 1 vs ANN 2 — architecture diagram</span>
+                  <label class="field"><span class="h">Caption under diagram <span class="sub">optional</span></span>
+                    <textarea name="ann_arch_note" data-key="ann_arch_note" class="short"></textarea>
+                    <div class="md-check"><input type="checkbox" data-md-for="ann_arch_note" id="md_ann_arch_note" aria-label="Render as Markdown" />
+                    <span>Render as Markdown</span></div>
+                  </label>
+                  <label class="field"><span class="h">Image asset URL</span>
+                    <input type="text" name="ann_arch_src" data-key="ann_arch_src" placeholder="https://… or assets/ann_arch_comparison.png" />
+                  </label>
+                  <label class="field"><span class="h">SVG markup <span class="sub">overrides URL</span></span>
+                    <textarea name="ann_arch_svg" data-key="ann_arch_svg" class="svg-paste" spellcheck="false" placeholder="Optional — side-by-side ANN diagram as SVG"></textarea>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="ann_arch_caption">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">ANN architecture diagram — figure caption</span>
+                  <input type="text" name="ann_arch_caption" data-key="ann_arch_caption" placeholder="e.g. Figure: ANN 1 vs ANN 2 architecture" />
+                </label>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="ann1_fig_acc_figure">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <div class="field figure-field-group">
+                  <span class="h">ANN 1 — training vs. validation accuracy (plot)</span>
+                  <label class="field"><span class="h">Caption under plot <span class="sub">optional</span></span>
+                    <textarea name="ann1_fig_acc_note" data-key="ann1_fig_acc_note" class="short"></textarea>
+                    <div class="md-check"><input type="checkbox" data-md-for="ann1_fig_acc_note" id="md_ann1_fig_acc_note" aria-label="Render as Markdown" />
+                    <span>Render as Markdown</span></div>
+                  </label>
+                  <label class="field"><span class="h">Image asset URL</span>
+                    <input type="text" name="ann1_fig_acc_src" data-key="ann1_fig_acc_src" placeholder="https://… or figures/ann1_accuracy.png" />
+                  </label>
+                  <label class="field"><span class="h">SVG markup <span class="sub">overrides URL</span></span>
+                    <textarea name="ann1_fig_acc_svg" data-key="ann1_fig_acc_svg" class="svg-paste" spellcheck="false" placeholder="Optional — ANN 1 accuracy plot as SVG"></textarea>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="ann1_fig_acc_caption">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">ANN 1 — plot caption</span>
+                  <input type="text" name="ann1_fig_acc_caption" data-key="ann1_fig_acc_caption" placeholder="e.g. Figure 2: Training vs. validation accuracy — ANN 1" />
+                </label>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="ann1_obs">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">ANN 1 — observations</span>
+                  <textarea name="ann1_obs" data-key="ann1_obs" class="tall"></textarea>
+                  <div class="md-check"><input type="checkbox" data-md-for="ann1_obs" id="md_ann1_obs" aria-label="Render as Markdown" />
+                  <span>Render as Markdown</span></div>
+                </label>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="ann_fig_acc_figure">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <div class="field figure-field-group">
+                  <span class="h">ANN 2 — training vs. validation accuracy (plot)</span>
+                  <label class="field"><span class="h">Caption under plot <span class="sub">optional</span></span>
+                    <textarea name="ann_fig_acc_note" data-key="ann_fig_acc_note" class="short"></textarea>
+                    <div class="md-check"><input type="checkbox" data-md-for="ann_fig_acc_note" id="md_ann_fig_acc_note" aria-label="Render as Markdown" />
+                    <span>Render as Markdown</span></div>
+                  </label>
+                  <label class="field"><span class="h">Image asset URL</span>
+                    <input type="text" name="ann_fig_acc_src" data-key="ann_fig_acc_src" placeholder="https://… or figures/ann2_accuracy.png" />
+                  </label>
+                  <label class="field"><span class="h">SVG markup <span class="sub">overrides URL</span></span>
+                    <textarea name="ann_fig_acc_svg" data-key="ann_fig_acc_svg" class="svg-paste" spellcheck="false" placeholder="Optional — accuracy plot as SVG"></textarea>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="ann_fig_acc_caption">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">ANN 2 — plot caption <span class="sub">optional; use caption under plot if you prefer</span></span>
+                  <input type="text" name="ann_fig_acc_caption" data-key="ann_fig_acc_caption" placeholder="e.g. Figure 3: Training vs. validation accuracy — ANN 2" />
+                </label>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="ann_precision_note">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">ANN 2 — classification report / precision &amp; F1</span>
+                  <textarea name="ann_precision_note" data-key="ann_precision_note" class="tall" placeholder="Turn on Render as Markdown. Use a GFM pipe table, or wrap sklearn output in a fenced ``` code block for monospace."></textarea>
+                  <div class="md-check"><input type="checkbox" data-md-for="ann_precision_note" id="md_ann_precision_note" aria-label="Render as Markdown" />
+                  <span>Render as Markdown</span></div>
+                </label>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="ann_cm_figure">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <div class="field figure-field-group">
+                  <span class="h">ANN 2 — confusion matrix (heatmap)</span>
+                  <label class="field"><span class="h">Note</span>
+                    <textarea name="ann_cm_note" data-key="ann_cm_note" class="short"></textarea>
+                    <div class="md-check"><input type="checkbox" data-md-for="ann_cm_note" id="md_ann_cm_note" aria-label="Render as Markdown" />
+                    <span>Render as Markdown</span></div>
+                  </label>
+                  <label class="field"><span class="h">Image asset URL</span>
+                    <input type="text" name="ann_cm_src" data-key="ann_cm_src" placeholder="https://… or figures/ann2_confusion_matrix.png" />
+                  </label>
+                  <label class="field"><span class="h">SVG markup <span class="sub">heatmap; overrides URL</span></span>
+                    <textarea name="ann_cm_svg" data-key="ann_cm_svg" class="svg-paste" spellcheck="false" placeholder="Optional — confusion matrix as SVG"></textarea>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="ann_observations">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">ANN 2 — observations</span>
+                  <textarea name="ann_observations" data-key="ann_observations" class="tall"></textarea>
+                  <div class="md-check"><input type="checkbox" data-md-for="ann_observations" id="md_ann_observations" aria-label="Render as Markdown" />
+                  <span>Render as Markdown</span></div>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="section sortable-section" data-section-id="cnn_prep">
+        <summary><span class="drag-handle" title="Drag to reorder" aria-hidden="true">⣿</span><span class="section-summary-text">Section 5 — CNN preprocessing</span></summary>
+        <div class="fields">
+          <label class="field section-chapter-title-row"><span class="h">Chapter title (H2 &amp; TOC)</span>
+            <input type="text" class="section-chapter-title" data-toc-index="4" placeholder="Same as Table of Contents for this section" />
+          </label>
+          <div class="sortable-fields-container" data-section-id="cnn_prep">
+            <div class="sortable-field-wrap" data-field-key="cnn_h4">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">Subheading (H4)</span>
+                  <input type="text" name="cnn_h4" data-key="cnn_h4" />
+                </label>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="cnn_prep_bullets">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">Bullet list <span class="sub">one line per bullet</span></span>
+                  <textarea class="tall" name="cnn_prep_bullets" data-key="cnn_prep_bullets"></textarea>
+                  <div class="md-check"><input type="checkbox" data-md-for="cnn_prep_bullets" id="md_cnn_prep_bullets" aria-label="Render as Markdown" />
+                  <span>Render as Markdown</span></div>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="section sortable-section" data-section-id="cnn_perf">
+        <summary><span class="drag-handle" title="Drag to reorder" aria-hidden="true">⣿</span><span class="section-summary-text">Section 6 — CNN performance</span></summary>
+        <div class="fields">
+          <label class="field section-chapter-title-row"><span class="h">Chapter title (H2 &amp; TOC)</span>
+            <input type="text" class="section-chapter-title" data-toc-index="5" placeholder="Same as Table of Contents for this section" />
+          </label>
+          <div class="sortable-fields-container" data-section-id="cnn_perf">
+            <div class="sortable-field-wrap" data-field-key="cnn_diff">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">Differences between CNN models</span>
+                  <textarea name="cnn_diff" data-key="cnn_diff"></textarea>
+                  <div class="md-check"><input type="checkbox" data-md-for="cnn_diff" id="md_cnn_diff" aria-label="Render as Markdown" />
+                  <span>Render as Markdown</span></div>
+                </label>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="cnn_arch_figure">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <div class="field figure-field-group">
+                  <span class="h">CNN 1 vs CNN 2 — architecture diagram</span>
+                  <label class="field"><span class="h">Caption under diagram <span class="sub">optional</span></span>
+                    <textarea name="cnn_arch_note" data-key="cnn_arch_note" class="short"></textarea>
+                    <div class="md-check"><input type="checkbox" data-md-for="cnn_arch_note" id="md_cnn_arch_note" aria-label="Render as Markdown" />
+                    <span>Render as Markdown</span></div>
+                  </label>
+                  <label class="field"><span class="h">Image asset URL</span>
+                    <input type="text" name="cnn_arch_src" data-key="cnn_arch_src" placeholder="https://… or assets/cnn_arch_comparison.png" />
+                  </label>
+                  <label class="field"><span class="h">SVG markup <span class="sub">overrides URL</span></span>
+                    <textarea name="cnn_arch_svg" data-key="cnn_arch_svg" class="svg-paste" spellcheck="false" placeholder="Optional — side-by-side CNN diagram as SVG"></textarea>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="cnn_arch_caption">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">CNN architecture diagram — figure caption</span>
+                  <input type="text" name="cnn_arch_caption" data-key="cnn_arch_caption" placeholder="e.g. Figure: CNN 1 vs CNN 2 architecture" />
+                </label>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="cnn_fig1_caption">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">CNN 1 plot — caption</span>
+                  <input type="text" name="cnn_fig1_caption" data-key="cnn_fig1_caption" />
+                </label>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="cnn_fig1_figure">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <div class="field figure-field-group">
+                  <span class="h">CNN 1 plot — note &amp; image</span>
+                  <label class="field"><span class="h">Note</span>
+                    <textarea name="cnn_fig1_note" data-key="cnn_fig1_note" class="short"></textarea>
+                    <div class="md-check"><input type="checkbox" data-md-for="cnn_fig1_note" id="md_cnn_fig1_note" aria-label="Render as Markdown" />
+                    <span>Render as Markdown</span></div>
+                  </label>
+                  <label class="field"><span class="h">Image asset URL</span>
+                    <input type="text" name="cnn_fig1_src" data-key="cnn_fig1_src" placeholder="https://… or figures/cnn1_accuracy.png" />
+                  </label>
+                  <label class="field"><span class="h">SVG markup <span class="sub">overrides URL</span></span>
+                    <textarea name="cnn_fig1_svg" data-key="cnn_fig1_svg" class="svg-paste" spellcheck="false" placeholder="Optional — CNN 1 plot as SVG"></textarea>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="cnn_fig2_caption">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">CNN 2 plot — caption</span>
+                  <input type="text" name="cnn_fig2_caption" data-key="cnn_fig2_caption" />
+                </label>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="cnn_fig2_figure">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <div class="field figure-field-group">
+                  <span class="h">CNN 2 plot — note &amp; image</span>
+                  <label class="field"><span class="h">Note</span>
+                    <textarea name="cnn_fig2_note" data-key="cnn_fig2_note" class="short"></textarea>
+                    <div class="md-check"><input type="checkbox" data-md-for="cnn_fig2_note" id="md_cnn_fig2_note" aria-label="Render as Markdown" />
+                    <span>Render as Markdown</span></div>
+                  </label>
+                  <label class="field"><span class="h">Image asset URL</span>
+                    <input type="text" name="cnn_fig2_src" data-key="cnn_fig2_src" placeholder="https://… or figures/cnn2_accuracy.png" />
+                  </label>
+                  <label class="field"><span class="h">SVG markup <span class="sub">overrides URL</span></span>
+                    <textarea name="cnn_fig2_svg" data-key="cnn_fig2_svg" class="svg-paste" spellcheck="false" placeholder="Optional — CNN 2 plot as SVG"></textarea>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="cnn_precision_note">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">Precision / F1 / CM paragraph</span>
+                  <textarea name="cnn_precision_note" data-key="cnn_precision_note"></textarea>
+                  <div class="md-check"><input type="checkbox" data-md-for="cnn_precision_note" id="md_cnn_precision_note" aria-label="Render as Markdown" />
+                  <span>Render as Markdown</span></div>
+                </label>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="cnn_cm_figure">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <div class="field figure-field-group">
+                  <span class="h">CNN confusion matrix — note &amp; image</span>
+                  <label class="field"><span class="h">Note</span>
+                    <textarea name="cnn_cm_note" data-key="cnn_cm_note" class="short"></textarea>
+                    <div class="md-check"><input type="checkbox" data-md-for="cnn_cm_note" id="md_cnn_cm_note" aria-label="Render as Markdown" />
+                    <span>Render as Markdown</span></div>
+                  </label>
+                  <label class="field"><span class="h">Image asset URL</span>
+                    <input type="text" name="cnn_cm_src" data-key="cnn_cm_src" placeholder="https://… or figures/cnn_confusion_matrix.png" />
+                  </label>
+                  <label class="field"><span class="h">SVG markup <span class="sub">heatmap; overrides URL</span></span>
+                    <textarea name="cnn_cm_svg" data-key="cnn_cm_svg" class="svg-paste" spellcheck="false" placeholder="Optional — CNN confusion matrix as SVG"></textarea>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="cnn_overall">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">Overall observations</span>
+                  <textarea name="cnn_overall" data-key="cnn_overall"></textarea>
+                  <div class="md-check"><input type="checkbox" data-md-for="cnn_overall" id="md_cnn_overall" aria-label="Render as Markdown" />
+                  <span>Render as Markdown</span></div>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="section sortable-section" data-section-id="final">
+        <summary><span class="drag-handle" title="Drag to reorder" aria-hidden="true">⣿</span><span class="section-summary-text">Section 7 — Final model</span></summary>
+        <div class="fields">
+          <label class="field section-chapter-title-row"><span class="h">Chapter title (H2 &amp; TOC)</span>
+            <input type="text" class="section-chapter-title" data-toc-index="6" placeholder="Same as Table of Contents for this section" />
+          </label>
+          <div class="sortable-fields-container" data-section-id="final">
+            <div class="sortable-field-wrap" data-field-key="final_p">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">Body paragraph</span>
+                  <textarea class="tall" name="final_p" data-key="final_p"></textarea>
+                  <div class="md-check"><input type="checkbox" data-md-for="final_p" id="md_final_p" aria-label="Render as Markdown" />
+                  <span>Render as Markdown</span></div>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="section sortable-section" data-section-id="conclusion">
+        <summary><span class="drag-handle" title="Drag to reorder" aria-hidden="true">⣿</span><span class="section-summary-text">Section 8 — Conclusion</span></summary>
+        <div class="fields">
+          <label class="field section-chapter-title-row"><span class="h">Chapter title (H2 &amp; TOC)</span>
+            <input type="text" class="section-chapter-title" data-toc-index="7" placeholder="Same as Table of Contents for this section" />
+          </label>
+          <div class="sortable-fields-container" data-section-id="conclusion">
+            <div class="sortable-field-wrap" data-field-key="conclusion_p">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">Closing paragraph</span>
+                  <textarea class="tall" name="conclusion_p" data-key="conclusion_p"></textarea>
+                  <div class="md-check"><input type="checkbox" data-md-for="conclusion_p" id="md_conclusion_p" aria-label="Render as Markdown" />
+                  <span>Render as Markdown</span></div>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="section sortable-section" data-section-id="appendix">
+        <summary><span class="drag-handle" title="Drag to reorder" aria-hidden="true">⣿</span><span class="section-summary-text">Section 9 — Appendix</span></summary>
+        <div class="fields">
+          <label class="field section-chapter-title-row"><span class="h">Chapter title (H2 &amp; TOC)</span>
+            <input type="text" class="section-chapter-title" data-toc-index="8" placeholder="Same as Table of Contents for this section" />
+          </label>
+          <div class="sortable-fields-container" data-section-id="appendix">
+            <div class="sortable-field-wrap" data-field-key="appendix_p1">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">Appendix paragraph 1</span>
+                  <textarea name="appendix_p1" data-key="appendix_p1"></textarea>
+                  <div class="md-check"><input type="checkbox" data-md-for="appendix_p1" id="md_appendix_p1" aria-label="Render as Markdown" />
+                  <span>Render as Markdown</span></div>
+                </label>
+              </div>
+            </div>
+            <div class="sortable-field-wrap" data-field-key="appendix_p2">
+              <div class="field-drag-wrap">
+                <span class="field-drag-handle" title="Drag to reorder">⣿</span>
+                <label class="field"><span class="h">Appendix paragraph 2</span>
+                  <textarea name="appendix_p2" data-key="appendix_p2"></textarea>
+                  <div class="md-check"><input type="checkbox" data-md-for="appendix_p2" id="md_appendix_p2" aria-label="Render as Markdown" />
+                  <span>Render as Markdown</span></div>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+      </div>
+    </form>
+
+    <footer class="form-foot">
+      Draft edits auto-save in <code>localStorage</code> (<code id="ls-key-label"></code>). For <strong>report-contents.json</strong>,
+      serve this folder over HTTP (e.g. <code>python3 -m http.server 8000</code>) then open
+      <code>http://localhost:8000/SVHN_Report_Form.html</code> — <code>file://</code> usually cannot load or save JSON.
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+  <script src="report-renderer.js"></script>
+  <script src="SVHN_Report_Form.js"></script>
+</body>
+</html>

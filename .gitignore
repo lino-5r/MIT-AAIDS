@@ -29,6 +29,17 @@ venv/
 *.gif
 *.webp
 
+# Allow report asset PNGs needed for GitHub Pages
+!assets/*.png
+
+# Google Drive shortcuts
+*.gdoc
+*.gsheet
+
+# Helper / temp files
+capture-for-figma.html
+assets/SVHN Digit Recognition*
+
 # Jupyter
 .ipynb_checkpoints/
 

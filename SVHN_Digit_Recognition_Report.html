@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SVHN Digit Recognition — Deep Learning Report</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      /* Great Learning brand */
+      --gl-blue: #006bd9;
+      --gl-blue-dark: #1b23b0;
+      --ink: #111111;
+      --gray-bg: #f4f6f9;
+      --gray-text: #3a3f47;
+      --gray-muted: #6b7280;
+      --callout-bg: linear-gradient(135deg, #f0f6ff 0%, #eef2fb 100%);
+      --border: #d5dde8;
+      /* Semantic aliases (sections, tables) */
+      --navy: var(--gl-blue-dark);
+      --navy-dark: #141a6e;
+      /* US Letter — PDF / print layout */
+      --page-w: 8.5in;
+      --page-h: 11in;
+      --page-margin: 0.75in;
+      /* Printable content box inside margins (6.5in × 9.5in at 0.75in margins) */
+      --content-w: calc(var(--page-w) - 2 * var(--page-margin));
+      --content-h: calc(var(--page-h) - 2 * var(--page-margin));
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    @page {
+      size: 8.5in 200in;
+      margin: 0;
+    }
+
+    html {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.5;
+      color: var(--ink);
+      background: #dfe3ea;
+    }
+
+    /* Screen: each “sheet” matches physical Letter size for WYSIWYG before PDF */
+    .sheet {
+      width: var(--page-w);
+      max-width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+      background: #fff;
+      box-shadow: 0 2px 14px rgba(0, 0, 0, 0.12);
+    }
+
+    .cover-sheet {
+      min-height: var(--page-h);
+      padding: var(--page-margin);
+      margin-bottom: 1.25rem;
+      box-sizing: border-box;
+    }
+
+    /* ----- Cover ----- */
+    .cover {
+      min-height: var(--content-h);
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+      page-break-after: always;
+    }
+
+    /* Logo row — single rule under the brand strip (no extra gradient bar) */
+    .cover-brand {
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      margin-bottom: 2.75rem;
+      padding-bottom: 1.1rem;
+      border-bottom: 1px solid rgba(0, 107, 217, 0.2);
+      max-width: 100%;
+    }
+
+    .brand-logo-link {
+      display: inline-block;
+      line-height: 0;
+      background: transparent;
+      padding: 0.35rem 0.5rem 0.35rem 0;
+    }
+
+    .brand-logo-img {
+      display: block;
+      height: 52px;
+      width: auto;
+      max-width: min(280px, 100%);
+    }
+
+    .cover-inner {
+      position: relative;
+      z-index: 1;
+      padding: 2rem 2.25rem 2rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .cover-title-block {
+      flex: 1;
+      max-width: 32rem;
+    }
+
+    .cover h1 {
+      margin: 0 0 0.35em;
+      font-family: Nunito, Inter, sans-serif;
+      font-size: 2.35rem;
+      font-weight: 800;
+      color: var(--gl-blue-dark);
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+
+    .cover .subtitle {
+      font-family: Nunito, Inter, sans-serif;
+      font-size: 1.15rem;
+      color: var(--gl-blue);
+      font-weight: 600;
+    }
+
+    .cover-client {
+      margin: 1.1rem 0 0;
+      font-size: 0.92rem;
+      color: var(--gray-muted);
+      font-weight: 500;
+      letter-spacing: 0.01em;
+    }
+
+    /* Decorative bands — top-right only so they never cross the footer */
+    .cover-shapes {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: min(58%, 22rem);
+      height: min(38%, 12rem);
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .cover-shapes::before,
+    .cover-shapes::after {
+      content: "";
+      position: absolute;
+    }
+
+    .cover-shapes::before {
+      width: 220%;
+      height: 52px;
+      top: 2.75rem;
+      right: -38%;
+      transform: rotate(-11deg);
+      transform-origin: right top;
+      background: linear-gradient(90deg, var(--gl-blue-dark), var(--gl-blue));
+      opacity: 0.92;
+    }
+
+    .cover-shapes::after {
+      width: 200%;
+      height: 40px;
+      top: 6.25rem;
+      right: -32%;
+      transform: rotate(-7deg);
+      transform-origin: right top;
+      background: rgba(0, 107, 217, 0.32);
+    }
+
+    .cover-footer {
+      margin-top: auto;
+      padding-top: 2.5rem;
+      font-size: 0.82rem;
+      color: var(--gray-muted);
+      border-top: 1px solid var(--border);
+      padding-bottom: 0.25rem;
+    }
+
+    /* Inner pages: slim brand strip (contained to page width) */
+    .report-brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(0, 107, 217, 0.18);
+    }
+
+    .report-brand-logo {
+      display: block;
+      height: 40px;
+      width: auto;
+      max-width: 220px;
+      background: transparent;
+      padding: 0.2rem 0.35rem 0.2rem 0;
+    }
+
+    .report-brand-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+      font-size: 0.78rem;
+      color: var(--gray-muted);
+      line-height: 1.3;
+    }
+
+    .report-brand-meta strong {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: 0.02em;
+    }
+
+    /* ----- Page shell (body text = one Letter column width) ----- */
+    .page {
+      width: var(--page-w);
+      max-width: 100%;
+      margin: 0 auto;
+      padding: var(--page-margin) var(--page-margin) 3rem;
+      box-sizing: border-box;
+    }
+
+    .page.cover-page {
+      width: auto;
+      max-width: none;
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    /* Chapter band: full width of Letter sheet only (not browser viewport) */
+    .chapter-wrap {
+      margin: 2.5rem calc(-1 * var(--page-margin)) 2rem;
+      width: calc(100% + 2 * var(--page-margin));
+      max-width: none;
+    }
+
+    .chapter {
+      background: linear-gradient(105deg, var(--gl-blue-dark) 0%, #252db8 48%, var(--gl-blue) 100%);
+      color: #fff;
+      padding: 1rem 1.5rem 1.05rem;
+      margin: 0;
+      box-shadow: 0 2px 12px rgba(27, 35, 176, 0.2);
+    }
+
+    .chapter-label {
+      font-family: Inter, sans-serif;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      opacity: 0.88;
+      margin-bottom: 0.3rem;
+    }
+
+    .chapter h2 {
+      font-family: Nunito, Inter, sans-serif;
+      margin: 0;
+      font-size: 1.38rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    /* ----- TOC ----- */
+    .toc-block {
+      margin-bottom: 3rem;
+      padding: 1.25rem 1.25rem 1.5rem;
+      background: linear-gradient(180deg, #fafbfd 0%, var(--gray-bg) 100%);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+    }
+
+    .toc-block h2 {
+      font-family: Nunito, Inter, sans-serif;
+      color: var(--gl-blue-dark);
+      font-size: 1.45rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--gl-blue);
+    }
+
+    .toc-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .toc-list li {
+      display: flex;
+      align-items: baseline;
+      margin: 0.65rem 0;
+      font-size: 0.95rem;
+    }
+
+    .toc-list a {
+      color: var(--gl-blue-dark);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .toc-list a:hover {
+      text-decoration: underline;
+    }
+
+    .toc-dots {
+      flex: 1;
+      border-bottom: 1px dotted #bbb;
+      margin: 0 0.5rem;
+      min-width: 1rem;
+      height: 0.85em;
+    }
+
+    .toc-page {
+      color: var(--gray-muted);
+      font-weight: 400;
+      min-width: 2rem;
+      text-align: right;
+    }
+
+    /* ----- Typography ----- */
+    h3 {
+      font-family: Nunito, Inter, sans-serif;
+      color: var(--gl-blue-dark);
+      font-size: 1.12rem;
+      font-weight: 700;
+      margin: 1.75rem 0 0.65rem;
+      padding-top: 0.35rem;
+      border-top: 1px solid var(--border);
+    }
+
+    h3:first-of-type {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    h4 {
+      font-family: Nunito, Inter, sans-serif;
+      color: var(--gl-blue-dark);
+      font-size: 1.02rem;
+      font-weight: 700;
+      margin: 1.25rem 0 0.5rem;
+    }
+
+    /* In-chapter subheads for ANN 2 performance blocks */
+    h3.ann2-subhead {
+      font-family: Nunito, Inter, sans-serif;
+      color: var(--gl-blue-dark);
+      font-size: 1.06rem;
+      font-weight: 700;
+      margin: 1.5rem 0 0.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+
+    p {
+      margin: 0.65rem 0;
+      color: var(--gray-text);
+    }
+
+    ul {
+      margin: 0.5rem 0 1rem;
+      padding-left: 1.25rem;
+      color: var(--gray-text);
+    }
+
+    li {
+      margin: 0.35rem 0;
+    }
+
+    /* ----- Table ----- */
+    table.report-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    table.report-table thead {
+      background: linear-gradient(180deg, var(--gl-blue-dark) 0%, #1e2699 100%);
+      color: #fff;
+    }
+
+    table.report-table th,
+    table.report-table td {
+      padding: 0.65rem 0.75rem;
+      text-align: left;
+      vertical-align: top;
+      border: 1px solid var(--border);
+    }
+
+    table.report-table tbody tr:nth-child(even) {
+      background: var(--gray-bg);
+    }
+
+    table.report-table tbody tr:nth-child(odd) {
+      background: #fff;
+    }
+
+    /* Table 1 — keep Model / Test accuracy on one line without a huge fixed Model column */
+    #table-models th:nth-child(1),
+    #table-models td:nth-child(1) {
+      white-space: nowrap;
+    }
+
+    #table-models th:nth-child(3),
+    #table-models td:nth-child(3) {
+      width: 1%;
+      white-space: nowrap;
+    }
+
+    .caption {
+      font-size: 0.85rem;
+      color: var(--gray-muted);
+      margin: -0.5rem 0 1.5rem;
+      text-align: center;
+    }
+
+    .caption.md-content {
+      color: var(--gray-muted);
+    }
+
+    .caption.md-content p {
+      margin: 0.35rem 0 0;
+      text-align: center;
+      color: inherit;
+    }
+
+    .caption.md-content p:first-child {
+      margin-top: 0;
+    }
+
+    /* ----- Pull quote / callout ----- */
+    .callout {
+      background: var(--callout-bg);
+      border: 1px solid rgba(0, 107, 217, 0.22);
+      border-left: 4px solid var(--gl-blue);
+      border-radius: 4px;
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+    }
+
+    /* Only the callout title line — not <strong> inside Markdown body */
+    .callout > strong {
+      font-family: Nunito, Inter, sans-serif;
+      color: var(--gl-blue-dark);
+      display: block;
+      font-size: 1.05rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .callout-body {
+      color: var(--gray-text);
+    }
+
+    .md-content {
+      color: var(--gray-text);
+    }
+
+    /* Keep emphasis inline (overrides any stray block rules on strong/em) */
+    .md-content strong,
+    .md-content em,
+    .md-content b,
+    .md-content i {
+      display: inline;
+    }
+
+    .md-content em,
+    .md-content i {
+      font-style: italic;
+    }
+
+    .md-content strong,
+    .md-content b {
+      font-weight: 600;
+    }
+
+    .md-content p {
+      margin: 0.65rem 0;
+    }
+
+    .md-content p:first-child {
+      margin-top: 0;
+    }
+
+    .md-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .md-content ul,
+    .md-content ol {
+      margin: 0.5rem 0 1rem;
+      padding-left: 1.25rem;
+      text-align: left;
+    }
+
+    .md-content code {
+      font-size: 0.9em;
+      background: rgba(0, 0, 0, 0.06);
+      padding: 0.1em 0.35em;
+      border-radius: 3px;
+    }
+
+    .md-content pre {
+      text-align: left;
+      overflow-x: auto;
+      padding: 0.75rem 1rem;
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 4px;
+      font-size: 0.88rem;
+    }
+
+    /* GFM tables (e.g. sklearn classification_report pasted as Markdown) */
+    .md-content table {
+      width: 100%;
+      max-width: 100%;
+      border-collapse: collapse;
+      font-size: 0.86rem;
+      margin: 0.75rem 0 1rem;
+      line-height: 1.35;
+    }
+
+    .md-content table thead {
+      background: rgba(0, 107, 217, 0.08);
+    }
+
+    .md-content table th,
+    .md-content table td {
+      border: 1px solid var(--border);
+      padding: 0.4rem 0.55rem;
+      text-align: right;
+      vertical-align: middle;
+    }
+
+    .md-content table th:first-child,
+    .md-content table td:first-child {
+      text-align: left;
+    }
+
+    .md-content table tbody tr:nth-child(even) {
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    .md-content a[href^="http"] {
+      color: var(--gl-blue);
+      text-decoration: underline;
+    }
+
+    /* Caption / note text directly under the figure (inside .figure-box) */
+    .figure-box > .figure-caption {
+      text-align: center;
+      margin: 0.85rem 0 0;
+      color: var(--gray-muted);
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+
+    .figure-box .figure-caption.md-content {
+      text-align: center;
+      margin-top: 0.85rem;
+      color: var(--gray-muted);
+      font-size: 0.92rem;
+    }
+
+    .figure-box .figure-caption.md-content p {
+      margin: 0.35rem 0 0;
+      text-align: center;
+    }
+
+    .figure-box .figure-caption.md-content p:first-child {
+      margin-top: 0;
+    }
+
+    /* ----- Figure placeholder ----- */
+    .figure-box {
+      background: var(--gray-bg);
+      border: 1px dashed rgba(0, 107, 217, 0.35);
+      border-radius: 6px;
+      padding: 2rem 1rem;
+      text-align: center;
+      color: var(--gray-muted);
+      font-size: 0.9rem;
+      margin: 1rem 0;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+
+    .figure-box img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    /* Inline SVGs (e.g. architecture diagrams): avoid double gray vs. dashed placeholder frame */
+    .figure-box:has(.figure-svg-wrap) {
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 0.5rem 0;
+      color: var(--gray-text);
+    }
+
+    .figure-svg-wrap {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
+      line-height: 0;
+    }
+
+    .figure-svg-wrap svg {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      vertical-align: middle;
+    }
+
+    /* ----- Appendix ----- */
+    .appendix-note {
+      font-size: 0.9rem;
+      color: var(--gray-text);
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      .sheet {
+        box-shadow: none;
+        width: 100%;
+        max-width: none;
+      }
+
+      .cover-sheet {
+        min-height: 0;
+        margin-bottom: 0;
+        padding: var(--page-margin);
+        padding-bottom: 0;
+      }
+
+      .cover {
+        min-height: auto;
+        overflow: visible;
+        page-break-after: auto;
+      }
+
+      .cover-footer {
+        padding-top: 1rem;
+        margin-top: 1.5rem;
+      }
+
+      /* Cover shapes: hide in print to avoid overlapping title */
+      .cover-shapes {
+        display: none;
+      }
+
+      .page {
+        width: 100%;
+        max-width: none;
+        padding: 0.5rem var(--page-margin) 0;
+      }
+
+      .chapter-wrap {
+        margin: 2rem calc(-1 * var(--page-margin)) 1.5rem;
+        width: calc(100% + 2 * var(--page-margin));
+      }
+
+      .chapter {
+        max-width: none;
+        width: 100%;
+        box-shadow: none;
+        border-bottom: 2px solid rgba(27, 35, 176, 0.35);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      a[href^="#"]::after {
+        content: "";
+      }
+    }
+  </style>
+</head>
+<body>
+  <div
+    id="report-load-error"
+    style="
+      display: none;
+      max-width: 40rem;
+      margin: 2rem auto;
+      padding: 1.25rem;
+      font-family: Inter, system-ui, sans-serif;
+      background: #fff8e6;
+      border: 1px solid #e6c35c;
+      border-radius: 8px;
+      color: #5c4d00;
+      line-height: 1.5;
+    "
+  ></div>
+
+  <!-- Report body text always loads from report-contents.json (same folder as this file). -->
+  <div id="report-cover" class="page cover-page sheet cover-sheet"></div>
+  <main id="report-main" class="page sheet body-sheet" hidden></main>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.8/dist/purify.min.js"></script>
+  <script src="report-renderer.js"></script>
+  <script>
+    (function () {
+      /** Fixed data source — edit the form / Update JSON to change this file, then refresh. */
+      var REPORT_JSON_FILE = "report-contents.json";
+
+      var errEl = document.getElementById("report-load-error");
+      var cover = document.getElementById("report-cover");
+      var main = document.getElementById("report-main");
+
+      function renderReport(data) {
+        var R = window.ReportRenderer;
+        var d = R.mergeData(data);
+        var dateStr = R.resolveDateString(d);
+        document.title = d.cover_title + " — Report";
+        cover.innerHTML = R.renderCoverInner(d, dateStr);
+        main.innerHTML = R.renderMainInner(d);
+        main.hidden = false;
+        R.refreshLiveDate(d);
+        /* Auto-size @page height to content for pageless PDF export */
+        requestAnimationFrame(function () {
+          setTimeout(function () {
+            var h = document.documentElement.scrollHeight;
+            var inches = (h / 96) + 0.25;
+            var s = document.createElement("style");
+            s.textContent = "@page { size: 8.5in " + inches + "in; margin: 0; }";
+            document.head.appendChild(s);
+          }, 200);
+        });
+      }
+
+      function clearError() {
+        errEl.style.display = "none";
+        errEl.innerHTML = "";
+      }
+
+      function showError(msg, opts) {
+        opts = opts || {};
+        cover.innerHTML = "";
+        main.innerHTML = "";
+        main.hidden = true;
+        errEl.style.display = "block";
+        errEl.innerHTML = "";
+
+        var p = document.createElement("p");
+        p.textContent = msg;
+        errEl.appendChild(p);
+
+        var row = document.createElement("p");
+        row.style.marginTop = "0.75rem";
+
+        var input = document.createElement("input");
+        input.type = "file";
+        input.accept = ".json,application/json";
+        input.id = "report-json-file-input";
+        input.style.marginRight = "0.5rem";
+        input.addEventListener("change", function () {
+          var f = input.files && input.files[0];
+          if (!f) return;
+          var reader = new FileReader();
+          reader.onload = function () {
+            try {
+              var data = JSON.parse(reader.result);
+              renderReport(data);
+              clearError();
+            } catch (err) {
+              alert("Could not parse JSON: " + err.message);
+            }
+          };
+          reader.onerror = function () {
+            alert("Could not read file.");
+          };
+          reader.readAsText(f);
+        });
+
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = "Choose " + REPORT_JSON_FILE + "…";
+        btn.style.font = "inherit";
+        btn.style.padding = "0.4rem 0.75rem";
+        btn.style.cursor = "pointer";
+        btn.addEventListener("click", function () {
+          input.click();
+        });
+
+        row.appendChild(btn);
+        row.appendChild(document.createTextNode(" — load the file from your project folder."));
+        errEl.appendChild(row);
+
+        if (opts.showRetry) {
+          var retry = document.createElement("button");
+          retry.type = "button";
+          retry.textContent = "Try loading again";
+          retry.style.font = "inherit";
+          retry.style.padding = "0.4rem 0.75rem";
+          retry.style.marginTop = "0.75rem";
+          retry.style.cursor = "pointer";
+          retry.addEventListener("click", function () {
+            tryFetch();
+          });
+          errEl.appendChild(retry);
+        }
+      }
+
+      function jsonUrl() {
+        return new URL(REPORT_JSON_FILE, window.location.href).href;
+      }
+
+      function tryFetch() {
+        clearError();
+        fetch(jsonUrl(), { cache: "no-store" })
+          .then(function (r) {
+            if (!r.ok) throw new Error("Server returned " + r.status + " for " + jsonUrl());
+            return r.json();
+          })
+          .then(function (data) {
+            renderReport(data);
+          })
+          .catch(function (e) {
+            var isFile = window.location.protocol === "file:";
+            var hint =
+              isFile
+                ? "Opened as file:// — browsers block loading " +
+                  REPORT_JSON_FILE +
+                  " automatically. Use http://localhost (same folder as this HTML), or pick the file below."
+                : "Could not load " +
+                  jsonUrl() +
+                  ". Keep " +
+                  REPORT_JSON_FILE +
+                  " next to this HTML file and serve this folder (e.g. python3 -m http.server 8000). ";
+            showError(hint + " Technical detail: " + e.message, { showRetry: !isFile });
+          });
+      }
+
+      tryFetch();
+    })();
+  </script>
+</body>
+</html>
