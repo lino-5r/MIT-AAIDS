@@ -319,7 +319,10 @@ td.worst-metric { color: var(--coral); }
   border: 1px solid var(--border-mid);
   box-shadow: var(--shadow);
   display: block;
+  cursor: zoom-in;
+  transition: opacity 0.15s ease;
 }
+.fig-block img:hover { opacity: 0.9; }
 .fig-caption {
   margin-top: 8px;
   font-size: 12.5px; line-height: 1.55;
@@ -332,6 +335,54 @@ td.worst-metric { color: var(--coral); }
 .arch-fig img {
   max-width: 100%; border: 1px solid var(--border-mid);
   border-radius: 8px; padding: 16px; background: var(--ivory);
+  cursor: zoom-in;
+  transition: opacity 0.15s ease;
+}
+.arch-fig img:hover { opacity: 0.9; }
+
+/* ─── LIGHTBOX ─── */
+#lightbox {
+  position: fixed; inset: 0; z-index: 9000;
+  background: rgba(20, 26, 34, 0.88);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.22s ease;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  padding: 32px;
+}
+#lightbox.open { opacity: 1; pointer-events: all; cursor: zoom-out; }
+#lightbox img {
+  max-width: min(92vw, 1400px);
+  max-height: 90vh;
+  border-radius: 8px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+  background: var(--ivory);
+  padding: 12px;
+  transform: scale(0.96);
+  transition: transform 0.22s ease;
+  cursor: default;
+}
+#lightbox.open img { transform: scale(1); }
+#lightbox-close {
+  position: fixed; top: 20px; right: 24px;
+  width: 36px; height: 36px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 50%; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 18px; line-height: 1;
+  transition: background 0.15s ease;
+  z-index: 9001;
+}
+#lightbox-close:hover { background: rgba(255,255,255,0.22); }
+#lightbox-caption {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  max-width: 680px; text-align: center;
+  font-size: 12.5px; color: rgba(255,255,255,0.65);
+  font-style: italic; line-height: 1.5;
+  pointer-events: none;
+  z-index: 9001;
 }
 
 /* ─── DIVIDERS ─── */
@@ -1410,11 +1461,54 @@ function initNav() {
   all.forEach(el => observer.observe(el));
 }
 
+// ─── LIGHTBOX ───
+function initLightbox() {
+  const lb      = document.getElementById('lightbox');
+  const lbImg   = document.getElementById('lightbox-img');
+  const lbClose = document.getElementById('lightbox-close');
+  const lbCap   = document.getElementById('lightbox-caption');
+
+  function open(src, caption) {
+    lbImg.src = src;
+    lbCap.textContent = caption;
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function close() {
+    lb.classList.remove('open');
+    document.body.style.overflow = '';
+    // clear src after transition so it doesn't flash on next open
+    setTimeout(() => { lbImg.src = ''; }, 250);
+  }
+
+  // Wire up every figure and arch image
+  document.querySelectorAll('.fig-block img, .arch-fig img').forEach(img => {
+    img.addEventListener('click', () => {
+      const caption = img.closest('.fig-block')
+        ?.querySelector('.fig-caption')?.textContent?.trim() ?? '';
+      open(img.src, caption);
+    });
+  });
+
+  // Close on backdrop click (not on the image itself)
+  lb.addEventListener('click', e => { if (e.target === lb) close(); });
+  lbClose.addEventListener('click', close);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+}
+
 // ─── BOOT ───
 document.addEventListener('DOMContentLoaded', () => {
   loadResults();
   initNav();
+  initLightbox();
 });
 </script>
+<!-- ── LIGHTBOX OVERLAY ── -->
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <button id="lightbox-close" aria-label="Close">&times;</button>
+  <img id="lightbox-img" src="" alt="Enlarged figure">
+  <div id="lightbox-caption"></div>
+</div>
+
 </body>
 </html>
