@@ -46,3 +46,6 @@ assets/SVHN Digit Recognition*
 # OS / editor
 .DS_Store
 Thumbs.db
+
+# Allow malaria-detection figures for GitHub Pages
+!malaria-detection/*.png

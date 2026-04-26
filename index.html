@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MIT Applied AI &amp; Data Science · Capstone Projects</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #f8f8f6; color: #2C3440; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 24px; }
+.hub { max-width: 680px; width: 100%; }
+.eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #1A6B7C; margin-bottom: 10px; }
+h1 { font-size: clamp(24px, 4vw, 34px); font-weight: 700; color: #2C3440; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 6px; }
+.subtitle { font-size: 15px; color: #5a6475; margin-bottom: 40px; }
+.project-card {
+  background: white; border: 1px solid rgba(26,107,124,0.14);
+  border-radius: 12px; padding: 24px 28px;
+  display: flex; align-items: flex-start; gap: 20px;
+  text-decoration: none; color: inherit;
+  transition: all 0.2s ease; margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(26,107,124,0.06);
+}
+.project-card:hover { border-color: #1A6B7C; box-shadow: 0 4px 18px rgba(26,107,124,0.14); transform: translateY(-1px); }
+.card-icon { font-size: 30px; flex-shrink: 0; margin-top: 2px; }
+.card-body { flex: 1; }
+.card-tag { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #1A6B7C; margin-bottom: 4px; }
+.card-title { font-size: 17px; font-weight: 600; color: #2C3440; margin-bottom: 6px; }
+.card-desc { font-size: 14px; color: #5a6475; line-height: 1.6; }
+.card-arrow { color: #1A6B7C; font-size: 18px; flex-shrink: 0; align-self: center; opacity: 0; transition: opacity 0.2s; }
+.project-card:hover .card-arrow { opacity: 1; }
+footer { margin-top: 40px; font-size: 12px; color: #8a94a0; text-align: center; }
+</style>
+</head>
+<body>
+<div class="hub">
+  <div class="eyebrow">MIT Applied AI &amp; Data Science Program · 2026</div>
+  <h1>Capstone Projects</h1>
+  <div class="subtitle">Applied deep learning projects from the MIT AAIDS program.</div>
+
+  <a class="project-card" href="malaria-detection/">
+    <div class="card-icon">🔬</div>
+    <div class="card-body">
+      <div class="card-tag">Capstone · Milestone Submission</div>
+      <div class="card-title">Malaria Detection Using Deep Learning</div>
+      <div class="card-desc">Binary classification of microscopic blood cell images. CNN1 baseline, CNN2 augmented, CNN3 recall-optimized, and MobileNetV2 transfer learning — with full model comparison and deployment recommendation.</div>
+    </div>
+    <div class="card-arrow">→</div>
+  </a>
+
+  <a class="project-card" href="SVHN_Digit_Recognition_Report.html">
+    <div class="card-icon">🔢</div>
+    <div class="card-body">
+      <div class="card-tag">Module Project</div>
+      <div class="card-title">SVHN Digit Recognition</div>
+      <div class="card-desc">Street View House Number recognition using deep learning on the SVHN dataset.</div>
+    </div>
+    <div class="card-arrow">→</div>
+  </a>
+
+  <footer>lino-5r · <a href="https://github.com/lino-5r/MIT-AAIDS" style="color:#1A6B7C;">github.com/lino-5r/MIT-AAIDS</a></footer>
+</div>
+</body>
+</html>

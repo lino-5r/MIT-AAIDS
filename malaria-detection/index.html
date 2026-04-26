@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Malaria Detection · Milestone Report · Claros 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --teal:        #1A6B7C;
+  --teal-light:  #e8f4f7;
+  --teal-mid:    rgba(26,107,124,0.12);
+  --amber:       #E8A838;
+  --amber-light: #fef8ec;
+  --coral:       #D95F4B;
+  --coral-light: #fdf0ee;
+  --sage:        #4E9E78;
+  --sage-light:  #edf7f2;
+  --dark:        #2C3440;
+  --mid:         #5a6475;
+  --muted:       #8a94a0;
+  --ivory:       #F7F4EF;
+  --white:       #FFFFFF;
+  --border:      rgba(26,107,124,0.14);
+  --border-mid:  rgba(44,52,64,0.1);
+  --shadow:      0 2px 12px rgba(26,107,124,0.08);
+  --radius:      10px;
+  --content-w:   860px;
+  --nav-offset:  240px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 400;
+  background: var(--white);
+  color: var(--dark);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ─── SIDE NAV ─── */
+.side-nav {
+  position: fixed;
+  top: 50%;
+  left: max(12px, calc(50vw - var(--content-w)/2 - var(--nav-offset)));
+  transform: translateY(-50%);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 90vh;
+  overflow: visible;
+}
+
+.side-nav a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 10px 5px 0;
+  text-decoration: none;
+  transition: all 0.22s ease;
+}
+
+.side-nav a .dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(26,107,124,0.3);
+  background: transparent;
+  flex-shrink: 0;
+  transition: all 0.22s ease;
+}
+.side-nav a.active .dot { background: var(--teal); border-color: var(--teal); box-shadow: 0 0 6px rgba(26,107,124,0.4); }
+.side-nav a:hover .dot  { border-color: var(--teal); }
+
+.side-nav a .nav-label {
+  font-size: 12px; font-weight: 400;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+  white-space: nowrap;
+  transition: color 0.22s ease;
+}
+.side-nav a.active .nav-label { color: var(--teal); font-weight: 600; }
+.side-nav a:hover  .nav-label { color: var(--dark); }
+
+.nav-sub {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.3s ease;
+  padding-left: 18px;
+  display: flex; flex-direction: column; gap: 0;
+}
+.nav-sub.open { max-height: 180px; }
+
+.side-nav .sub-link {
+  display: flex; align-items: center; gap: 8px;
+  padding: 3px 0; text-decoration: none; transition: all 0.18s;
+}
+.side-nav .sub-link .subdot {
+  width: 5px; height: 5px; border-radius: 50%;
+  border: 1px solid rgba(26,107,124,0.25);
+  background: transparent; flex-shrink: 0; transition: all 0.18s;
+}
+.side-nav .sub-link.active .subdot { background: var(--teal); border-color: var(--teal); }
+.side-nav .sub-link:hover  .subdot { border-color: var(--teal); }
+.side-nav .sub-link .nav-label { font-size: 11px; color: rgba(90,100,117,0.65); }
+.side-nav .sub-link.active .nav-label { color: var(--teal); font-weight: 600; }
+.side-nav .sub-link:hover  .nav-label { color: var(--dark); }
+
+/* ─── LAYOUT ─── */
+.page {
+  max-width: var(--content-w);
+  margin: 0 auto;
+  padding: 52px 28px 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ─── HEADER ─── */
+.doc-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-bottom: 32px;
+  border-bottom: 2px solid var(--teal);
+  gap: 24px;
+  margin-bottom: 56px;
+}
+.header-left { display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.header-eyebrow {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--teal);
+}
+.header-title {
+  font-size: clamp(26px, 3.5vw, 38px);
+  font-weight: 700; color: var(--dark);
+  line-height: 1.15; letter-spacing: -0.02em;
+}
+.header-subtitle {
+  font-size: 15px; font-weight: 400; color: var(--mid);
+  margin-top: 4px;
+}
+.header-meta {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;
+}
+.meta-chip {
+  display: inline-block; padding: 3px 10px; border-radius: 20px;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.meta-chip.prog { background: var(--teal-light); color: var(--teal); border: 1px solid var(--border); }
+.meta-chip.year { background: var(--ivory); color: var(--muted); border: 1px solid var(--border-mid); }
+.meta-chip.best {
+  background: var(--sage-light); color: var(--sage);
+  border: 1px solid rgba(78,158,120,0.25);
+}
+.header-logo { display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; }
+.logo-name {
+  font-size: 13px; font-weight: 700; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--teal);
+}
+.logo-tagline {
+  font-size: 9px; font-weight: 400; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted);
+}
+
+/* ─── SECTIONS ─── */
+.doc-section { scroll-margin-top: 32px; margin-bottom: 64px; }
+
+.section-number {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--teal); margin-bottom: 6px;
+}
+.section-title {
+  font-size: clamp(20px, 2.5vw, 26px);
+  font-weight: 700; color: var(--dark);
+  line-height: 1.2; letter-spacing: -0.015em;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.subsection-title {
+  font-size: 17px; font-weight: 600; color: var(--dark);
+  margin: 28px 0 12px;
+}
+.subsection-title.indent { padding-left: 16px; border-left: 3px solid var(--teal); }
+.sub2-title {
+  font-size: 14px; font-weight: 600; color: var(--teal);
+  margin: 20px 0 8px; text-transform: uppercase; letter-spacing: 0.06em;
+}
+
+p { margin-bottom: 14px; font-size: 15px; line-height: 1.75; color: var(--dark); }
+p:last-child { margin-bottom: 0; }
+
+strong { font-weight: 600; color: var(--dark); }
+em { font-style: italic; }
+code {
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 12.5px;
+  background: var(--ivory);
+  border: 1px solid var(--border-mid);
+  border-radius: 4px;
+  padding: 1px 5px;
+  color: var(--teal);
+}
+a { color: var(--teal); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+ul, ol { padding-left: 20px; margin-bottom: 14px; }
+li { font-size: 15px; line-height: 1.75; margin-bottom: 6px; }
+
+/* ─── CALLOUT / CARD ─── */
+.card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  background: var(--teal-light);
+  margin: 20px 0;
+}
+.card.amber { background: var(--amber-light); border-color: rgba(232,168,56,0.25); }
+.card.coral { background: var(--coral-light); border-color: rgba(217,95,75,0.25); }
+.card.sage  { background: var(--sage-light);  border-color: rgba(78,158,120,0.25); }
+.card.neutral { background: var(--ivory); border-color: var(--border-mid); }
+.card-label {
+  font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.12em; color: var(--teal); margin-bottom: 8px;
+}
+.card.amber .card-label { color: var(--amber); }
+.card.coral .card-label { color: var(--coral); }
+.card.sage  .card-label { color: var(--sage); }
+.card.neutral .card-label { color: var(--muted); }
+
+/* ─── METRIC CHIPS (inline) ─── */
+.met {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 4px;
+  font-size: 13px; font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.met.good   { background: var(--sage-light);  color: var(--sage);  border: 1px solid rgba(78,158,120,0.25); }
+.met.warn   { background: var(--amber-light); color: #b87e1a;      border: 1px solid rgba(232,168,56,0.3); }
+.met.bad    { background: var(--coral-light); color: var(--coral); border: 1px solid rgba(217,95,75,0.25); }
+.met.neutral{ background: var(--ivory);       color: var(--dark);  border: 1px solid var(--border-mid); }
+.met.teal   { background: var(--teal-light);  color: var(--teal);  border: 1px solid var(--border); }
+
+/* ─── METRIC ROW ─── */
+.metric-row {
+  display: flex; flex-wrap: wrap; gap: 12px; margin: 16px 0;
+}
+.metric-box {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 12px 18px; border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--white); min-width: 100px; flex: 1;
+}
+.metric-box .mb-value {
+  font-size: 22px; font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--teal);
+}
+.metric-box .mb-label {
+  font-size: 11px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--muted);
+}
+.metric-box.highlight { border-color: var(--sage); background: var(--sage-light); }
+.metric-box.highlight .mb-value { color: var(--sage); }
+.metric-box.warn { border-color: rgba(217,95,75,0.3); background: var(--coral-light); }
+.metric-box.warn .mb-value { color: var(--coral); }
+
+/* ─── TABLES ─── */
+table {
+  width: 100%; border-collapse: collapse; margin: 16px 0;
+  font-size: 14px;
+}
+th {
+  background: var(--teal); color: white;
+  padding: 10px 14px; text-align: left;
+  font-weight: 600; font-size: 12px;
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+th:first-child { border-radius: 6px 0 0 0; }
+th:last-child  { border-radius: 0 6px 0 0; }
+td {
+  padding: 9px 14px; border-bottom: 1px solid var(--border-mid);
+  color: var(--dark); vertical-align: middle;
+}
+tr:last-child td { border-bottom: none; }
+tr:nth-child(even) td { background: var(--ivory); }
+tr.best-row td { background: var(--sage-light) !important; font-weight: 500; }
+tr.best-row td:first-child { border-left: 3px solid var(--sage); padding-left: 11px; }
+td.metric-cell { font-variant-numeric: tabular-nums; font-weight: 500; }
+td.best-metric { color: var(--sage); font-weight: 700; }
+td.worst-metric { color: var(--coral); }
+
+/* ─── FIGURES ─── */
+.fig-block { margin: 24px 0; }
+.fig-block img {
+  width: 100%; border-radius: 8px;
+  border: 1px solid var(--border-mid);
+  box-shadow: var(--shadow);
+  display: block;
+}
+.fig-caption {
+  margin-top: 8px;
+  font-size: 12.5px; line-height: 1.55;
+  color: var(--muted); font-style: italic;
+}
+.fig-caption strong { font-style: normal; color: var(--mid); }
+
+/* ─── ARCH SVG ─── */
+.arch-fig { margin: 20px 0; }
+.arch-fig img {
+  max-width: 100%; border: 1px solid var(--border-mid);
+  border-radius: 8px; padding: 16px; background: var(--ivory);
+}
+
+/* ─── DIVIDERS ─── */
+.section-divider {
+  border: none; border-top: 1px solid var(--border-mid);
+  margin: 48px 0;
+}
+
+/* ─── TOOLTIP ─── */
+.term {
+  border-bottom: 1px dotted var(--teal);
+  cursor: help;
+  color: var(--dark);
+}
+.tooltip-popup {
+  position: fixed;
+  z-index: 9999;
+  max-width: 300px;
+  background: var(--dark);
+  color: white;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px; line-height: 1.55;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+  opacity: 0;
+}
+.tooltip-popup.visible { opacity: 1; }
+.tooltip-popup .tt-term {
+  font-weight: 600; color: var(--amber);
+  display: block; margin-bottom: 4px;
+}
+
+/* ─── DATA NOTICE ─── */
+.data-notice {
+  position: fixed; bottom: 20px; right: 20px;
+  font-size: 11px; color: var(--muted);
+  background: var(--ivory);
+  border: 1px solid var(--border-mid);
+  border-radius: 20px;
+  padding: 5px 14px;
+  z-index: 300;
+  transition: opacity 0.5s ease;
+}
+.data-notice.loaded { color: var(--sage); border-color: rgba(78,158,120,0.3); }
+.data-notice.error  { color: var(--coral); border-color: rgba(217,95,75,0.3); }
+
+/* ─── WORKING NOTES ─── */
+.notes-section { border-left: 3px solid var(--amber); padding-left: 20px; }
+.notes-section .section-title { border-color: rgba(232,168,56,0.25); color: var(--dark); }
+.note-item { margin-bottom: 36px; }
+.note-item h4 {
+  font-size: 15px; font-weight: 600; color: var(--dark);
+  margin-bottom: 10px;
+}
+.note-tag {
+  display: inline-block;
+  font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; padding: 2px 8px; border-radius: 10px;
+  background: var(--amber-light); color: #b87e1a;
+  border: 1px solid rgba(232,168,56,0.3); margin-bottom: 8px;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1100px) {
+  .side-nav { display: none; }
+}
+@media (max-width: 700px) {
+  .doc-header { flex-direction: column; }
+  .metric-row { flex-direction: column; }
+  .metric-box { min-width: auto; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════ SIDE NAV ══════ -->
+<nav class="side-nav" id="side-nav">
+  <a href="#s1" data-section="s1"><span class="dot"></span><span class="nav-label">1. Problem Definition</span></a>
+  <a href="#s2" data-section="s2"><span class="dot"></span><span class="nav-label">2. Data Exploration</span></a>
+  <a href="#s3" data-section="s3" id="nav-s3" class="nav-parent"><span class="dot"></span><span class="nav-label">3. Model Building</span></a>
+  <div class="nav-sub" id="nav-sub-s3">
+    <a href="#s3-1" data-section="s3-1" class="sub-link"><span class="subdot"></span><span class="nav-label">CNN1 Baseline</span></a>
+    <a href="#s3-2" data-section="s3-2" class="sub-link"><span class="subdot"></span><span class="nav-label">CNN2 Augmented</span></a>
+    <a href="#s3-3" data-section="s3-3" class="sub-link"><span class="subdot"></span><span class="nav-label">CNN3 Recall-Optimized</span></a>
+    <a href="#s3-4" data-section="s3-4" class="sub-link"><span class="subdot"></span><span class="nav-label">MobileNetV2</span></a>
+  </div>
+  <a href="#s4" data-section="s4"><span class="dot"></span><span class="nav-label">4. Model Comparison</span></a>
+  <a href="#s5" data-section="s5"><span class="dot"></span><span class="nav-label">5. Recommendation</span></a>
+  <a href="#appendix" data-section="appendix"><span class="dot"></span><span class="nav-label">Appendix</span></a>
+  <a href="#notes" data-section="notes"><span class="dot"></span><span class="nav-label">Working Notes</span></a>
+</nav>
+
+<!-- ══════ PAGE ══════ -->
+<div class="page">
+
+<!-- ── HEADER ── -->
+<header class="doc-header">
+  <div class="header-left">
+    <div class="header-eyebrow">MIT Applied AI &amp; Data Science Program · Capstone Project</div>
+    <div class="header-title">Malaria Detection<br>Using Deep Learning</div>
+    <div class="header-subtitle">Milestone Submission Report</div>
+    <div class="header-meta">
+      <span class="meta-chip prog">Milestone Submission</span>
+      <span class="meta-chip year">2026</span>
+      <span class="meta-chip best" id="header-best-chip">Best model: <span id="header-best-name">loading...</span> &middot; Recall <span id="header-best-recall">—</span></span>
+    </div>
+  </div>
+  <div class="header-logo">
+    <!-- Ring-in-ring logo: outer ring = cell membrane (teal), inner ring = parasite ring form (amber), nucleus dot (coral) -->
+    <svg viewBox="0 0 72 72" width="80" height="80" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Claros logo">
+      <circle cx="36" cy="36" r="32" fill="none" stroke="#1A6B7C" stroke-width="5"/>
+      <circle cx="36" cy="36" r="32" fill="none" stroke="#1A6B7C" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.3"/>
+      <circle cx="36" cy="36" r="20" fill="none" stroke="#E8A838" stroke-width="4.5"/>
+      <circle cx="43" cy="29" r="4" fill="#D95F4B"/>
+    </svg>
+    <div class="logo-name">Claros</div>
+    <div class="logo-tagline">Pathology Intelligence</div>
+  </div>
+</header>
+
+
+<!-- ══════════════════════════════════ -->
+<!-- SECTION 1 — PROBLEM DEFINITION   -->
+<!-- ══════════════════════════════════ -->
+<section id="s1" class="doc-section">
+  <div class="section-number">Section 1</div>
+  <div class="section-title">Problem Definition</div>
+
+  <div class="subsection-title">1.1 Context</div>
+  <p>Malaria is a life-threatening infectious disease caused by <span class="term" data-term="Plasmodium"><em>Plasmodium</em></span> parasites transmitted through the bites of infected female <span class="term" data-term="Anopheles"><em>Anopheles</em></span> mosquitoes. Once in the bloodstream, the parasites invade red blood cells, causing oxygen deprivation, respiratory distress, and — if untreated — death. A particularly dangerous characteristic is that the parasites can remain dormant in the body for over a year before symptoms appear, significantly increasing the window for undetected transmission.</p>
+  <p>According to the WHO, more than <strong>229 million malaria cases</strong> and approximately <strong>400,000 deaths</strong> were reported globally in 2019 alone. Sub-Saharan Africa bears the highest burden; children under five account for <strong>67% of all malaria deaths worldwide</strong>.</p>
+  <p>The conventional diagnostic method — microscopic examination of blood smear slides — is slow, labor-intensive, and dependent on the availability of skilled microscopists. In low-resource, high-burden settings, that expertise is scarce. Inter-observer variability further undermines diagnostic consistency. Automated, AI-driven detection directly addresses these gaps: machine learning classification has demonstrated accuracy comparable to manual examination, while being deployable at scale, available continuously, and free from observer fatigue.</p>
+
+  <div class="subsection-title">1.2 Objectives</div>
+  <ul>
+    <li>Build a reliable deep learning model that classifies microscopic blood cell images as either <strong>Parasitized</strong> or <strong>Uninfected</strong>.</li>
+    <li>Minimize <strong>false negatives</strong> — missed infections — since they represent the most clinically consequential error in a diagnostic context.</li>
+    <li>Evaluate and compare multiple model architectures to identify the best-performing approach for this dataset.</li>
+    <li>Provide a well-reasoned proposal for which model should be adopted for deployment.</li>
+  </ul>
+
+  <div class="subsection-title">1.3 Key Questions</div>
+  <ol>
+    <li>Can a <span class="term" data-term="CNN">CNN</span> learn discriminative visual features from cell images that reliably distinguish parasitized from uninfected cells?</li>
+    <li>What preprocessing and <span class="term" data-term="Data Augmentation">data augmentation</span> strategies improve model robustness and reduce <span class="term" data-term="Overfitting">overfitting</span>?</li>
+    <li>How does model complexity affect generalization to unseen images?</li>
+    <li>Does <span class="term" data-term="Transfer Learning">transfer learning</span> from <span class="term" data-term="MobileNetV2">MobileNetV2</span> / <span class="term" data-term="ImageNet">ImageNet</span> outperform custom architectures trained from scratch?</li>
+  </ol>
+
+  <div class="subsection-title">1.4 Problem Formulation</div>
+  <p>This is a <strong>binary image classification</strong> problem addressed using supervised deep learning.</p>
+  <ul>
+    <li><strong>Input:</strong> A single RGB microscopic blood cell image, resized to 64×64 pixels.</li>
+    <li><strong>Output:</strong> A binary prediction — <code>1</code> (Parasitized) or <code>0</code> (Uninfected).</li>
+    <li><strong>Primary Metric:</strong> <span class="term" data-term="Recall"><strong>Recall</strong></span> for the Parasitized class. In a medical screening context, the cost of a false negative far outweighs the cost of a false positive. Minimizing missed diagnoses is the governing objective.</li>
+    <li><strong>Supporting Metrics:</strong> <span class="term" data-term="Accuracy">Accuracy</span>, <span class="term" data-term="Precision">Precision</span>, <span class="term" data-term="F1-Score">F1-Score</span>, and <span class="term" data-term="AUC-ROC">AUC-ROC</span>.</li>
+  </ul>
+</section>
+
+<hr class="section-divider">
+
+<!-- ══════════════════════════════════ -->
+<!-- SECTION 2 — DATA EXPLORATION     -->
+<!-- ══════════════════════════════════ -->
+<section id="s2" class="doc-section">
+  <div class="section-number">Section 2</div>
+  <div class="section-title">Data Exploration</div>
+
+  <div class="subsection-title">2.1 Data Description</div>
+  <p>The dataset consists of colored microscopic images of individual red blood cells, sourced from the NIH Malaria Dataset. Each image depicts a single cell labeled as either Parasitized (containing the <em>Plasmodium</em> parasite) or Uninfected.</p>
+
+  <table>
+    <thead><tr><th>Split</th><th>Parasitized</th><th>Uninfected</th><th>Total</th></tr></thead>
+    <tbody>
+      <tr><td>Training</td><td>12,582</td><td>12,376</td><td>24,958</td></tr>
+      <tr><td>Test</td><td>1,300</td><td>1,300</td><td>2,600</td></tr>
+    </tbody>
+  </table>
+
+  <div class="fig-block">
+    <img src="fig_eda_class_distribution.png" alt="Class distribution bar chart">
+    <div class="fig-caption"><strong>Figure 1.</strong> Class distribution across training and test splits. Both splits are very nearly balanced at 50/50.</div>
+  </div>
+
+  <p>A <span class="term" data-term="Stratified Split">stratified 80/20 split</span> was applied to the training set to create a validation subset:</p>
+  <table>
+    <thead><tr><th>Subset</th><th>Size</th></tr></thead>
+    <tbody>
+      <tr><td>Train</td><td>~19,966 images</td></tr>
+      <tr><td>Validation</td><td>~4,992 images</td></tr>
+      <tr><td>Test (held out)</td><td>2,600 images</td></tr>
+    </tbody>
+  </table>
+
+  <div class="subsection-title">2.2 Observations &amp; Insights</div>
+
+  <div class="sub2-title">Class Balance</div>
+  <p>The dataset is very nearly perfectly balanced — approximately 50% Parasitized and 50% Uninfected in both splits. This makes <span class="term" data-term="Accuracy">accuracy</span> a valid and interpretable metric: the model must genuinely learn to distinguish the two classes, and no resampling or class-weighting is required in the baseline setup.</p>
+
+  <div class="sub2-title">Visual Characteristics</div>
+  <p>Visual inspection reveals meaningful and learnable differences between classes. Parasitized cells exhibit dark staining artifacts — the visible signature of <span class="term" data-term="Trophozoites"><em>Plasmodium</em> trophozoites</span> or ring-forms within the cell. Uninfected cells appear uniformly pale or pink with a smooth, regular structure. These contrasts in texture, color, and internal structure are precisely the spatial patterns that convolutional filters are designed to detect.</p>
+
+  <div class="fig-block">
+    <img src="fig_eda_sample_images.png" alt="Sample cell images by class">
+    <div class="fig-caption"><strong>Figure 2.</strong> Sample cell images by class. Parasitized cells (top row) show dark staining artifacts from <em>Plasmodium</em> trophozoites; uninfected cells (bottom row) appear uniformly pale with a smooth, regular internal structure.</div>
+  </div>
+
+  <div class="sub2-title">Pixel Intensity Patterns</div>
+  <p>Analysis of pixel intensity distributions across the three color channels shows subtle but consistent differences between classes. Parasitized cells show a shift in intensity distributions, particularly in the red and blue channels, consistent with the darker staining caused by Giemsa interaction with the parasite.</p>
+
+  <div class="fig-block">
+    <img src="fig_eda_pixel_intensity.png" alt="Pixel intensity KDE distributions">
+    <div class="fig-caption"><strong>Figure 3.</strong> Pixel intensity distributions (KDE) per RGB channel for Parasitized vs. Uninfected cells. The red channel suppression and blue channel elevation in Parasitized cells reflects the characteristic Giemsa staining of the parasite.</div>
+  </div>
+
+  <p>The same signal can also be visualized spatially. Mean pixel values computed per channel — Parasitized minus Uninfected — show where in the cell frame the chromatic difference is concentrated. In original (non-augmented) images, the signature clusters near the cell center, consistent with the parasite occupying a predictable position within the segmented crop.</p>
+
+  <div class="fig-block">
+    <img src="fig_eda_spectral_channels.png" alt="Spectral difference maps">
+    <div class="fig-caption"><strong>Figure 4.</strong> Spectral difference maps (original images): mean(Parasitized) minus mean(Uninfected) per RGB channel. Red regions indicate pixels where Parasitized cells are brighter; blue regions where Uninfected cells are brighter. The spatial concentration of the signal toward the cell center reflects the parasite's typical position in pre-segmented crops.</div>
+  </div>
+
+  <div class="sub2-title">Image Size Variability</div>
+  <p>Original images vary in pixel dimensions, ranging approximately from 100 to 200 pixels in width and height. A uniform input size of <strong>64×64 pixels</strong> was selected, balancing spatial detail against computational efficiency. Images were resized using <span class="term" data-term="bilinear interpolation">bilinear interpolation</span> via <span class="term" data-term="PIL">PIL</span>.</p>
+
+  <div class="fig-block">
+    <img src="fig_eda_image_dimensions.png" alt="Original image dimension distribution">
+    <div class="fig-caption"><strong>Figure 5.</strong> Distribution of original image dimensions across the full dataset. Most images fall in the 100–200 pixel range in both width and height.</div>
+  </div>
+
+  <div class="subsection-title">2.3 Pre-Processing Steps</div>
+  <table>
+    <thead><tr><th>Step</th><th>Detail</th></tr></thead>
+    <tbody>
+      <tr><td>Resizing</td><td>All images resized to 64×64 RGB</td></tr>
+      <tr><td>Normalization</td><td>Pixel values scaled from [0, 255] → [0.0, 1.0]</td></tr>
+      <tr><td><span class="term" data-term="Stratified Split">Train/Validation Split</span></td><td>80/20 stratified split from training data</td></tr>
+      <tr><td><span class="term" data-term="Data Augmentation">Data Augmentation</span></td><td>Applied dynamically during CNN2 and CNN3 training (see Section 3.2)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="subsection-title">2.4 Dataset Balance and Modeling Implications</div>
+  <p>The near-perfect class balance has a direct implication for the modeling strategy: both classes are represented equally throughout training, so the optimizer faces equal pressure to learn features for both. There is no risk of a shortcut solution by defaulting to the dominant class. This simplifies the baseline training setup — no resampling or class weighting required — and means accuracy and recall can be expected to move broadly in concert throughout training.</p>
+</section>
+
+<hr class="section-divider">
+
+<!-- ══════════════════════════════════ -->
+<!-- SECTION 3 — MODEL BUILDING       -->
+<!-- ══════════════════════════════════ -->
+<section id="s3" class="doc-section">
+  <div class="section-number">Section 3</div>
+  <div class="section-title">Model Building</div>
+  <p>Three distinct modeling approaches were implemented and evaluated, progressing from a simple baseline through to a fine-tuned transfer learning model. A fourth model (CNN3) was added as a controlled experiment to isolate the effect of training configuration on the CNN2 architecture.</p>
+</section>
+
+<!-- 3.1 CNN1 -->
+<section id="s3-1" class="doc-section">
+  <div class="section-number">Section 3.1</div>
+  <div class="section-title">Baseline CNN (CNN1)</div>
+
+  <p>The baseline model is a custom <span class="term" data-term="CNN">CNN</span> with three convolutional blocks of increasing filter depth (32 → 64 → 128 filters), followed by a fully connected layer with <span class="term" data-term="Dropout">dropout</span> regularization and a sigmoid output.</p>
+
+  <div class="subsection-title">Architecture</div>
+  <ul>
+    <li>Conv Block 1: Conv2D(32) → MaxPooling</li>
+    <li>Conv Block 2: Conv2D(64) → MaxPooling</li>
+    <li>Conv Block 3: Conv2D(128) → MaxPooling</li>
+    <li>Flatten → Dense(256, ReLU) → Dropout(0.5) → Dense(1, sigmoid)</li>
+  </ul>
+  <div class="arch-fig">
+    <img src="fig_cnn1_architecture.svg" alt="CNN1 Architecture Diagram">
+  </div>
+  <p>Compiled with the <span class="term" data-term="Adam optimizer">Adam optimizer</span>, <span class="term" data-term="binary cross-entropy loss">binary cross-entropy loss</span>, trained with <span class="term" data-term="early stopping">early stopping</span> (patience=5) and <span class="term" data-term="learning rate reduction on plateau">learning rate reduction on plateau</span>.</p>
+
+  <div class="subsection-title">Key Finding</div>
+  <div class="card">
+    <div class="card-label">CNN1 - Baseline</div>
+    <p>The baseline CNN trained for <strong><span id="dyn-cnn1-epochs">—</span> epochs</strong> before early stopping triggered, with best weights restored from epoch <strong><span id="dyn-cnn1-best-epoch">—</span></strong> (validation loss: <strong><span id="dyn-cnn1-best-val-loss">—</span></strong>). Training accuracy reached <span id="dyn-cnn1-train-acc" class="met neutral">—</span>, while validation accuracy held at <span id="dyn-cnn1-val-acc" class="met neutral">—</span>. The loss curves diverge from the best epoch onward: training loss continued to fall while validation loss climbed, the textbook <span class="term" data-term="Overfitting">overfitting</span> signal. The model's generalizable learning happened in the first few epochs; subsequent passes extracted training-specific patterns. The accuracy gap is modest (~1%), but the loss divergence makes clear the model is fitting noise. That behavior motivates CNN2.</p>
+  </div>
+
+  <div class="metric-row" id="cnn1-metrics">
+    <div class="metric-box"><div class="mb-value" id="dyn-cnn1-recall">—</div><div class="mb-label">Recall</div></div>
+    <div class="metric-box"><div class="mb-value" id="dyn-cnn1-acc">—</div><div class="mb-label">Accuracy</div></div>
+    <div class="metric-box"><div class="mb-value" id="dyn-cnn1-auc">—</div><div class="mb-label">AUC-ROC</div></div>
+    <div class="metric-box"><div class="mb-value" id="dyn-cnn1-fn">—</div><div class="mb-label">False Negatives</div></div>
+  </div>
+
+  <div class="fig-block">
+    <img src="fig_cnn1_training_history.png" alt="CNN1 training history">
+    <div class="fig-caption"><strong>Figure 6.</strong> CNN1 Baseline — Training and validation accuracy and loss over epochs. Diverging loss curves indicate mild overfitting; early stopping triggered before further degradation.</div>
+  </div>
+  <div class="fig-block">
+    <img src="fig_cnn1_evaluation.png" alt="CNN1 confusion matrix and ROC curve">
+    <div class="fig-caption"><strong>Figure 7.</strong> CNN1 Baseline — Confusion matrix and ROC curve on the test set (2,600 images).</div>
+  </div>
+</section>
+
+<!-- 3.2 CNN2 -->
+<section id="s3-2" class="doc-section">
+  <div class="section-number">Section 3.2</div>
+  <div class="section-title">Augmented CNN (CNN2)</div>
+
+  <p>To address overfitting and improve generalization, CNN2 introduced <span class="term" data-term="Data Augmentation">data augmentation</span> applied dynamically during training, along with architectural improvements.</p>
+
+  <div class="subsection-title">Augmentation Parameters</div>
+  <table>
+    <thead><tr><th>Technique</th><th>Parameter</th></tr></thead>
+    <tbody>
+      <tr><td>Random rotation</td><td>±20°</td></tr>
+      <tr><td>Horizontal flip</td><td>Enabled</td></tr>
+      <tr><td>Vertical flip</td><td>Enabled</td></tr>
+      <tr><td>Width / height shift</td><td>±10%</td></tr>
+      <tr><td>Zoom</td><td>±10%</td></tr>
+    </tbody>
+  </table>
+
+  <p>The architecture also added <code>BatchNormalization</code> after each convolutional layer and replaced the final <code>Flatten → Dense</code> structure with <code>GlobalAveragePooling2D</code>, which reduces spatial feature maps to a single vector and limits overfitting by reducing parameter count.</p>
+
+  <div class="arch-fig">
+    <img src="fig_cnn2_architecture.svg" alt="CNN2 Architecture Diagram">
+  </div>
+
+  <div class="subsection-title">What Augmentation Does to the Training Signal</div>
+  <p>The augmentation pipeline applies random transformations to each training batch. The examples below show the range of variation a single cell image can undergo before being passed to the model.</p>
+
+  <div class="fig-block">
+    <img src="fig_eda_augmentation_examples.png" alt="Data augmentation examples">
+    <div class="fig-caption"><strong>Figure 8.</strong> Data augmentation examples. Each row shows the same source image after different random augmentation draws, illustrating the rotation, flip, shift, and zoom variation the model trains on.</div>
+  </div>
+
+  <p>The difference maps below compare mean pixel differences between classes computed on original images (top row) and augmented images (bottom row), across all three channels.</p>
+
+  <div class="fig-block">
+    <img src="fig_eda_spectral_augmented.png" alt="Spectral difference maps: original vs augmented">
+    <div class="fig-caption"><strong>Figure 9.</strong> Spectral Difference Maps: Original vs. Augmented Training Data. Each map shows mean(Parasitized) minus mean(Uninfected) per channel. In the original maps, the parasite signature clusters near the cell center. In the augmented maps, that signature diffuses across positions and orientations — forcing the model to learn the parasite's color and texture signature rather than its position.</div>
+  </div>
+
+  <p>In the original maps, the parasite signature appears as a localized cluster concentrated toward the image center, reflecting the parasite's predictable position in pre-segmented crops. In the augmented maps, that signature becomes more diffuse and rotationally symmetric. The core chromatic signal — red channel suppression and blue channel elevation caused by Giemsa staining — is still present but smeared across positions and orientations rather than anchored to one spot. CNN2 therefore trains on a parasite that could appear anywhere in the frame; positional shortcuts are no longer available.</p>
+
+  <div class="card neutral">
+    <div class="card-label">Note on Experimental Design</div>
+    <p>CNN2 introduces two categories of change simultaneously: augmented training data and a more regularized architecture (BatchNormalization, block-level Dropout, GlobalAveragePooling2D). Performance differences between CNN1 and CNN2 cannot be attributed cleanly to augmentation alone. In a production setting, these variables would be tested in isolation. For this analysis, CNN2 is treated as a combined improvement package; any performance gain is the aggregate effect of both changes.</p>
+  </div>
+
+  <div class="subsection-title">Key Finding</div>
+  <div class="card">
+    <div class="card-label">CNN2 - Training Curves</div>
+    <p>CNN2 ran for <strong><span id="dyn-cnn2-epochs">—</span> epochs</strong> before early stopping triggered — notably shorter than CNN1's <span id="dyn-cnn1-epochs-2">—</span>. Training accuracy (<span id="dyn-cnn2-train-acc" class="met neutral">—</span>) and validation accuracy (<span id="dyn-cnn2-val-acc" class="met neutral">—</span>) remained within 0.5% of each other throughout, a tighter gap than CNN1. The augmentation and architectural changes appear to have reduced overfitting pressure during training. What the training curves do not show is the calibration failure that emerges at evaluation time.</p>
+  </div>
+
+  <div class="fig-block">
+    <img src="fig_cnn2_training_history.png" alt="CNN2 training history">
+    <div class="fig-caption"><strong>Figure 10.</strong> CNN2 Augmented — Training and validation accuracy and loss over epochs. Compare loss curve divergence to CNN1.</div>
+  </div>
+
+  <div class="subsection-title">Threshold Analysis</div>
+  <div class="card coral">
+    <div class="card-label">Sigmoid Calibration Failure</div>
+    <p>Despite the training curve behavior, CNN2's default-threshold evaluation produces a recall of <span class="met bad" id="dyn-cnn2-recall-default">—</span> for the Parasitized class — <strong><span id="dyn-cnn2-fn-default">—</span> false negatives</strong> out of 1,300 Parasitized images. The AUC-ROC of <span class="met teal" id="dyn-cnn2-auc">—</span> confirms the model has strong discriminative ability. The disconnect points to a calibration problem: sigmoid output probabilities cluster far below 0.5, so the default threshold misclassifies almost every Parasitized cell.</p>
+  </div>
+
+  <div class="fig-block">
+    <img src="fig_cnn2_evaluation.png" alt="CNN2 default evaluation">
+    <div class="fig-caption"><strong>Figure 11.</strong> CNN2 Augmented — Confusion matrix and ROC curve at the default 0.5 threshold. Note the high AUC alongside collapsed recall: indicative of sigmoid calibration failure, not poor discriminative ability.</div>
+  </div>
+
+  <p>Thresholds from 0.01 to 0.55 were scanned and Recall, Precision, and F1-Score computed at each point. The scan identifies two clinically relevant operating points: the threshold that maximizes F1-Score, and the lowest threshold that achieves at least 95% recall.</p>
+
+  <div class="fig-block">
+    <img src="fig_cnn2_threshold_analysis.png" alt="CNN2 threshold analysis">
+    <div class="fig-caption"><strong>Figure 12.</strong> CNN2 Augmented — Threshold trade-off analysis. Left: Recall, Precision, and F1-Score as a function of classification threshold. Right: Precision-Recall curve. The high AUC-PR confirms discriminative ability; the low default-threshold recall confirms miscalibration.</div>
+  </div>
+
+  <p>Re-evaluating CNN2 at the optimal F1 threshold (<span class="met teal" id="dyn-cnn2-tuned-threshold">—</span>) demonstrates the model's actual capability.</p>
+
+  <div class="metric-row">
+    <div class="metric-box"><div class="mb-value" id="dyn-cnn2-tuned-recall">—</div><div class="mb-label">Recall (tuned)</div></div>
+    <div class="metric-box"><div class="mb-value" id="dyn-cnn2-tuned-fn">—</div><div class="mb-label">False Negatives (tuned)</div></div>
+    <div class="metric-box"><div class="mb-value" id="dyn-cnn2-tuned-prec">—</div><div class="mb-label">Precision (tuned)</div></div>
+    <div class="metric-box"><div class="mb-value" id="dyn-cnn2-tuned-f1">—</div><div class="mb-label">F1 (tuned)</div></div>
+  </div>
+
+  <div class="fig-block">
+    <img src="fig_cnn2_tuned_evaluation.png" alt="CNN2 tuned threshold evaluation">
+    <div class="fig-caption"><strong>Figure 13.</strong> CNN2 Augmented — Confusion matrix at the threshold tuned for best F1-Score. Compare false negative count to the default-threshold evaluation to quantify the calibration effect.</div>
+  </div>
+
+  <p>This analysis motivates CNN3: rather than operating CNN2 at a non-default threshold post-hoc, CNN3 addresses the calibration failure during training via class weighting, so the model learns to place its outputs in a useful range from the start.</p>
+</section>
+
+<!-- 3.3 CNN3 -->
+<section id="s3-3" class="doc-section">
+  <div class="section-number">Section 3.3</div>
+  <div class="section-title">Recall-Optimized CNN (CNN3)</div>
+
+  <p>CNN3 holds the architecture and augmentation pipeline constant and changes only the training setup. Because architecture and augmentation are unchanged between CNN2 and CNN3, performance differences between the two isolate the effect of training configuration — making CNN3 the first controlled experiment in the sequence.</p>
+
+  <div class="subsection-title">Training Configuration Changes</div>
+  <ul>
+    <li><code>class_weight=&#123;0:1, 1:2&#125;</code> penalizes false negatives at twice the cost of false positives, shifting the optimizer's pressure toward correctly identifying Parasitized cells.</li>
+    <li><code>EarlyStopping(monitor='val_loss')</code> monitors validation loss for early stopping. An earlier experiment using <code>monitor='val_recall'</code> caused model collapse: the callback rewarded the model for predicting everything as Parasitized (100% recall, ~50% accuracy), since raw recall with no precision constraint is trivially maximized by always predicting positive. Monitoring <code>val_loss</code> retains the corrective pressure from class weighting while preventing that collapse.</li>
+    <li><code>keras.metrics.Recall</code> is added to the compiled metrics so recall is tracked alongside loss and accuracy during training.</li>
+  </ul>
+
+  <div class="subsection-title">Key Finding</div>
+  <div class="card sage">
+    <div class="card-label">CNN3 - Recall-Optimized</div>
+    <p>Class weighting resolved the calibration failure completely. CNN3 achieves <span class="met good" id="dyn-cnn3-recall">—</span> recall at the default 0.5 threshold — compared to CNN2's <span class="met bad" id="dyn-cnn2-recall-ref">—</span> — with only <strong><span id="dyn-cnn3-fn">—</span></strong> missed Parasitized cells out of 1,300 (<span id="dyn-cnn3-fnr" class="met good">—</span> false negative rate). AUC-ROC reached <span class="met good" id="dyn-cnn3-auc">—</span>, the highest of any model. The model trained for <strong><span id="dyn-cnn3-epochs">—</span> epochs</strong> with best weights from epoch <span id="dyn-cnn3-best-epoch">—</span>, and final validation recall of <span id="dyn-cnn3-val-recall" class="met good">—</span> closely tracks the test recall, confirming the result generalizes. The cost was a modest increase in false positives: <span id="dyn-cnn3-fp">—</span> Uninfected cells flagged as Parasitized (<span id="dyn-cnn3-fpr" class="met warn">—</span> false positive rate) — a reasonable trade-off in a screening context where false positives prompt follow-up rather than missed treatment.</p>
+  </div>
+
+  <div class="metric-row">
+    <div class="metric-box highlight"><div class="mb-value" id="dyn-cnn3-recall-box">—</div><div class="mb-label">Recall</div></div>
+    <div class="metric-box highlight"><div class="mb-value" id="dyn-cnn3-auc-box">—</div><div class="mb-label">AUC-ROC</div></div>
+    <div class="metric-box highlight"><div class="mb-value" id="dyn-cnn3-fn-box">—</div><div class="mb-label">False Negatives</div></div>
+    <div class="metric-box"><div class="mb-value" id="dyn-cnn3-acc-box">—</div><div class="mb-label">Accuracy</div></div>
+  </div>
+
+  <div class="fig-block">
+    <img src="fig_cnn3_training_history.png" alt="CNN3 training history">
+    <div class="fig-caption"><strong>Figure 14.</strong> CNN3 Recall-Optimized — Training and validation accuracy, loss, and recall over epochs. The recall panel shows class weighting shifting the model toward correctly identifying Parasitized cells throughout training.</div>
+  </div>
+  <div class="fig-block">
+    <img src="fig_cnn3_evaluation.png" alt="CNN3 evaluation">
+    <div class="fig-caption"><strong>Figure 15.</strong> CNN3 Recall-Optimized — Confusion matrix and ROC curve on the test set at the default 0.5 threshold.</div>
+  </div>
+</section>
+
+<!-- 3.4 MobileNetV2 -->
+<section id="s3-4" class="doc-section">
+  <div class="section-number">Section 3.4</div>
+  <div class="section-title">Transfer Learning with MobileNetV2</div>
+
+  <p>The third approach uses <span class="term" data-term="MobileNetV2">MobileNetV2</span> as a feature extraction backbone — a lightweight CNN pre-trained on <span class="term" data-term="ImageNet">ImageNet</span> (1.28 million images across 1,000 categories). Transfer learning was applied in two phases.</p>
+
+  <div class="subsection-title">Why MobileNetV2</div>
+  <ul>
+    <li>Depthwise separable convolutions efficiently learn hierarchical spatial features with far fewer parameters than a comparable standard CNN.</li>
+    <li>Inverted residual blocks with linear bottlenecks improve gradient flow, making fine-tuning stable.</li>
+    <li>Low parameter count means the model runs efficiently on modest hardware — a realistic candidate for clinical field deployment.</li>
+  </ul>
+
+  <div class="subsection-title">Phase 1 — Feature Extraction</div>
+  <p>The MobileNetV2 backbone was frozen. Only the classification head (GlobalAveragePooling2D → Dropout → Dense(128) → Dropout → Dense(1, sigmoid)) was trained. This leverages ImageNet-learned features without risking overwriting them with noisy gradients early in training.</p>
+  <div class="fig-block">
+    <img src="fig_mobilenetv2_transfer_training_history.png" alt="MobileNetV2 feature extraction training">
+    <div class="fig-caption"><strong>Figure 16.</strong> MobileNetV2 — Feature Extraction Phase training curves. With the backbone frozen, only the classification head trains.</div>
+  </div>
+
+  <div class="subsection-title">Phase 2 — Fine-Tuning</div>
+  <p>The last 30 layers of the backbone were unfrozen and retrained at a reduced learning rate (1e-5). This allows the deepest layers to adapt to the morphological characteristics of malaria-infected cells, while the earlier layers (which capture broadly useful low-level features like edges) remain stable.</p>
+  <div class="fig-block">
+    <img src="fig_mobilenetv2_finetuned_training_history.png" alt="MobileNetV2 fine-tuning training">
+    <div class="fig-caption"><strong>Figure 17.</strong> MobileNetV2 — Fine-Tuning Phase training curves. Lower learning rate and partial backbone unfreezing produce more gradual convergence.</div>
+  </div>
+
+  <div class="subsection-title">Key Finding</div>
+  <div class="card amber">
+    <div class="card-label">MobileNetV2 - Fine-Tuned</div>
+    <p>MobileNetV2 achieved <span class="met warn" id="dyn-mv2-recall">—</span> recall and AUC-ROC of <span class="met teal" id="dyn-mv2-auc">—</span> on the test set, with <strong><span id="dyn-mv2-fn">—</span></strong> false negatives out of 1,300 Parasitized images (<span id="dyn-mv2-fnr" class="met warn">—</span> false negative rate). Despite competitive AUC, recall falls below both CNN1 and CNN3 on the primary metric. The relatively short training run and the domain gap between ImageNet's natural image features and Giemsa-stained microscopy cells at 64×64 resolution likely limited the expected transfer advantage. MobileNetV2 remains a strong candidate for future work at higher input resolution (128×128 or 224×224) with more fine-tuning epochs.</p>
+  </div>
+
+  <div class="metric-row">
+    <div class="metric-box warn"><div class="mb-value" id="dyn-mv2-recall-box">—</div><div class="mb-label">Recall</div></div>
+    <div class="metric-box"><div class="mb-value" id="dyn-mv2-auc-box">—</div><div class="mb-label">AUC-ROC</div></div>
+    <div class="metric-box warn"><div class="mb-value" id="dyn-mv2-fn-box">—</div><div class="mb-label">False Negatives</div></div>
+    <div class="metric-box"><div class="mb-value" id="dyn-mv2-acc-box">—</div><div class="mb-label">Accuracy</div></div>
+  </div>
+
+  <div class="fig-block">
+    <img src="fig_mobilenetv2_finetuned_evaluation.png" alt="MobileNetV2 evaluation">
+    <div class="fig-caption"><strong>Figure 18.</strong> MobileNetV2 Fine-Tuned — Confusion matrix and ROC curve on the test set. The false negative count is the primary comparison point against CNN1, CNN2, and CNN3.</div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ══════════════════════════════════ -->
+<!-- SECTION 4 — COMPARISON           -->
+<!-- ══════════════════════════════════ -->
+<section id="s4" class="doc-section">
+  <div class="section-number">Section 4</div>
+  <div class="section-title">Comparison of Techniques and Performance</div>
+
+  <div class="subsection-title">4.1 Why Recall Is the Primary Metric</div>
+  <p>In a medical screening context, the two types of classification errors carry very different costs:</p>
+  <ul>
+    <li><strong>False Negative:</strong> A Parasitized cell predicted as Uninfected — a missed diagnosis. The patient receives no treatment, the infection progresses, and there is ongoing transmission risk.</li>
+    <li><strong>False Positive:</strong> An Uninfected cell predicted as Parasitized — an incorrect positive. The patient undergoes confirmatory testing or receives treatment unnecessarily. Costly and disruptive, but not life-threatening.</li>
+  </ul>
+  <p>Given this asymmetry, <strong>Recall for the Parasitized class</strong> is the governing metric. AUC-ROC is reported as a threshold-independent measure of discriminative power.</p>
+
+  <div class="subsection-title">4.2 Model Performance Comparison</div>
+  <div id="comparison-table-wrap">
+    <table id="comparison-table">
+      <thead>
+        <tr>
+          <th>Model</th><th>Threshold</th>
+          <th>Accuracy</th><th>Precision</th><th>Recall ↑</th><th>F1-Score</th><th>AUC-ROC</th>
+        </tr>
+      </thead>
+      <tbody id="comparison-tbody">
+        <tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px;">Loading from results.json…</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:13px;color:var(--muted);margin-top:8px;">All metrics are reported on the held-out test set (2,600 images). Recall and Precision refer to the Parasitized (positive) class. Best recall row is highlighted.</p>
+
+  <div class="subsection-title">4.3 Confusion Matrix Analysis</div>
+  <p>Confusion matrices were generated for each model on the test set. The key figure in each is the <strong>false negative count</strong> — Parasitized cells the model failed to flag.</p>
+  <div id="fn-analysis">
+    <ul>
+      <li><strong>CNN1 Baseline:</strong> <span id="dyn-fn-cnn1">—</span> false negatives out of 1,300 (<span id="dyn-fnr-cnn1">—</span> FNR). A strong baseline.</li>
+      <li><strong>CNN2 (default threshold):</strong> <span id="dyn-fn-cnn2-default">—</span> false negatives (<span id="dyn-fnr-cnn2-default">—</span> FNR) — near-total failure driven by sigmoid miscalibration.</li>
+      <li><strong>CNN2 (tuned threshold = 0.02):</strong> <span id="dyn-fn-cnn2-tuned">—</span> false negatives (<span id="dyn-fnr-cnn2-tuned">—</span> FNR). Threshold shifting recovers latent discriminative power.</li>
+      <li><strong>CNN3 Recall-Optimized:</strong> <span id="dyn-fn-cnn3">—</span> false negatives (<span id="dyn-fnr-cnn3">—</span> FNR) — the lowest false negative count of any model.</li>
+      <li><strong>MobileNetV2 (Fine-tuned):</strong> <span id="dyn-fn-mv2">—</span> false negatives (<span id="dyn-fnr-mv2">—</span> FNR). Despite competitive AUC, one in six Parasitized cells is missed.</li>
+    </ul>
+  </div>
+
+  <div class="subsection-title">4.4 Pros, Cons, and Scope for Improvement</div>
+  <table>
+    <thead><tr><th>Model</th><th>Strengths</th><th>Limitations</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>CNN1</strong></td>
+        <td>Simple, fast to train, easy to interpret</td>
+        <td>Higher overfitting risk; limited feature extraction depth</td>
+      </tr>
+      <tr>
+        <td><strong>CNN2</strong></td>
+        <td>Architecture improvements and augmentation; reduced overfitting during training</td>
+        <td>Training configuration caused sigmoid miscalibration, collapsing recall to near zero at default threshold</td>
+      </tr>
+      <tr class="best-row">
+        <td><strong>CNN3 ★</strong></td>
+        <td>Controlled comparison to CNN2: same architecture and augmentation, corrected training configuration; class weighting directly penalizes missed detections</td>
+        <td>Class weighting is a hyperparameter requiring tuning; correcting the training setup produces a distinct model rather than a direct repair of CNN2</td>
+      </tr>
+      <tr>
+        <td><strong>MobileNetV2</strong></td>
+        <td>Competitive AUC-ROC; proven architecture at scale; strong candidate at higher input resolutions</td>
+        <td>Recall (84.62%) below CNN1 and CNN3 at 64×64; domain gap limits transfer advantage at low resolution; requires two-phase training</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="subsection-title">Scope for Further Improvement</div>
+  <ul>
+    <li>Increasing input resolution from 64×64 to 128×128 or 224×224 would preserve more spatial detail and likely improve recall, at the cost of longer training time.</li>
+    <li>Focal loss (a variant of cross-entropy that down-weights easy negatives) would more aggressively penalize hard-to-classify Parasitized cells beyond what class weighting alone achieves.</li>
+    <li>Ensemble methods — combining predictions from two or more models — could push performance above any individual model.</li>
+    <li>Test-time augmentation (averaging predictions over multiple augmented versions of each test image) is a low-cost technique that often yields 1–2% improvements in recall.</li>
+  </ul>
+</section>
+
+<hr class="section-divider">
+
+<!-- ══════════════════════════════════ -->
+<!-- SECTION 5 — RECOMMENDATION       -->
+<!-- ══════════════════════════════════ -->
+<section id="s5" class="doc-section">
+  <div class="section-number">Section 5</div>
+  <div class="section-title">Proposal for Final Solution Design</div>
+
+  <div class="subsection-title">5.1 Recommended Model: <span id="dyn-best-model-name">CNN3 - Recall-Optimized</span></div>
+
+  <div class="card sage">
+    <div class="card-label">Recommendation</div>
+    <p>Based on the comparative analysis, <strong><span id="dyn-rec-model">CNN3 - Recall-Optimized</span></strong> is the recommended model for adoption. It achieves <span class="met good" id="dyn-rec-recall">99.15%</span> recall on the held-out test set — only <span id="dyn-rec-fn">11</span> missed Parasitized cells out of 1,300 — with an AUC-ROC of <span class="met good" id="dyn-rec-auc">0.9993</span>, the highest of any model evaluated. The result is not a threshold artifact: the model was evaluated at the default 0.5 operating point, and its validation recall of <span id="dyn-rec-val-recall">98.45%</span> during training closely tracks the test result, confirming stable generalization.</p>
+  </div>
+
+  <p>MobileNetV2, despite being the expected winner given its ImageNet pre-training, achieved only <span id="dyn-mv2-recall-ref" class="met warn">84.62%</span> recall at this dataset and input resolution. The likely explanation is a combination of domain gap — ImageNet features for natural scenes do not transfer as directly to 64×64 Giemsa-stained microscopy crops — and insufficient fine-tuning duration. The transfer learning architecture remains a strong candidate for future work at higher resolution with more fine-tuning epochs.</p>
+
+  <div class="subsection-title">5.2 Why CNN3 Performs Better — The Intuition</div>
+  <p>The gap between CNN3 and the other models comes from two places: what the training objective was, and how long the model trained.</p>
+  <ul>
+    <li><strong>Class weighting aligns the objective with the clinical goal:</strong> Standard binary cross-entropy treats a missed Parasitized cell and a missed Uninfected cell as equally costly. CNN3's class weight of 2:1 makes every false negative count twice in the loss calculation. The optimizer is directly penalized for the failure mode that matters most, so the learned decision boundary skews toward Parasitized.</li>
+    <li><strong>More training, better convergence:</strong> CNN3 ran for <span id="dyn-cnn3-epochs-s5">26</span> epochs (best at epoch <span id="dyn-cnn3-best-s5">21</span>), compared to CNN2's 5. The augmented training data requires more passes to build stable feature representations, and CNN3 had the training budget to do it.</li>
+    <li><strong>Architecture is not the limiting factor:</strong> CNN3 uses exactly CNN2's architecture. The performance difference confirms the architecture was capable all along; the original training configuration was not optimized for recall. Architectural complexity alone does not determine recall — the training objective does.</li>
+  </ul>
+
+  <div class="subsection-title">5.3 How This Solves the Problem</div>
+  <ul>
+    <li><strong>Speed:</strong> The model processes a single cell image in milliseconds, enabling high-throughput screening of blood smear samples that would take a human microscopist hours to review.</li>
+    <li><strong>Consistency:</strong> The model applies the same learned decision boundary to every image, regardless of time of day, case volume, or operator experience — eliminating the observer fatigue and inter-rater disagreement that undermine manual review at scale.</li>
+    <li><strong>Deployability:</strong> CNN3 shares its architecture with CNN2 — a compact custom CNN with GlobalAveragePooling2D. The low parameter count means the model runs efficiently on modest hardware and is a realistic candidate for field deployment in low-resource settings.</li>
+    <li><strong>Recall:</strong> <span id="dyn-rec-recall-s5">99.15%</span> recall on the test set means one in roughly 118 Parasitized cells is missed. For a screening tool deployed ahead of expert confirmatory review, this rate is clinically meaningful and represents a substantial improvement over manual microscopy in high-throughput, low-resource settings.</li>
+  </ul>
+</section>
+
+<hr class="section-divider">
+
+<!-- ══════════════════════════════════ -->
+<!-- APPENDIX                         -->
+<!-- ══════════════════════════════════ -->
+<section id="appendix" class="doc-section">
+  <div class="section-number">Appendix</div>
+  <div class="section-title">A. Model Architectures / B. Training Configuration / C. References</div>
+
+  <div class="subsection-title">A. Model Architectures (Summary)</div>
+  <p><strong>CNN1 - Baseline:</strong> 3 convolutional blocks (Conv2D 32/64/128 filters, 3×3 kernel, ReLU, same padding) → MaxPooling2D after each block → Flatten → Dense(256, ReLU) → Dropout(0.5) → Dense(1, sigmoid)</p>
+  <p><strong>CNN2 - Improved:</strong> 3 convolutional blocks with dual Conv2D layers per block (32/64/128 filters) + BatchNormalization + Dropout(0.25) after each block → GlobalAveragePooling2D → Dense(256, ReLU) → Dropout(0.5) → Dense(1, sigmoid). Data augmentation applied during training.</p>
+  <p><strong>CNN3 - Recall-Optimized:</strong> Same architecture as CNN2. Trained with <code>class_weight=&#123;0:1.0, 1:2.0&#125;</code> and <code>keras.metrics.Recall</code> compiled alongside accuracy and loss. EarlyStopping monitors <code>val_loss</code>.</p>
+  <p><strong>MobileNetV2 (Transfer Learning):</strong> Pre-trained MobileNetV2 backbone (ImageNet weights, top excluded) → GlobalAveragePooling2D → Dropout(0.3) → Dense(128, ReLU) → Dropout(0.3) → Dense(1, sigmoid). Phase 1: backbone frozen. Phase 2: last 30 layers unfrozen, retrained at learning rate 1e-5.</p>
+
+  <div class="subsection-title">B. Training Configuration</div>
+  <p>The following settings apply to all models unless noted otherwise.</p>
+  <table>
+    <thead><tr><th>Parameter</th><th>Value</th></tr></thead>
+    <tbody>
+      <tr><td>Input image size</td><td>64×64 RGB</td></tr>
+      <tr><td>Optimizer</td><td><span class="term" data-term="Adam optimizer">Adam</span></td></tr>
+      <tr><td>Loss function</td><td><span class="term" data-term="binary cross-entropy loss">Binary cross-entropy</span></td></tr>
+      <tr><td><span class="term" data-term="early stopping">Early stopping</span></td><td>Patience = 5 epochs (monitor: val_loss)</td></tr>
+      <tr><td><span class="term" data-term="learning rate reduction on plateau">LR reduction on plateau</span></td><td>Factor = 0.5, Patience = 3, Min LR = 1e-6</td></tr>
+      <tr><td>Batch size</td><td>64</td></tr>
+      <tr><td>Random seed</td><td>42</td></tr>
+    </tbody>
+  </table>
+  <p><strong>CNN3 differences:</strong></p>
+  <table>
+    <thead><tr><th>Parameter</th><th>CNN3 Value</th></tr></thead>
+    <tbody>
+      <tr><td>Class weight</td><td><code>&#123;0: 1.0, 1: 2.0&#125;</code> (Parasitized penalized at 2x)</td></tr>
+      <tr><td>Compiled metrics</td><td>Accuracy, Loss, Recall (Recall added)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="subsection-title">C. References</div>
+  <p style="font-size:13px;color:var(--mid);font-weight:600;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.06em;">Disease Burden and Clinical Motivation</p>
+  <ul style="font-size:14px;">
+    <li>World Health Organization. <em>World Malaria Report 2020</em>. Geneva: WHO, 2020.</li>
+  </ul>
+  <p style="font-size:13px;color:var(--mid);font-weight:600;margin:16px 0 6px;text-transform:uppercase;letter-spacing:0.06em;">Dataset</p>
+  <ul style="font-size:14px;">
+    <li>NIH Malaria Cell Images Dataset. U.S. National Library of Medicine. <a href="https://lhncbc.nlm.nih.gov/LHC-research/LHC-projects/image-processing/malaria-datasheet.html" target="_blank">lhncbc.nlm.nih.gov</a></li>
+    <li>Rajaraman, S. et al. (2018). Pre-trained convolutional neural networks as feature extractors toward improved malaria parasite detection in thin blood smear images. <em>PeerJ</em>, 6, e4568.</li>
+  </ul>
+  <p style="font-size:13px;color:var(--mid);font-weight:600;margin:16px 0 6px;text-transform:uppercase;letter-spacing:0.06em;">Model Architecture — Transfer Learning Backbone</p>
+  <ul style="font-size:14px;">
+    <li>Sandler, M. et al. (2018). MobileNetV2: Inverted Residuals and Linear Bottlenecks. <em>CVPR 2018</em>.</li>
+  </ul>
+  <p style="font-size:13px;color:var(--mid);font-weight:600;margin:16px 0 6px;text-transform:uppercase;letter-spacing:0.06em;">Two-Stage Detection Pipeline (Future Work)</p>
+  <ul style="font-size:14px;">
+    <li>Ren, S., He, K., Girshick, R., &amp; Sun, J. (2015). Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks. <em>NeurIPS</em>, 28. <a href="https://arxiv.org/abs/1506.01497" target="_blank">arxiv.org/abs/1506.01497</a></li>
+    <li>Hung, J. et al. (2017). Applying Faster R-CNN for Object Detection on Malaria Images. <em>CVPR Workshops</em>.</li>
+    <li>Baum, J. et al. (2021). Automated detection and staging of malaria parasites from cytological smears using CNNs. <em>Biological Imaging</em>, 1, e2. <a href="https://doi.org/10.1017/S2633903X21000015" target="_blank">doi.org/10.1017/S2633903X21000015</a></li>
+  </ul>
+  <p style="font-size:13px;color:var(--mid);font-weight:600;margin:16px 0 6px;text-transform:uppercase;letter-spacing:0.06em;">Tools and Frameworks</p>
+  <ul style="font-size:14px;">
+    <li>TensorFlow / Keras Documentation. <a href="https://www.tensorflow.org" target="_blank">tensorflow.org</a></li>
+  </ul>
+</section>
+
+<hr class="section-divider">
+
+<!-- ══════════════════════════════════ -->
+<!-- WORKING NOTES                    -->
+<!-- ══════════════════════════════════ -->
+<section id="notes" class="doc-section notes-section">
+  <div class="section-number">Working Notes</div>
+  <div class="section-title">Ideas for Future Work &amp; Known Limitations</div>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:24px;font-style:italic;">This section captures analytical notes, limitations, and directions for exploration. It is not part of the formal report body.</p>
+
+  <div class="note-item">
+    <div class="note-tag">Future Architecture</div>
+    <h4>Two-Stage Detection Pipeline</h4>
+    <p>The current models are single-stage classifiers: given a pre-segmented cell image, predict infected or uninfected. A more robust production architecture would decouple the problem into Stage 1 (spot detection — identify candidate locations within a cell where a suspicious inclusion is present) and Stage 2 (spot classification — classify each cropped candidate region as Plasmodium ring form, platelet, staining artifact, etc.). This mirrors clinical workflow, improves interpretability, and allows explicit contaminant rejection. <strong>Prior art:</strong> Hung et al. (2017, CVPR) applied Faster R-CNN to blood smear images, achieving 98% accuracy vs. 59% for a single-stage model. Baum et al. (2021) built a production-ready version (PlasmoCount) with AUC-ROC 0.98 on <em>P. falciparum</em>.</p>
+  </div>
+
+  <div class="note-item">
+    <div class="note-tag">Methodological Note</div>
+    <h4>Ablation Study Design</h4>
+    <p>The jump from CNN1 to CNN2 changed two things simultaneously: architecture and augmentation. This makes it impossible to attribute performance differences to either cause independently. A rigorous sequence would be: (1) CNN1 baseline, (2) CNN1 + augmentation only, (3) CNN2 architecture + augmentation. CNN3 provides one controlled comparison (architecture held constant), but a full ablation remains for follow-on work.</p>
+  </div>
+
+  <div class="note-item">
+    <div class="note-tag">Analysis Limitation</div>
+    <h4>Spectral vs. Positional Confound in Difference Maps</h4>
+    <p>The <code>mean(Parasitized) - mean(Uninfected)</code> difference maps conflate spectral signal (Giemsa staining color differences) with positional signal (the parasite tends to occupy the cell center). The KDE pixel intensity histograms are cleaner for spectral comparison. Future work: compute per-image channel means/ratios (R/G, B/G per cell) and compare distributions between classes to isolate color from spatial arrangement.</p>
+  </div>
+
+  <div class="note-item">
+    <div class="note-tag">Dataset Limitation</div>
+    <h4>Plasmodium Species Generalization</h4>
+    <p>The NIH dataset contains predominantly <em>P. falciparum</em> ring forms. Other species (<em>P. vivax</em>, <em>P. ovale</em>, <em>P. malariae</em>, <em>P. knowlesi</em>) have meaningfully different morphology. A model trained on this dataset is not validated for other species and may fail silently in regions where non-falciparum malaria is prevalent.</p>
+  </div>
+
+  <div class="note-item">
+    <div class="note-tag">Dataset Limitation</div>
+    <h4>Single-Source Dataset and Cross-Site Generalization</h4>
+    <p>All images come from one institution with one staining protocol and one imaging setup. Performance numbers reflect in-distribution generalization. Cross-site validation against images from different labs has not been performed and would be required before clinical deployment.</p>
+  </div>
+
+  <div class="note-item">
+    <div class="note-tag">Interpretability</div>
+    <h4>Grad-CAM for Model Interpretability</h4>
+    <p>The current models produce a binary prediction with no explanation of which image region drove the decision. Grad-CAM uses the gradient of the class score with respect to the final convolutional feature maps to produce a heatmap. This would allow visual verification that the model is attending to the cell interior, surface cases where the model is making predictions based on staining artifacts, and serve as a proxy for Stage 1 localization in a two-stage pipeline. Straightforward to implement in Keras using <code>tf.GradientTape</code> against the last Conv2D layer.</p>
+  </div>
+
+  <div class="note-item">
+    <div class="note-tag">Deployment</div>
+    <h4>Full Slide Processing Pipeline</h4>
+    <p>The current model assumes pre-segmented 64×64 single-cell images as input. A production deployment pipeline would also need: (1) whole slide image ingestion, (2) cell segmentation (locate and crop individual RBCs), (3) per-cell classification (what this project does), and (4) slide-level aggregation (combine per-cell predictions into a slide-level diagnosis). Each stage introduces its own error rate; overall system recall is bounded by the weakest stage.</p>
+  </div>
+</section>
+
+</div><!-- end .page -->
+
+<!-- ══════ TOOLTIP POPUP ══════ -->
+<div id="tooltip-popup" class="tooltip-popup" role="tooltip"></div>
+
+<!-- ══════ DATA NOTICE ══════ -->
+<div class="data-notice" id="data-notice">Loading results.json…</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SCRIPT                                                -->
+<!-- ══════════════════════════════════════════════════════ -->
+<script>
+// ─── GLOSSARY ───
+const GLOSSARY = {
+  "Plasmodium": "The genus of single-celled parasitic protozoa that cause malaria. Five species infect humans; P. falciparum is the most widespread and deadly, and is the species in this dataset.",
+  "Anopheles": "The genus of mosquito responsible for transmitting malaria to humans. Only the female Anopheles mosquito feeds on blood, during which she can inject Plasmodium parasites.",
+  "Trophozoites": "The active, feeding stage of the Plasmodium parasite inside red blood cells. In Giemsa-stained smears, ring-form trophozoites appear as thin blue rings with a red nucleus dot.",
+  "Overfitting": "When a model learns training data too precisely — including noise — and performs well on training examples but poorly on new data. Detected by diverging training and validation loss curves.",
+  "CNN": "Convolutional Neural Network. A class of deep learning model designed for image data. Stacked layers of learnable filters detect patterns — edges, textures, shapes — at progressively higher levels of abstraction.",
+  "Preprocessing": "Transformations applied to raw data before it is fed into a model. Includes resizing, normalization, and train/val/test splitting.",
+  "Data Augmentation": "Artificially expanding the training dataset by applying random but realistic transformations (rotations, flips, zooms) without collecting new data. Reduces overfitting.",
+  "Transfer Learning": "Reusing a model pre-trained on one large dataset as a starting point for a related task. Pre-trained features (edges, textures) transfer effectively, reducing data and compute required.",
+  "MobileNetV2": "A lightweight CNN architecture by Google using depthwise separable convolutions and inverted residual blocks. Designed for efficient inference on mobile and embedded devices. Pre-trained on ImageNet.",
+  "ImageNet": "A large-scale image database with 14+ million labeled images across 20,000+ categories. Widely used to train and benchmark computer vision models.",
+  "Accuracy": "The proportion of all predictions that were correct. Can be misleading in imbalanced datasets; here it is valid given the near-50/50 class split.",
+  "Precision": "Of all cases flagged as Parasitized, the proportion that were actually Parasitized. Calculated as TP / (TP + FP). High precision means few false alarms.",
+  "Recall": "Of all actual Parasitized cases, the proportion the model correctly identified. Also called sensitivity or true positive rate. Calculated as TP / (TP + FN). The primary metric here — a missed diagnosis carries greater cost than a false alarm.",
+  "F1-Score": "The harmonic mean of Precision and Recall. Balances the trade-off between the two; useful when both false positives and false negatives matter.",
+  "AUC-ROC": "Area Under the ROC Curve. Summarizes a model's discriminative ability across all possible thresholds. 0.5 = random; 1.0 = perfect.",
+  "Stratified Split": "A data splitting strategy that preserves original class proportions in each subset. Prevents accidental class imbalance due to random sampling.",
+  "Adam optimizer": "An adaptive gradient descent algorithm that automatically adjusts the learning rate per parameter. Widely used as a reliable default optimizer for deep learning.",
+  "binary cross-entropy loss": "The standard loss function for binary classification. Measures how far the predicted probability is from the true label, with a logarithmic penalty for divergence.",
+  "early stopping": "A training callback that halts training when a validation metric stops improving for a set number of epochs (patience). Prevents continued overfitting after the optimal point.",
+  "learning rate reduction on plateau": "A callback that reduces the learning rate by a set factor when a monitored metric stops improving. Allows smaller, more precise weight updates when coarse progress has stalled.",
+  "Dropout": "A regularization technique that randomly sets a fraction of neuron outputs to zero during training, preventing co-adaptation and reducing overfitting.",
+  "bilinear interpolation": "A method for resizing images by estimating new pixel values as a weighted average of the four nearest pixels in the original image.",
+  "PIL": "Python Imaging Library (Pillow fork). A widely used Python library for opening, manipulating, and saving image files."
+};
+
+// ─── TOOLTIP SYSTEM ───
+const popup = document.getElementById('tooltip-popup');
+let activeEl = null;
+
+function showTooltip(el) {
+  const term = el.dataset.term;
+  const def = GLOSSARY[term];
+  if (!def) return;
+  popup.innerHTML = `<span class="tt-term">${term}</span>${def}`;
+  popup.classList.add('visible');
+  activeEl = el;
+  positionTooltip(el);
+}
+
+function hideTooltip() {
+  popup.classList.remove('visible');
+  activeEl = null;
+}
+
+function positionTooltip(el) {
+  const rect = el.getBoundingClientRect();
+  let top = rect.bottom + 8;
+  let left = rect.left;
+  const popW = 300;
+  if (left + popW > window.innerWidth - 12) left = window.innerWidth - popW - 12;
+  if (top + 120 > window.innerHeight) top = rect.top - 130;
+  popup.style.left = left + 'px';
+  popup.style.top  = top + 'px';
+}
+
+document.querySelectorAll('.term').forEach(el => {
+  el.addEventListener('mouseenter', () => showTooltip(el));
+  el.addEventListener('mouseleave', hideTooltip);
+  el.addEventListener('focus',      () => showTooltip(el));
+  el.addEventListener('blur',       hideTooltip);
+  el.setAttribute('tabindex', '0');
+});
+
+// ─── FORMAT HELPERS ───
+const fmt = {
+  pct:     v => (v * 100).toFixed(2) + '%',
+  pct1:    v => (v * 100).toFixed(1) + '%',
+  dec4:    v => parseFloat(v).toFixed(4),
+  int:     v => parseInt(v).toLocaleString(),
+  str:     v => String(v),
+  thresh:  v => parseFloat(v).toFixed(2),
+};
+
+function set(id, val) {
+  const el = document.getElementById(id);
+  if (el && val !== undefined && val !== null) el.textContent = val;
+}
+
+// ─── POPULATE DYNAMIC ELEMENTS ───
+function populateAll(d) {
+  const m = d.models;
+
+  // Header
+  set('header-best-name',   d.best_model.name);
+  set('header-best-recall', fmt.pct(d.best_model.recall));
+
+  // CNN1
+  set('dyn-cnn1-epochs',        fmt.int(m.cnn1.training.epochs_trained));
+  set('dyn-cnn1-epochs-2',      fmt.int(m.cnn1.training.epochs_trained));
+  set('dyn-cnn1-best-epoch',    fmt.int(m.cnn1.training.best_epoch + 1));
+  set('dyn-cnn1-best-val-loss', fmt.dec4(m.cnn1.training.best_val_loss));
+  set('dyn-cnn1-train-acc',     fmt.pct(m.cnn1.training.final_train_accuracy));
+  set('dyn-cnn1-val-acc',       fmt.pct(m.cnn1.training.final_val_accuracy));
+  set('dyn-cnn1-recall',        fmt.pct(m.cnn1.test.recall));
+  set('dyn-cnn1-acc',           fmt.pct(m.cnn1.test.accuracy));
+  set('dyn-cnn1-auc',           fmt.dec4(m.cnn1.test.auc_roc));
+  set('dyn-cnn1-fn',            fmt.int(m.cnn1.test.confusion_matrix[1][0]));
+
+  // CNN2 default
+  set('dyn-cnn2-epochs',          fmt.int(m.cnn2.training.epochs_trained));
+  set('dyn-cnn2-train-acc',       fmt.pct(m.cnn2.training.final_train_accuracy));
+  set('dyn-cnn2-val-acc',         fmt.pct(m.cnn2.training.final_val_accuracy));
+  set('dyn-cnn2-recall-default',  fmt.pct(m.cnn2.test.recall));
+  set('dyn-cnn2-recall-ref',      fmt.pct(m.cnn2.test.recall));
+  set('dyn-cnn2-fn-default',      fmt.int(m.cnn2.test.confusion_matrix[1][0]));
+  set('dyn-cnn2-auc',             fmt.dec4(m.cnn2.test.auc_roc));
+
+  // CNN2 tuned
+  if (m.cnn2_tuned) {
+    set('dyn-cnn2-tuned-threshold', fmt.thresh(m.cnn2_tuned.threshold_used));
+    set('dyn-cnn2-tuned-recall',    fmt.pct(m.cnn2_tuned.test.recall));
+    set('dyn-cnn2-tuned-fn',        fmt.int(m.cnn2_tuned.test.confusion_matrix[1][0]));
+    set('dyn-cnn2-tuned-prec',      fmt.pct(m.cnn2_tuned.test.precision));
+    set('dyn-cnn2-tuned-f1',        fmt.pct(m.cnn2_tuned.test.f1));
+  }
+
+  // CNN3
+  set('dyn-cnn3-recall',        fmt.pct(m.cnn3.test.recall));
+  set('dyn-cnn3-fn',            fmt.int(m.cnn3.test.confusion_matrix[1][0]));
+  set('dyn-cnn3-fnr',           fmt.pct1(m.cnn3.test.false_negative_rate));
+  set('dyn-cnn3-fp',            fmt.int(m.cnn3.test.confusion_matrix[0][1]));
+  set('dyn-cnn3-fpr',           fmt.pct1(m.cnn3.test.false_positive_rate));
+  set('dyn-cnn3-auc',           fmt.dec4(m.cnn3.test.auc_roc));
+  set('dyn-cnn3-epochs',        fmt.int(m.cnn3.training.epochs_trained));
+  set('dyn-cnn3-best-epoch',    fmt.int(m.cnn3.training.best_epoch + 1));
+  set('dyn-cnn3-val-recall',    m.cnn3.training.final_val_recall ? fmt.pct(m.cnn3.training.final_val_recall) : '—');
+  // metric boxes
+  set('dyn-cnn3-recall-box',    fmt.pct(m.cnn3.test.recall));
+  set('dyn-cnn3-auc-box',       fmt.dec4(m.cnn3.test.auc_roc));
+  set('dyn-cnn3-fn-box',        fmt.int(m.cnn3.test.confusion_matrix[1][0]));
+  set('dyn-cnn3-acc-box',       fmt.pct(m.cnn3.test.accuracy));
+  // Section 5 refs
+  set('dyn-cnn3-epochs-s5',     fmt.int(m.cnn3.training.epochs_trained));
+  set('dyn-cnn3-best-s5',       fmt.int(m.cnn3.training.best_epoch + 1));
+
+  // MobileNetV2
+  set('dyn-mv2-recall',        fmt.pct(m.mobilenetv2.test.recall));
+  set('dyn-mv2-fn',            fmt.int(m.mobilenetv2.test.confusion_matrix[1][0]));
+  set('dyn-mv2-fnr',           fmt.pct1(m.mobilenetv2.test.false_negative_rate));
+  set('dyn-mv2-auc',           fmt.dec4(m.mobilenetv2.test.auc_roc));
+  set('dyn-mv2-recall-box',    fmt.pct(m.mobilenetv2.test.recall));
+  set('dyn-mv2-auc-box',       fmt.dec4(m.mobilenetv2.test.auc_roc));
+  set('dyn-mv2-fn-box',        fmt.int(m.mobilenetv2.test.confusion_matrix[1][0]));
+  set('dyn-mv2-acc-box',       fmt.pct(m.mobilenetv2.test.accuracy));
+  set('dyn-mv2-recall-ref',    fmt.pct(m.mobilenetv2.test.recall));
+
+  // Section 4.3 FN analysis
+  set('dyn-fn-cnn1',          fmt.int(m.cnn1.test.confusion_matrix[1][0]));
+  set('dyn-fnr-cnn1',         fmt.pct1(m.cnn1.test.false_negative_rate));
+  set('dyn-fn-cnn2-default',  fmt.int(m.cnn2.test.confusion_matrix[1][0]));
+  set('dyn-fnr-cnn2-default', fmt.pct1(m.cnn2.test.false_negative_rate));
+  if (m.cnn2_tuned) {
+    set('dyn-fn-cnn2-tuned',  fmt.int(m.cnn2_tuned.test.confusion_matrix[1][0]));
+    set('dyn-fnr-cnn2-tuned', fmt.pct1(m.cnn2_tuned.test.false_negative_rate));
+  }
+  set('dyn-fn-cnn3',          fmt.int(m.cnn3.test.confusion_matrix[1][0]));
+  set('dyn-fnr-cnn3',         fmt.pct1(m.cnn3.test.false_negative_rate));
+  set('dyn-fn-mv2',           fmt.int(m.mobilenetv2.test.confusion_matrix[1][0]));
+  set('dyn-fnr-mv2',          fmt.pct1(m.mobilenetv2.test.false_negative_rate));
+
+  // Section 5 recommendation
+  const best = d.best_model;
+  set('dyn-best-model-name',  best.name);
+  set('dyn-rec-model',        best.name);
+  set('dyn-rec-recall',       fmt.pct(best.recall));
+  set('dyn-rec-fn',           fmt.int(m[best.slug].test.confusion_matrix[1][0]));
+  set('dyn-rec-auc',          fmt.dec4(best.auc_roc));
+  set('dyn-rec-recall-s5',    fmt.pct(best.recall));
+  if (m[best.slug].training.final_val_recall)
+    set('dyn-rec-val-recall', fmt.pct(m[best.slug].training.final_val_recall));
+
+  // Comparison table
+  buildComparisonTable(d);
+}
+
+// ─── COMPARISON TABLE ───
+function buildComparisonTable(d) {
+  const m = d.models;
+  const rows = [
+    { slug:'cnn1',       label:'CNN1 Baseline',                     thresh: 'default (0.5)', key: m.cnn1 },
+    { slug:'cnn2',       label:'CNN2 Augmented',                    thresh: 'default (0.5)', key: m.cnn2 },
+    { slug:'cnn2_tuned', label:'CNN2 Augmented',                    thresh: `tuned (${m.cnn2_tuned ? fmt.thresh(m.cnn2_tuned.threshold_used) : '0.02'})`, key: m.cnn2_tuned },
+    { slug:'cnn3',       label:'CNN3 Recall-Optimized ★',           thresh: 'default (0.5)', key: m.cnn3, best: true },
+    { slug:'mobilenetv2',label:'MobileNetV2 Fine-Tuned',            thresh: 'default (0.5)', key: m.mobilenetv2 },
+  ];
+
+  // Find best per column
+  const allRecalls = rows.filter(r=>r.key).map(r=>r.key.test.recall);
+  const bestRecall = Math.max(...allRecalls);
+
+  const tbody = document.getElementById('comparison-tbody');
+  tbody.innerHTML = rows.map(r => {
+    if (!r.key) return '';
+    const t = r.key.test;
+    const isBest = r.best;
+    const recClass = t.recall === bestRecall ? 'best-metric' : (t.recall < 0.5 ? 'worst-metric' : '');
+    return `<tr class="${isBest ? 'best-row' : ''}">
+      <td><strong>${r.label}</strong></td>
+      <td style="font-size:12px;color:var(--muted)">${r.thresh}</td>
+      <td class="metric-cell">${fmt.pct(t.accuracy)}</td>
+      <td class="metric-cell">${fmt.pct(t.precision)}</td>
+      <td class="metric-cell ${recClass}">${fmt.pct(t.recall)}</td>
+      <td class="metric-cell">${fmt.pct(t.f1)}</td>
+      <td class="metric-cell">${fmt.dec4(t.auc_roc)}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ─── LOAD DATA ───
+const notice = document.getElementById('data-notice');
+
+function loadResults() {
+  // Try fetch first; fall back to XMLHttpRequest for file:// origins
+  const doFetch = typeof fetch !== 'undefined'
+    ? fetch('results.json').then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    : Promise.reject(new Error('fetch unavailable'));
+
+  doFetch.catch(() => {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', 'results.json', false); // synchronous fallback
+      try { xhr.send(); resolve(JSON.parse(xhr.responseText)); }
+      catch(e) { reject(e); }
+    });
+  }).then(data => {
+    populateAll(data);
+    const ts = data.generated_at ? ` · generated ${data.generated_at}` : '';
+    notice.textContent = 'results.json loaded' + ts;
+    notice.classList.add('loaded');
+    setTimeout(() => { notice.style.opacity = '0'; }, 6000);
+  }).catch(err => {
+    notice.textContent = 'results.json not found — serve from a local HTTP server: python3 -m http.server 8000';
+    notice.classList.add('error');
+    console.warn('Could not load results.json:', err);
+  });
+}
+
+// ─── NAV ACTIVE STATE (IntersectionObserver) ───
+function initNav() {
+  const sectionIds = ['s1','s2','s3','s3-1','s3-2','s3-3','s3-4','s4','s5','appendix','notes'];
+  const navLinks = document.querySelectorAll('.side-nav a[data-section], .side-nav .sub-link[data-section]');
+
+  // Toggle subnav open when any s3-x section is active
+  const subNav = document.getElementById('nav-sub-s3');
+  const s3Parent = document.getElementById('nav-s3');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navLinks.forEach(a => {
+          const isActive = a.dataset.section === id;
+          a.classList.toggle('active', isActive);
+        });
+        // Open subnav if any model section is active
+        const inModels = ['s3','s3-1','s3-2','s3-3','s3-4'].includes(id);
+        subNav.classList.toggle('open', inModels);
+        if (inModels) s3Parent.classList.add('active');
+        else if (!id.startsWith('s3')) s3Parent.classList.remove('active');
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px', threshold: 0 });
+
+  sectionIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
+}
+
+// ─── BOOT ───
+document.addEventListener('DOMContentLoaded', () => {
+  loadResults();
+  initNav();
+});
+</script>
+</body>
+</html>

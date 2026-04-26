@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 250" width="940" height="250" style="background:#F7F4EF;font-family:system-ui,sans-serif;">
+  <defs>
+    <marker id="arr" markerWidth="7" markerHeight="7" refX="7" refY="3.5" orient="auto">
+      <polygon points="0 0, 7 3.5, 0 7" fill="#2C3440"/>
+    </marker>
+  </defs>
+  <line x1="97" y1="36" x2="247" y2="36" stroke="#C8C8C8" stroke-width="1"/>
+  <line x1="97" y1="33" x2="97" y2="39" stroke="#C8C8C8" stroke-width="1"/>
+  <line x1="247" y1="33" x2="247" y2="39" stroke="#C8C8C8" stroke-width="1"/>
+  <text x="172.0" y="26" text-anchor="middle" font-size="9.5" fill="#AAAAAA" letter-spacing="0.8">BLOCK 1</text>
+  <line x1="261" y1="36" x2="411" y2="36" stroke="#C8C8C8" stroke-width="1"/>
+  <line x1="261" y1="33" x2="261" y2="39" stroke="#C8C8C8" stroke-width="1"/>
+  <line x1="411" y1="33" x2="411" y2="39" stroke="#C8C8C8" stroke-width="1"/>
+  <text x="336.0" y="26" text-anchor="middle" font-size="9.5" fill="#AAAAAA" letter-spacing="0.8">BLOCK 2</text>
+  <line x1="425" y1="36" x2="575" y2="36" stroke="#C8C8C8" stroke-width="1"/>
+  <line x1="425" y1="33" x2="425" y2="39" stroke="#C8C8C8" stroke-width="1"/>
+  <line x1="575" y1="33" x2="575" y2="39" stroke="#C8C8C8" stroke-width="1"/>
+  <text x="500.0" y="26" text-anchor="middle" font-size="9.5" fill="#AAAAAA" letter-spacing="0.8">BLOCK 3</text>
+  <line x1="665" y1="36" x2="916" y2="36" stroke="#C8C8C8" stroke-width="1"/>
+  <line x1="665" y1="33" x2="665" y2="39" stroke="#C8C8C8" stroke-width="1"/>
+  <line x1="916" y1="33" x2="916" y2="39" stroke="#C8C8C8" stroke-width="1"/>
+  <text x="790.5" y="26" text-anchor="middle" font-size="9.5" fill="#AAAAAA" letter-spacing="0.8">CLASSIFIER</text>
+  <line x1="80" y1="148" x2="99" y2="148" stroke="#2C3440" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="168" y1="148" x2="187" y2="148" stroke="#2C3440" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="244" y1="148" x2="263" y2="148" stroke="#2C3440" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="332" y1="148" x2="351" y2="148" stroke="#2C3440" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="408" y1="148" x2="427" y2="148" stroke="#2C3440" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="496" y1="148" x2="515" y2="148" stroke="#2C3440" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="572" y1="148" x2="591" y2="148" stroke="#2C3440" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="648" y1="148" x2="667" y2="148" stroke="#2C3440" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="736" y1="148" x2="755" y2="148" stroke="#2C3440" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="824" y1="148" x2="843" y2="148" stroke="#2C3440" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="20" y="126.0" width="60" height="44" rx="4" ry="4" fill="#2C3440"/>
+  <text x="50.0" y="143" text-anchor="middle" font-size="10" font-weight="600" fill="#F7F4EF">Input</text>
+  <text x="50.0" y="156" text-anchor="middle" font-size="9" fill="#F7F4EF" opacity="0.85">64×64×3</text>
+  <rect x="100" y="103.0" width="68" height="90" rx="4" ry="4" fill="#1A6B7C"/>
+  <text x="134.0" y="143" text-anchor="middle" font-size="10" font-weight="600" fill="#F7F4EF">Conv2D</text>
+  <text x="134.0" y="156" text-anchor="middle" font-size="9" fill="#F7F4EF" opacity="0.85">32 · 3×3</text>
+  <rect x="188" y="118.0" width="56" height="60" rx="4" ry="4" fill="#E8A838"/>
+  <text x="216.0" y="143" text-anchor="middle" font-size="10" font-weight="600" fill="#2C3440">MaxPool</text>
+  <text x="216.0" y="156" text-anchor="middle" font-size="9" fill="#2C3440" opacity="0.85">2×2</text>
+  <rect x="264" y="93.0" width="68" height="110" rx="4" ry="4" fill="#1A6B7C"/>
+  <text x="298.0" y="143" text-anchor="middle" font-size="10" font-weight="600" fill="#F7F4EF">Conv2D</text>
+  <text x="298.0" y="156" text-anchor="middle" font-size="9" fill="#F7F4EF" opacity="0.85">64 · 3×3</text>
+  <rect x="352" y="113.0" width="56" height="70" rx="4" ry="4" fill="#E8A838"/>
+  <text x="380.0" y="143" text-anchor="middle" font-size="10" font-weight="600" fill="#2C3440">MaxPool</text>
+  <text x="380.0" y="156" text-anchor="middle" font-size="9" fill="#2C3440" opacity="0.85">2×2</text>
+  <rect x="428" y="83.0" width="68" height="130" rx="4" ry="4" fill="#1A6B7C"/>
+  <text x="462.0" y="143" text-anchor="middle" font-size="10" font-weight="600" fill="#F7F4EF">Conv2D</text>
+  <text x="462.0" y="156" text-anchor="middle" font-size="9" fill="#F7F4EF" opacity="0.85">128 · 3×3</text>
+  <rect x="516" y="108.0" width="56" height="80" rx="4" ry="4" fill="#E8A838"/>
+  <text x="544.0" y="143" text-anchor="middle" font-size="10" font-weight="600" fill="#2C3440">MaxPool</text>
+  <text x="544.0" y="156" text-anchor="middle" font-size="9" fill="#2C3440" opacity="0.85">2×2</text>
+  <rect x="592" y="135.0" width="56" height="26" rx="4" ry="4" fill="#2C3440"/>
+  <text x="620.0" y="143" text-anchor="middle" font-size="10" font-weight="600" fill="#F7F4EF">Flatten</text>
+  <text x="620.0" y="156" text-anchor="middle" font-size="9" fill="#F7F4EF" opacity="0.85">8,192</text>
+  <rect x="668" y="100.0" width="68" height="96" rx="4" ry="4" fill="#4E9E78"/>
+  <text x="702.0" y="143" text-anchor="middle" font-size="10" font-weight="600" fill="#F7F4EF">Dense</text>
+  <text x="702.0" y="156" text-anchor="middle" font-size="9" fill="#F7F4EF" opacity="0.85">256 · ReLU</text>
+  <rect x="756" y="119.0" width="68" height="58" rx="4" ry="4" fill="#8BB8A4"/>
+  <text x="790.0" y="143" text-anchor="middle" font-size="10" font-weight="600" fill="#2C3440">Dropout</text>
+  <text x="790.0" y="156" text-anchor="middle" font-size="9" fill="#2C3440" opacity="0.85">p = 0.5</text>
+  <rect x="844" y="126.0" width="68" height="44" rx="4" ry="4" fill="#D95F4B"/>
+  <text x="878.0" y="143" text-anchor="middle" font-size="10" font-weight="600" fill="#F7F4EF">Dense</text>
+  <text x="878.0" y="156" text-anchor="middle" font-size="9" fill="#F7F4EF" opacity="0.85">1 · Sigmoid</text>
+  <text x="216.0" y="192.0" text-anchor="middle" font-size="9" fill="#999999">32×32×32</text>
+  <text x="380.0" y="197.0" text-anchor="middle" font-size="9" fill="#999999">16×16×64</text>
+  <text x="544.0" y="202.0" text-anchor="middle" font-size="9" fill="#999999">8×8×128</text>
+</svg>

@@ -1,0 +1,185 @@
+{
+  "generated_at": "2026-04-26T13:43:53",
+  "dataset": {
+    "train_size": 19966,
+    "val_size": 4992,
+    "test_size": 2600,
+    "image_size": [
+      64,
+      64,
+      3
+    ],
+    "classes": [
+      "Uninfected",
+      "Parasitized"
+    ]
+  },
+  "models": {
+    "cnn1": {
+      "name": "CNN1 - Baseline",
+      "slug": "cnn1",
+      "threshold_used": 0.5,
+      "test": {
+        "accuracy": 0.9846,
+        "precision": 0.9869,
+        "recall": 0.9823,
+        "f1": 0.9846,
+        "auc_roc": 0.999,
+        "confusion_matrix": [
+          [
+            1283,
+            17
+          ],
+          [
+            23,
+            1277
+          ]
+        ],
+        "false_negative_rate": 0.0177,
+        "false_positive_rate": 0.0131
+      },
+      "training": {
+        "epochs_trained": 8,
+        "final_train_accuracy": 0.987,
+        "final_val_accuracy": 0.9774,
+        "final_train_loss": 0.0382,
+        "final_val_loss": 0.0685,
+        "best_val_loss": 0.0633,
+        "best_epoch": 3
+      }
+    },
+    "cnn2": {
+      "name": "CNN2 - Augmented",
+      "slug": "cnn2",
+      "threshold_used": 0.5,
+      "test": {
+        "accuracy": 0.5073,
+        "precision": 1.0,
+        "recall": 0.0146,
+        "f1": 0.0288,
+        "auc_roc": 0.9799,
+        "confusion_matrix": [
+          [
+            1300,
+            0
+          ],
+          [
+            1281,
+            19
+          ]
+        ],
+        "false_negative_rate": 0.9854,
+        "false_positive_rate": 0.0
+      },
+      "training": {
+        "epochs_trained": 5,
+        "final_train_accuracy": 0.9751,
+        "final_val_accuracy": 0.9704,
+        "final_train_loss": 0.0753,
+        "final_val_loss": 0.0846,
+        "best_val_loss": 0.0846,
+        "best_epoch": 5
+      }
+    },
+    "cnn2_tuned": {
+      "name": "CNN2 - Augmented (tuned threshold)",
+      "slug": "cnn2_tuned",
+      "threshold_used": 0.02,
+      "test": {
+        "accuracy": 0.9423,
+        "precision": 0.9974,
+        "recall": 0.8869,
+        "f1": 0.9389,
+        "auc_roc": 0.9799,
+        "confusion_matrix": [
+          [
+            1297,
+            3
+          ],
+          [
+            147,
+            1153
+          ]
+        ],
+        "false_negative_rate": 0.1131,
+        "false_positive_rate": 0.0023
+      }
+    },
+    "cnn3": {
+      "name": "CNN3 - Recall-Optimized",
+      "slug": "cnn3",
+      "threshold_used": 0.5,
+      "test": {
+        "accuracy": 0.9823,
+        "precision": 0.9736,
+        "recall": 0.9915,
+        "f1": 0.9825,
+        "auc_roc": 0.9993,
+        "confusion_matrix": [
+          [
+            1265,
+            35
+          ],
+          [
+            11,
+            1289
+          ]
+        ],
+        "false_negative_rate": 0.0085,
+        "false_positive_rate": 0.0269
+      },
+      "training": {
+        "epochs_trained": 26,
+        "final_train_accuracy": 1.0,
+        "final_val_accuracy": 0.9806,
+        "final_train_loss": 0.0267,
+        "final_val_loss": 0.0502,
+        "best_val_loss": 0.05,
+        "best_epoch": 21,
+        "final_train_recall": 1.0,
+        "final_val_recall": 0.9845
+      }
+    },
+    "mobilenetv2": {
+      "name": "MobileNetV2 - Transfer Learning",
+      "slug": "mobilenetv2",
+      "threshold_used": 0.5,
+      "test": {
+        "accuracy": 0.9104,
+        "precision": 0.9709,
+        "recall": 0.8462,
+        "f1": 0.9042,
+        "auc_roc": 0.9827,
+        "confusion_matrix": [
+          [
+            1267,
+            33
+          ],
+          [
+            200,
+            1100
+          ]
+        ],
+        "false_negative_rate": 0.1538,
+        "false_positive_rate": 0.0254
+      },
+      "training": {
+        "epochs_trained": 5,
+        "final_train_accuracy": 0.9036,
+        "final_val_accuracy": 0.9349,
+        "final_train_loss": 0.2581,
+        "final_val_loss": 0.1734,
+        "best_val_loss": 0.1734,
+        "best_epoch": 5
+      }
+    }
+  },
+  "best_model": {
+    "slug": "cnn3",
+    "name": "CNN3 - Recall-Optimized",
+    "file": "malaria_detection_cnn3.keras",
+    "selection_metric": "recall",
+    "recall": 0.9915,
+    "auc_roc": 0.9993
+  }
+}
