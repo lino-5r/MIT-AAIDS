@@ -41,7 +41,7 @@ html {
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   font-weight: 400;
-  background: var(--white);
+  background: var(--ivory);
   color: var(--dark);
   line-height: 1.7;
   overflow-x: hidden;
@@ -118,10 +118,13 @@ body {
 .page {
   max-width: var(--content-w);
   margin: 0 auto;
-  padding: 52px 28px 100px;
+  padding: 52px 48px 100px;
   display: flex;
   flex-direction: column;
   gap: 0;
+  background: var(--white);
+  box-shadow: 0 4px 40px rgba(44,52,64,0.07);
+  min-height: 100vh;
 }
 
 /* ─── HEADER ─── */
@@ -164,7 +167,7 @@ body {
   text-transform: uppercase;
 }
 .meta-chip.prog { background: var(--teal-light); color: var(--teal); border: 1px solid var(--border); }
-.meta-chip.year { background: var(--ivory); color: var(--muted); border: 1px solid var(--border-mid); }
+.meta-chip.year { background: var(--white); color: var(--muted); border: 1px solid var(--border-mid); }
 .meta-chip.best {
   background: var(--sage-light); color: var(--sage);
   border: 1px solid rgba(78,158,120,0.25);
