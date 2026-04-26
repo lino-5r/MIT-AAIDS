@@ -340,6 +340,23 @@ td.worst-metric { color: var(--coral); }
 }
 .arch-fig img:hover { opacity: 0.9; }
 
+/* ─── FIGURE COMPARISON (2-up before/after) ─── */
+.fig-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 24px 0;
+}
+.fig-compare-panel { display: flex; flex-direction: column; gap: 6px; }
+.fig-compare-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--teal);
+  padding: 4px 10px; background: var(--teal-light);
+  border-radius: 4px; align-self: flex-start;
+}
+.fig-compare .fig-block { margin: 0; }
+@media (max-width: 640px) { .fig-compare { grid-template-columns: 1fr; } }
+
 /* ─── LIGHTBOX ─── */
 #lightbox {
   position: fixed; inset: 0; z-index: 9000;
@@ -739,11 +756,6 @@ td.worst-metric { color: var(--coral); }
     <p>Despite the training curve behavior, CNN2's default-threshold evaluation produces a recall of <span class="met bad" id="dyn-cnn2-recall-default">—</span> for the Parasitized class — <strong><span id="dyn-cnn2-fn-default">—</span> false negatives</strong> out of 1,300 Parasitized images. The AUC-ROC of <span class="met teal" id="dyn-cnn2-auc">—</span> confirms the model has strong discriminative ability. The disconnect points to a calibration problem: sigmoid output probabilities cluster far below 0.5, so the default threshold misclassifies almost every Parasitized cell.</p>
   </div>
 
-  <div class="fig-block">
-    <img src="fig_cnn2_evaluation.png" alt="CNN2 default evaluation">
-    <div class="fig-caption"><strong>Figure 11.</strong> CNN2 Augmented — Confusion matrix and ROC curve at the default 0.5 threshold. Note the high AUC alongside collapsed recall: indicative of sigmoid calibration failure, not poor discriminative ability.</div>
-  </div>
-
   <p>Thresholds from 0.01 to 0.55 were scanned and Recall, Precision, and F1-Score computed at each point. The scan identifies two clinically relevant operating points: the threshold that maximizes F1-Score, and the lowest threshold that achieves at least 95% recall.</p>
 
   <div class="fig-block">
@@ -760,9 +772,21 @@ td.worst-metric { color: var(--coral); }
     <div class="metric-box"><div class="mb-value" id="dyn-cnn2-tuned-f1">—</div><div class="mb-label">F1 (tuned)</div></div>
   </div>
 
-  <div class="fig-block">
-    <img src="fig_cnn2_tuned_evaluation.png" alt="CNN2 tuned threshold evaluation">
-    <div class="fig-caption"><strong>Figure 13.</strong> CNN2 Augmented — Confusion matrix at the threshold tuned for best F1-Score. Compare false negative count to the default-threshold evaluation to quantify the calibration effect.</div>
+  <div class="fig-compare">
+    <div class="fig-compare-panel">
+      <div class="fig-compare-label">Default threshold (0.5)</div>
+      <div class="fig-block">
+        <img src="fig_cnn2_evaluation.png" alt="CNN2 default threshold evaluation">
+        <div class="fig-caption"><strong>Figure 11.</strong> CNN2 at default threshold — high AUC alongside collapsed recall confirms sigmoid calibration failure, not poor discriminative ability.</div>
+      </div>
+    </div>
+    <div class="fig-compare-panel">
+      <div class="fig-compare-label">Tuned threshold (<span id="dyn-cnn2-tuned-threshold-fig">best F1</span>)</div>
+      <div class="fig-block">
+        <img src="fig_cnn2_tuned_evaluation.png" alt="CNN2 tuned threshold evaluation">
+        <div class="fig-caption"><strong>Figure 13.</strong> CNN2 at the tuned threshold — the same model, recalibrated post-hoc. Compare false negative count directly to Figure 11.</div>
+      </div>
+    </div>
   </div>
 
   <p>This analysis motivates CNN3: rather than operating CNN2 at a non-default threshold post-hoc, CNN3 addresses the calibration failure during training via class weighting, so the model learns to place its outputs in a useful range from the start.</p>
@@ -1238,7 +1262,8 @@ function populateAll(d) {
 
   // CNN2 tuned
   if (m.cnn2_tuned) {
-    set('dyn-cnn2-tuned-threshold', fmt.thresh(m.cnn2_tuned.threshold_used));
+    set('dyn-cnn2-tuned-threshold',     fmt.thresh(m.cnn2_tuned.threshold_used));
+    set('dyn-cnn2-tuned-threshold-fig', fmt.thresh(m.cnn2_tuned.threshold_used));
     set('dyn-cnn2-tuned-recall',    fmt.pct(m.cnn2_tuned.test.recall));
     set('dyn-cnn2-tuned-fn',        fmt.int(m.cnn2_tuned.test.confusion_matrix[1][0]));
     set('dyn-cnn2-tuned-prec',      fmt.pct(m.cnn2_tuned.test.precision));
