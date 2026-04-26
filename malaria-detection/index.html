@@ -669,6 +669,7 @@ td.worst-metric { color: var(--coral); }
   </ul>
   <div class="arch-fig">
     <img src="fig_cnn1_architecture.svg" alt="CNN1 Architecture Diagram">
+    <div class="fig-caption"><strong>Architecture - CNN1 Baseline.</strong> Three Conv2D blocks (32, 64, 128 filters; 3×3 kernels; ReLU) each followed by MaxPooling2D, then Flatten → Dense(256, ReLU) → Dropout(0.5) → Dense(1, sigmoid).</div>
   </div>
   <p>Compiled with the <span class="term" data-term="Adam optimizer">Adam optimizer</span>, <span class="term" data-term="binary cross-entropy loss">binary cross-entropy loss</span>, trained with <span class="term" data-term="early stopping">early stopping</span> (patience=5) and <span class="term" data-term="learning rate reduction on plateau">learning rate reduction on plateau</span>.</p>
 
@@ -718,6 +719,7 @@ td.worst-metric { color: var(--coral); }
 
   <div class="arch-fig">
     <img src="fig_cnn2_architecture.svg" alt="CNN2 Architecture Diagram">
+    <div class="fig-caption"><strong>Architecture - CNN2 Augmented.</strong> Data augmentation preprocessing feeds into three blocks, each with dual Conv2D layers (32, 64, 128 filters), BatchNormalization, and Dropout(0.25), followed by GlobalAveragePooling2D → Dense(256, ReLU) → Dropout(0.5) → Dense(1, sigmoid).</div>
   </div>
 
   <div class="subsection-title">What Augmentation Does to the Training Signal</div>
@@ -1018,21 +1020,25 @@ td.worst-metric { color: var(--coral); }
   <p><strong>CNN1 - Baseline:</strong> 3 convolutional blocks (Conv2D 32/64/128 filters, 3×3 kernel, ReLU, same padding) → MaxPooling2D after each block → Flatten → Dense(256, ReLU) → Dropout(0.5) → Dense(1, sigmoid)</p>
   <div class="arch-fig">
     <img src="fig_cnn1_architecture.svg" alt="CNN1 Architecture Diagram">
+    <div class="fig-caption"><strong>Architecture - CNN1 Baseline.</strong> Three Conv2D blocks (32, 64, 128 filters; 3×3 kernels; ReLU) each followed by MaxPooling2D, then Flatten → Dense(256, ReLU) → Dropout(0.5) → Dense(1, sigmoid).</div>
   </div>
 
   <p><strong>CNN2 - Improved:</strong> 3 convolutional blocks with dual Conv2D layers per block (32/64/128 filters) + BatchNormalization + Dropout(0.25) after each block → GlobalAveragePooling2D → Dense(256, ReLU) → Dropout(0.5) → Dense(1, sigmoid). Data augmentation applied during training.</p>
   <div class="arch-fig">
     <img src="fig_cnn2_architecture.svg" alt="CNN2 Architecture Diagram">
+    <div class="fig-caption"><strong>Architecture - CNN2 Augmented.</strong> Data augmentation preprocessing feeds into three blocks, each with dual Conv2D layers (32, 64, 128 filters), BatchNormalization, and Dropout(0.25), followed by GlobalAveragePooling2D → Dense(256, ReLU) → Dropout(0.5) → Dense(1, sigmoid).</div>
   </div>
 
   <p><strong>CNN3 - Recall-Optimized:</strong> Same architecture as CNN2. Trained with <code>class_weight=&#123;0:1.0, 1:2.0&#125;</code> and <code>keras.metrics.Recall</code> compiled alongside accuracy and loss. EarlyStopping monitors <code>val_loss</code>.</p>
   <div class="arch-fig">
     <img src="fig_cnn3_architecture.svg" alt="CNN3 Architecture Diagram">
+    <div class="fig-caption"><strong>Architecture - CNN3 Recall-Optimized.</strong> Identical structure to CNN2. The amber badge annotates the training-only change: class weights {Uninfected: 1.0, Parasitized: 2.0} applied during training.</div>
   </div>
 
   <p><strong>MobileNetV2 (Transfer Learning):</strong> Pre-trained MobileNetV2 backbone (ImageNet weights, top excluded) → GlobalAveragePooling2D → Dropout(0.3) → Dense(128, ReLU) → Dropout(0.3) → Dense(1, sigmoid). Phase 1: backbone frozen. Phase 2: last 30 layers unfrozen, retrained at learning rate 1e-5.</p>
   <div class="arch-fig">
     <img src="fig_mobilenetv2_architecture.svg" alt="MobileNetV2 Architecture Diagram">
+    <div class="fig-caption"><strong>Architecture - MobileNetV2 Transfer Learning.</strong> Pre-trained MobileNetV2 backbone (ImageNet, top excluded) → GlobalAveragePooling2D → Dropout(0.3) → Dense(128, ReLU) → Dropout(0.3) → Dense(1, sigmoid). Phase 1: backbone frozen. Phase 2: last 30 layers unfrozen at LR 1e-5.</div>
   </div>
 
   <div id="appendix-b" class="subsection-title" data-nav-label="B. Training Config">B. Training Configuration</div>
@@ -1515,8 +1521,8 @@ function initLightbox() {
   document.querySelectorAll('.fig-block img, .arch-fig img').forEach(img => {
     img.addEventListener('click', () => {
       const isArch = !!img.closest('.arch-fig');
-      const caption = img.closest('.fig-block')
-        ?.querySelector('.fig-caption')?.textContent?.trim() ?? '';
+      const container = img.closest('.fig-block') || img.closest('.arch-fig');
+      const caption = container?.querySelector('.fig-caption')?.textContent?.trim() ?? '';
       open(img.src, caption, isArch);
     });
   });
