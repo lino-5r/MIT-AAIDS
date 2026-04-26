@@ -364,6 +364,7 @@ td.worst-metric { color: var(--coral); }
   cursor: default;
 }
 #lightbox.open img { transform: scale(1); }
+#lightbox img.arch { max-width: min(98vw, 1600px); max-height: 80vh; }
 #lightbox-close {
   position: fixed; top: 20px; right: 24px;
   width: 36px; height: 36px;
@@ -1468,8 +1469,9 @@ function initLightbox() {
   const lbClose = document.getElementById('lightbox-close');
   const lbCap   = document.getElementById('lightbox-caption');
 
-  function open(src, caption) {
+  function open(src, caption, isArch) {
     lbImg.src = src;
+    lbImg.classList.toggle('arch', isArch);
     lbCap.textContent = caption;
     lb.classList.add('open');
     document.body.style.overflow = 'hidden';
@@ -1484,9 +1486,10 @@ function initLightbox() {
   // Wire up every figure and arch image
   document.querySelectorAll('.fig-block img, .arch-fig img').forEach(img => {
     img.addEventListener('click', () => {
+      const isArch = !!img.closest('.arch-fig');
       const caption = img.closest('.fig-block')
         ?.querySelector('.fig-caption')?.textContent?.trim() ?? '';
-      open(img.src, caption);
+      open(img.src, caption, isArch);
     });
   });
 
