@@ -410,49 +410,7 @@ td.worst-metric { color: var(--coral); }
 <body>
 
 <!-- ══════ SIDE NAV ══════ -->
-<nav class="side-nav" id="side-nav">
-  <a href="#s1" data-section="s1" id="nav-s1" class="nav-parent"><span class="dot"></span><span class="nav-label">1. Problem Definition</span></a>
-  <div class="nav-sub" id="nav-sub-s1">
-    <a href="#s1-1" data-section="s1-1" class="sub-link"><span class="subdot"></span><span class="nav-label">Context</span></a>
-    <a href="#s1-2" data-section="s1-2" class="sub-link"><span class="subdot"></span><span class="nav-label">Objectives</span></a>
-    <a href="#s1-3" data-section="s1-3" class="sub-link"><span class="subdot"></span><span class="nav-label">Key Questions</span></a>
-    <a href="#s1-4" data-section="s1-4" class="sub-link"><span class="subdot"></span><span class="nav-label">Problem Formulation</span></a>
-  </div>
-  <a href="#s2" data-section="s2" id="nav-s2" class="nav-parent"><span class="dot"></span><span class="nav-label">2. Data Exploration</span></a>
-  <div class="nav-sub" id="nav-sub-s2">
-    <a href="#s2-1" data-section="s2-1" class="sub-link"><span class="subdot"></span><span class="nav-label">Data Description</span></a>
-    <a href="#s2-2" data-section="s2-2" class="sub-link"><span class="subdot"></span><span class="nav-label">Observations &amp; Insights</span></a>
-    <a href="#s2-3" data-section="s2-3" class="sub-link"><span class="subdot"></span><span class="nav-label">Pre-Processing</span></a>
-    <a href="#s2-4" data-section="s2-4" class="sub-link"><span class="subdot"></span><span class="nav-label">Dataset Balance</span></a>
-  </div>
-  <a href="#s3" data-section="s3" id="nav-s3" class="nav-parent"><span class="dot"></span><span class="nav-label">3. Model Building</span></a>
-  <div class="nav-sub" id="nav-sub-s3">
-    <a href="#s3-1" data-section="s3-1" class="sub-link"><span class="subdot"></span><span class="nav-label">CNN1 Baseline</span></a>
-    <a href="#s3-2" data-section="s3-2" class="sub-link"><span class="subdot"></span><span class="nav-label">CNN2 Augmented</span></a>
-    <a href="#s3-3" data-section="s3-3" class="sub-link"><span class="subdot"></span><span class="nav-label">CNN3 Recall-Optimized</span></a>
-    <a href="#s3-4" data-section="s3-4" class="sub-link"><span class="subdot"></span><span class="nav-label">MobileNetV2</span></a>
-  </div>
-  <a href="#s4" data-section="s4" id="nav-s4" class="nav-parent"><span class="dot"></span><span class="nav-label">4. Model Comparison</span></a>
-  <div class="nav-sub" id="nav-sub-s4">
-    <a href="#s4-1" data-section="s4-1" class="sub-link"><span class="subdot"></span><span class="nav-label">Why Recall</span></a>
-    <a href="#s4-2" data-section="s4-2" class="sub-link"><span class="subdot"></span><span class="nav-label">Performance Comparison</span></a>
-    <a href="#s4-3" data-section="s4-3" class="sub-link"><span class="subdot"></span><span class="nav-label">Confusion Matrices</span></a>
-    <a href="#s4-4" data-section="s4-4" class="sub-link"><span class="subdot"></span><span class="nav-label">Pros, Cons &amp; Scope</span></a>
-  </div>
-  <a href="#s5" data-section="s5" id="nav-s5" class="nav-parent"><span class="dot"></span><span class="nav-label">5. Recommendation</span></a>
-  <div class="nav-sub" id="nav-sub-s5">
-    <a href="#s5-1" data-section="s5-1" class="sub-link"><span class="subdot"></span><span class="nav-label">Recommended Model</span></a>
-    <a href="#s5-2" data-section="s5-2" class="sub-link"><span class="subdot"></span><span class="nav-label">Why CNN3</span></a>
-    <a href="#s5-3" data-section="s5-3" class="sub-link"><span class="subdot"></span><span class="nav-label">How This Solves It</span></a>
-  </div>
-  <a href="#appendix" data-section="appendix" id="nav-appendix" class="nav-parent"><span class="dot"></span><span class="nav-label">Appendix</span></a>
-  <div class="nav-sub" id="nav-sub-appendix">
-    <a href="#app-a" data-section="app-a" class="sub-link"><span class="subdot"></span><span class="nav-label">A. Architectures</span></a>
-    <a href="#app-b" data-section="app-b" class="sub-link"><span class="subdot"></span><span class="nav-label">B. Training Config</span></a>
-    <a href="#app-c" data-section="app-c" class="sub-link"><span class="subdot"></span><span class="nav-label">C. References</span></a>
-  </div>
-  <a href="#notes" data-section="notes"><span class="dot"></span><span class="nav-label">Working Notes</span></a>
-</nav>
+<nav class="side-nav" id="side-nav"></nav>
 
 <!-- ══════ PAGE ══════ -->
 <div class="page">
@@ -491,16 +449,16 @@ td.worst-metric { color: var(--coral); }
 <!-- ══════════════════════════════════ -->
 <!-- SECTION 1 — PROBLEM DEFINITION   -->
 <!-- ══════════════════════════════════ -->
-<section id="s1" class="doc-section">
+<section id="s1" class="doc-section" data-nav-label="1. Problem Definition">
   <div class="section-number">Section 1</div>
   <div class="section-title">Problem Definition</div>
 
-  <div id="s1-1" class="subsection-title">1.1 Context</div>
+  <div id="s1-1" class="subsection-title" data-nav-label="Context">1.1 Context</div>
   <p>Malaria is a life-threatening infectious disease caused by <span class="term" data-term="Plasmodium"><em>Plasmodium</em></span> parasites transmitted through the bites of infected female <span class="term" data-term="Anopheles"><em>Anopheles</em></span> mosquitoes. Once in the bloodstream, the parasites invade red blood cells, causing oxygen deprivation, respiratory distress, and — if untreated — death. A particularly dangerous characteristic is that the parasites can remain dormant in the body for over a year before symptoms appear, significantly increasing the window for undetected transmission.</p>
   <p>According to the WHO, more than <strong>229 million malaria cases</strong> and approximately <strong>400,000 deaths</strong> were reported globally in 2019 alone. Sub-Saharan Africa bears the highest burden; children under five account for <strong>67% of all malaria deaths worldwide</strong>.</p>
   <p>The conventional diagnostic method — microscopic examination of blood smear slides — is slow, labor-intensive, and dependent on the availability of skilled microscopists. In low-resource, high-burden settings, that expertise is scarce. Inter-observer variability further undermines diagnostic consistency. Automated, AI-driven detection directly addresses these gaps: machine learning classification has demonstrated accuracy comparable to manual examination, while being deployable at scale, available continuously, and free from observer fatigue.</p>
 
-  <div id="s1-2" class="subsection-title">1.2 Objectives</div>
+  <div id="s1-2" class="subsection-title" data-nav-label="Objectives">1.2 Objectives</div>
   <ul>
     <li>Build a reliable deep learning model that classifies microscopic blood cell images as either <strong>Parasitized</strong> or <strong>Uninfected</strong>.</li>
     <li>Minimize <strong>false negatives</strong> — missed infections — since they represent the most clinically consequential error in a diagnostic context.</li>
@@ -508,7 +466,7 @@ td.worst-metric { color: var(--coral); }
     <li>Provide a well-reasoned proposal for which model should be adopted for deployment.</li>
   </ul>
 
-  <div id="s1-3" class="subsection-title">1.3 Key Questions</div>
+  <div id="s1-3" class="subsection-title" data-nav-label="Key Questions">1.3 Key Questions</div>
   <ol>
     <li>Can a <span class="term" data-term="CNN">CNN</span> learn discriminative visual features from cell images that reliably distinguish parasitized from uninfected cells?</li>
     <li>What preprocessing and <span class="term" data-term="Data Augmentation">data augmentation</span> strategies improve model robustness and reduce <span class="term" data-term="Overfitting">overfitting</span>?</li>
@@ -516,7 +474,7 @@ td.worst-metric { color: var(--coral); }
     <li>Does <span class="term" data-term="Transfer Learning">transfer learning</span> from <span class="term" data-term="MobileNetV2">MobileNetV2</span> / <span class="term" data-term="ImageNet">ImageNet</span> outperform custom architectures trained from scratch?</li>
   </ol>
 
-  <div id="s1-4" class="subsection-title">1.4 Problem Formulation</div>
+  <div id="s1-4" class="subsection-title" data-nav-label="Problem Formulation">1.4 Problem Formulation</div>
   <p>This is a <strong>binary image classification</strong> problem addressed using supervised deep learning.</p>
   <ul>
     <li><strong>Input:</strong> A single RGB microscopic blood cell image, resized to 64×64 pixels.</li>
@@ -531,11 +489,11 @@ td.worst-metric { color: var(--coral); }
 <!-- ══════════════════════════════════ -->
 <!-- SECTION 2 — DATA EXPLORATION     -->
 <!-- ══════════════════════════════════ -->
-<section id="s2" class="doc-section">
+<section id="s2" class="doc-section" data-nav-label="2. Data Exploration">
   <div class="section-number">Section 2</div>
   <div class="section-title">Data Exploration</div>
 
-  <div id="s2-1" class="subsection-title">2.1 Data Description</div>
+  <div id="s2-1" class="subsection-title" data-nav-label="Data Description">2.1 Data Description</div>
   <p>The dataset consists of colored microscopic images of individual red blood cells, sourced from the NIH Malaria Dataset. Each image depicts a single cell labeled as either Parasitized (containing the <em>Plasmodium</em> parasite) or Uninfected.</p>
 
   <table>
@@ -561,7 +519,7 @@ td.worst-metric { color: var(--coral); }
     </tbody>
   </table>
 
-  <div id="s2-2" class="subsection-title">2.2 Observations &amp; Insights</div>
+  <div id="s2-2" class="subsection-title" data-nav-label="Observations &amp; Insights">2.2 Observations &amp; Insights</div>
 
   <div class="sub2-title">Class Balance</div>
   <p>The dataset is very nearly perfectly balanced — approximately 50% Parasitized and 50% Uninfected in both splits. This makes <span class="term" data-term="Accuracy">accuracy</span> a valid and interpretable metric: the model must genuinely learn to distinguish the two classes, and no resampling or class-weighting is required in the baseline setup.</p>
@@ -597,7 +555,7 @@ td.worst-metric { color: var(--coral); }
     <div class="fig-caption"><strong>Figure 5.</strong> Distribution of original image dimensions across the full dataset. Most images fall in the 100–200 pixel range in both width and height.</div>
   </div>
 
-  <div id="s2-3" class="subsection-title">2.3 Pre-Processing Steps</div>
+  <div id="s2-3" class="subsection-title" data-nav-label="Pre-Processing">2.3 Pre-Processing Steps</div>
   <table>
     <thead><tr><th>Step</th><th>Detail</th></tr></thead>
     <tbody>
@@ -608,7 +566,7 @@ td.worst-metric { color: var(--coral); }
     </tbody>
   </table>
 
-  <div id="s2-4" class="subsection-title">2.4 Dataset Balance and Modeling Implications</div>
+  <div id="s2-4" class="subsection-title" data-nav-label="Dataset Balance">2.4 Dataset Balance and Modeling Implications</div>
   <p>The near-perfect class balance has a direct implication for the modeling strategy: both classes are represented equally throughout training, so the optimizer faces equal pressure to learn features for both. There is no risk of a shortcut solution by defaulting to the dominant class. This simplifies the baseline training setup — no resampling or class weighting required — and means accuracy and recall can be expected to move broadly in concert throughout training.</p>
 </section>
 
@@ -617,14 +575,14 @@ td.worst-metric { color: var(--coral); }
 <!-- ══════════════════════════════════ -->
 <!-- SECTION 3 — MODEL BUILDING       -->
 <!-- ══════════════════════════════════ -->
-<section id="s3" class="doc-section">
+<section id="s3" class="doc-section" data-nav-label="3. Model Building">
   <div class="section-number">Section 3</div>
   <div class="section-title">Model Building</div>
   <p>Three distinct modeling approaches were implemented and evaluated, progressing from a simple baseline through to a fine-tuned transfer learning model. A fourth model (CNN3) was added as a controlled experiment to isolate the effect of training configuration on the CNN2 architecture.</p>
 </section>
 
 <!-- 3.1 CNN1 -->
-<section id="s3-1" class="doc-section">
+<section id="s3-1" class="doc-section" data-nav-label="CNN1 Baseline">
   <div class="section-number">Section 3.1</div>
   <div class="section-title">Baseline CNN (CNN1)</div>
 
@@ -666,7 +624,7 @@ td.worst-metric { color: var(--coral); }
 </section>
 
 <!-- 3.2 CNN2 -->
-<section id="s3-2" class="doc-section">
+<section id="s3-2" class="doc-section" data-nav-label="CNN2 Augmented">
   <div class="section-number">Section 3.2</div>
   <div class="section-title">Augmented CNN (CNN2)</div>
 
@@ -759,7 +717,7 @@ td.worst-metric { color: var(--coral); }
 </section>
 
 <!-- 3.3 CNN3 -->
-<section id="s3-3" class="doc-section">
+<section id="s3-3" class="doc-section" data-nav-label="CNN3 Recall-Optimized">
   <div class="section-number">Section 3.3</div>
   <div class="section-title">Recall-Optimized CNN (CNN3)</div>
 
@@ -796,7 +754,7 @@ td.worst-metric { color: var(--coral); }
 </section>
 
 <!-- 3.4 MobileNetV2 -->
-<section id="s3-4" class="doc-section">
+<section id="s3-4" class="doc-section" data-nav-label="MobileNetV2">
   <div class="section-number">Section 3.4</div>
   <div class="section-title">Transfer Learning with MobileNetV2</div>
 
@@ -847,11 +805,11 @@ td.worst-metric { color: var(--coral); }
 <!-- ══════════════════════════════════ -->
 <!-- SECTION 4 — COMPARISON           -->
 <!-- ══════════════════════════════════ -->
-<section id="s4" class="doc-section">
+<section id="s4" class="doc-section" data-nav-label="4. Model Comparison">
   <div class="section-number">Section 4</div>
   <div class="section-title">Comparison of Techniques and Performance</div>
 
-  <div id="s4-1" class="subsection-title">4.1 Why Recall Is the Primary Metric</div>
+  <div id="s4-1" class="subsection-title" data-nav-label="Why Recall">4.1 Why Recall Is the Primary Metric</div>
   <p>In a medical screening context, the two types of classification errors carry very different costs:</p>
   <ul>
     <li><strong>False Negative:</strong> A Parasitized cell predicted as Uninfected — a missed diagnosis. The patient receives no treatment, the infection progresses, and there is ongoing transmission risk.</li>
@@ -859,7 +817,7 @@ td.worst-metric { color: var(--coral); }
   </ul>
   <p>Given this asymmetry, <strong>Recall for the Parasitized class</strong> is the governing metric. AUC-ROC is reported as a threshold-independent measure of discriminative power.</p>
 
-  <div id="s4-2" class="subsection-title">4.2 Model Performance Comparison</div>
+  <div id="s4-2" class="subsection-title" data-nav-label="Performance Comparison">4.2 Model Performance Comparison</div>
   <div id="comparison-table-wrap">
     <table id="comparison-table">
       <thead>
@@ -875,7 +833,7 @@ td.worst-metric { color: var(--coral); }
   </div>
   <p style="font-size:13px;color:var(--muted);margin-top:8px;">All metrics are reported on the held-out test set (2,600 images). Recall and Precision refer to the Parasitized (positive) class. Best recall row is highlighted.</p>
 
-  <div id="s4-3" class="subsection-title">4.3 Confusion Matrix Analysis</div>
+  <div id="s4-3" class="subsection-title" data-nav-label="Confusion Matrices">4.3 Confusion Matrix Analysis</div>
   <p>Confusion matrices were generated for each model on the test set. The key figure in each is the <strong>false negative count</strong> — Parasitized cells the model failed to flag.</p>
   <div id="fn-analysis">
     <ul>
@@ -887,7 +845,7 @@ td.worst-metric { color: var(--coral); }
     </ul>
   </div>
 
-  <div id="s4-4" class="subsection-title">4.4 Pros, Cons, and Scope for Improvement</div>
+  <div id="s4-4" class="subsection-title" data-nav-label="Pros, Cons &amp; Scope">4.4 Pros, Cons, and Scope for Improvement</div>
   <table>
     <thead><tr><th>Model</th><th>Strengths</th><th>Limitations</th></tr></thead>
     <tbody>
@@ -928,11 +886,11 @@ td.worst-metric { color: var(--coral); }
 <!-- ══════════════════════════════════ -->
 <!-- SECTION 5 — RECOMMENDATION       -->
 <!-- ══════════════════════════════════ -->
-<section id="s5" class="doc-section">
+<section id="s5" class="doc-section" data-nav-label="5. Recommendation">
   <div class="section-number">Section 5</div>
   <div class="section-title">Proposal for Final Solution Design</div>
 
-  <div id="s5-1" class="subsection-title">5.1 Recommended Model: <span id="dyn-best-model-name">CNN3 - Recall-Optimized</span></div>
+  <div id="s5-1" class="subsection-title" data-nav-label="Recommended Model">5.1 Recommended Model: <span id="dyn-best-model-name">CNN3 - Recall-Optimized</span></div>
 
   <div class="card sage">
     <div class="card-label">Recommendation</div>
@@ -941,7 +899,7 @@ td.worst-metric { color: var(--coral); }
 
   <p>MobileNetV2, despite being the expected winner given its ImageNet pre-training, achieved only <span id="dyn-mv2-recall-ref" class="met warn">84.62%</span> recall at this dataset and input resolution. The likely explanation is a combination of domain gap — ImageNet features for natural scenes do not transfer as directly to 64×64 Giemsa-stained microscopy crops — and insufficient fine-tuning duration. The transfer learning architecture remains a strong candidate for future work at higher resolution with more fine-tuning epochs.</p>
 
-  <div id="s5-2" class="subsection-title">5.2 Why CNN3 Performs Better — The Intuition</div>
+  <div id="s5-2" class="subsection-title" data-nav-label="Why CNN3">5.2 Why CNN3 Performs Better — The Intuition</div>
   <p>The gap between CNN3 and the other models comes from two places: what the training objective was, and how long the model trained.</p>
   <ul>
     <li><strong>Class weighting aligns the objective with the clinical goal:</strong> Standard binary cross-entropy treats a missed Parasitized cell and a missed Uninfected cell as equally costly. CNN3's class weight of 2:1 makes every false negative count twice in the loss calculation. The optimizer is directly penalized for the failure mode that matters most, so the learned decision boundary skews toward Parasitized.</li>
@@ -949,7 +907,7 @@ td.worst-metric { color: var(--coral); }
     <li><strong>Architecture is not the limiting factor:</strong> CNN3 uses exactly CNN2's architecture. The performance difference confirms the architecture was capable all along; the original training configuration was not optimized for recall. Architectural complexity alone does not determine recall — the training objective does.</li>
   </ul>
 
-  <div id="s5-3" class="subsection-title">5.3 How This Solves the Problem</div>
+  <div id="s5-3" class="subsection-title" data-nav-label="How This Solves It">5.3 How This Solves the Problem</div>
   <ul>
     <li><strong>Speed:</strong> The model processes a single cell image in milliseconds, enabling high-throughput screening of blood smear samples that would take a human microscopist hours to review.</li>
     <li><strong>Consistency:</strong> The model applies the same learned decision boundary to every image, regardless of time of day, case volume, or operator experience — eliminating the observer fatigue and inter-rater disagreement that undermine manual review at scale.</li>
@@ -963,17 +921,17 @@ td.worst-metric { color: var(--coral); }
 <!-- ══════════════════════════════════ -->
 <!-- APPENDIX                         -->
 <!-- ══════════════════════════════════ -->
-<section id="appendix" class="doc-section">
+<section id="appendix" class="doc-section" data-nav-label="Appendix">
   <div class="section-number">Appendix</div>
   <div class="section-title">A. Model Architectures / B. Training Configuration / C. References</div>
 
-  <div id="app-a" class="subsection-title">A. Model Architectures (Summary)</div>
+  <div id="appendix-a" class="subsection-title" data-nav-label="A. Architectures">A. Model Architectures (Summary)</div>
   <p><strong>CNN1 - Baseline:</strong> 3 convolutional blocks (Conv2D 32/64/128 filters, 3×3 kernel, ReLU, same padding) → MaxPooling2D after each block → Flatten → Dense(256, ReLU) → Dropout(0.5) → Dense(1, sigmoid)</p>
   <p><strong>CNN2 - Improved:</strong> 3 convolutional blocks with dual Conv2D layers per block (32/64/128 filters) + BatchNormalization + Dropout(0.25) after each block → GlobalAveragePooling2D → Dense(256, ReLU) → Dropout(0.5) → Dense(1, sigmoid). Data augmentation applied during training.</p>
   <p><strong>CNN3 - Recall-Optimized:</strong> Same architecture as CNN2. Trained with <code>class_weight=&#123;0:1.0, 1:2.0&#125;</code> and <code>keras.metrics.Recall</code> compiled alongside accuracy and loss. EarlyStopping monitors <code>val_loss</code>.</p>
   <p><strong>MobileNetV2 (Transfer Learning):</strong> Pre-trained MobileNetV2 backbone (ImageNet weights, top excluded) → GlobalAveragePooling2D → Dropout(0.3) → Dense(128, ReLU) → Dropout(0.3) → Dense(1, sigmoid). Phase 1: backbone frozen. Phase 2: last 30 layers unfrozen, retrained at learning rate 1e-5.</p>
 
-  <div id="app-b" class="subsection-title">B. Training Configuration</div>
+  <div id="appendix-b" class="subsection-title" data-nav-label="B. Training Config">B. Training Configuration</div>
   <p>The following settings apply to all models unless noted otherwise.</p>
   <table>
     <thead><tr><th>Parameter</th><th>Value</th></tr></thead>
@@ -996,7 +954,7 @@ td.worst-metric { color: var(--coral); }
     </tbody>
   </table>
 
-  <div id="app-c" class="subsection-title">C. References</div>
+  <div id="appendix-c" class="subsection-title" data-nav-label="C. References">C. References</div>
   <p style="font-size:13px;color:var(--mid);font-weight:600;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.06em;">Disease Burden and Clinical Motivation</p>
   <ul style="font-size:14px;">
     <li>World Health Organization. <em>World Malaria Report 2020</em>. Geneva: WHO, 2020.</li>
@@ -1027,7 +985,7 @@ td.worst-metric { color: var(--coral); }
 <!-- ══════════════════════════════════ -->
 <!-- WORKING NOTES                    -->
 <!-- ══════════════════════════════════ -->
-<section id="notes" class="doc-section notes-section">
+<section id="notes" class="doc-section notes-section" data-nav-label="Working Notes">
   <div class="section-number">Working Notes</div>
   <div class="section-title">Ideas for Future Work &amp; Known Limitations</div>
   <p style="font-size:13px;color:var(--muted);margin-bottom:24px;font-style:italic;">This section captures analytical notes, limitations, and directions for exploration. It is not part of the formal report body.</p>
@@ -1331,44 +1289,100 @@ function loadResults() {
   });
 }
 
-// ─── NAV ACTIVE STATE (IntersectionObserver) ───
-function initNav() {
-  const groups = [
-    { parentId: 'nav-s1',       subId: 'nav-sub-s1',       ids: ['s1','s1-1','s1-2','s1-3','s1-4'] },
-    { parentId: 'nav-s2',       subId: 'nav-sub-s2',       ids: ['s2','s2-1','s2-2','s2-3','s2-4'] },
-    { parentId: 'nav-s3',       subId: 'nav-sub-s3',       ids: ['s3','s3-1','s3-2','s3-3','s3-4'] },
-    { parentId: 'nav-s4',       subId: 'nav-sub-s4',       ids: ['s4','s4-1','s4-2','s4-3','s4-4'] },
-    { parentId: 'nav-s5',       subId: 'nav-sub-s5',       ids: ['s5','s5-1','s5-2','s5-3'] },
-    { parentId: 'nav-appendix', subId: 'nav-sub-appendix', ids: ['appendix','app-a','app-b','app-c'] },
-  ];
+// ─── NAV: DYNAMIC BUILD + ACTIVE STATE ───
+// Reads data-nav-label attributes from the document and builds the
+// sidebar nav entirely at runtime. Add/rename sections in the HTML
+// and the nav updates automatically — no JS changes needed.
 
-  const allIds = ['notes', ...groups.flatMap(g => g.ids)];
-  const navLinks = document.querySelectorAll('.side-nav a[data-section], .side-nav .sub-link[data-section]');
+function buildNav() {
+  const nav = document.getElementById('side-nav');
 
-  groups.forEach(g => {
-    g.subEl    = document.getElementById(g.subId);
-    g.parentEl = document.getElementById(g.parentId);
+  // Collect all labeled elements in DOM order, keyed by id
+  const all = [...document.querySelectorAll('[data-nav-label]')].filter(el => el.id);
+  const byId = Object.fromEntries(all.map(el => [el.id, el]));
+
+  // Determine parent/child relationships via id convention:
+  // "s1-2" → parent "s1", "appendix-a" → parent "appendix"
+  const childrenOf = {};
+  const childSet   = new Set();
+  all.forEach(el => {
+    const parts    = el.id.split('-');
+    const parentId = parts.length > 1 ? parts.slice(0, -1).join('-') : null;
+    if (parentId && byId[parentId]) {
+      childSet.add(el.id);
+      (childrenOf[parentId] = childrenOf[parentId] || []).push(el);
+    }
   });
+
+  // Build nav HTML from top-level items only
+  let html = '';
+  all.filter(el => !childSet.has(el.id)).forEach(el => {
+    const { id } = el;
+    const label   = el.dataset.navLabel;
+    const kids    = childrenOf[id] || [];
+
+    if (kids.length) {
+      html += `<a href="#${id}" data-section="${id}" id="nav-${id}" class="nav-parent">` +
+              `<span class="dot"></span><span class="nav-label">${label}</span></a>` +
+              `<div class="nav-sub" id="nav-sub-${id}">`;
+      kids.forEach(k => {
+        html += `<a href="#${k.id}" data-section="${k.id}" class="sub-link">` +
+                `<span class="subdot"></span><span class="nav-label">${k.dataset.navLabel}</span></a>`;
+      });
+      html += `</div>`;
+    } else {
+      html += `<a href="#${id}" data-section="${id}">` +
+              `<span class="dot"></span><span class="nav-label">${label}</span></a>`;
+    }
+  });
+
+  nav.innerHTML = html;
+}
+
+function initNav() {
+  buildNav();
+
+  // Re-derive groups from the DOM now that nav is built
+  const all    = [...document.querySelectorAll('[data-nav-label]')].filter(el => el.id);
+  const byId   = Object.fromEntries(all.map(el => [el.id, el]));
+  const childSet = new Set();
+  all.forEach(el => {
+    const parts = el.id.split('-');
+    const pid   = parts.length > 1 ? parts.slice(0, -1).join('-') : null;
+    if (pid && byId[pid]) childSet.add(el.id);
+  });
+
+  const groups = all
+    .filter(el => !childSet.has(el.id))
+    .map(el => {
+      const kids = all.filter(c => {
+        const parts = c.id.split('-');
+        return parts.length > 1 && parts.slice(0, -1).join('-') === el.id;
+      });
+      return kids.length ? {
+        parentEl: document.getElementById(`nav-${el.id}`),
+        subEl:    document.getElementById(`nav-sub-${el.id}`),
+        ids:      [el.id, ...kids.map(k => k.id)],
+      } : null;
+    })
+    .filter(Boolean);
+
+  const navLinks = document.querySelectorAll('.side-nav a[data-section], .side-nav .sub-link[data-section]');
 
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
-      const id = entry.target.id;
-
+      const { id } = entry.target;
       navLinks.forEach(a => a.classList.toggle('active', a.dataset.section === id));
-
       groups.forEach(g => {
         const active = g.ids.includes(id);
-        if (g.subEl)    g.subEl.classList.toggle('open', active);
-        if (g.parentEl) g.parentEl.classList.toggle('active', active);
+        g.subEl   ?.classList.toggle('open',   active);
+        g.parentEl?.classList.toggle('active', active);
       });
     });
   }, { rootMargin: '-30% 0px -60% 0px', threshold: 0 });
 
-  allIds.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) observer.observe(el);
-  });
+  all.forEach(el => observer.observe(el));
 }
 
 // ─── BOOT ───
