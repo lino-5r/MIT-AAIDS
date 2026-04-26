@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 300" width="960" height="300" style="background:#F7F4EF;system-ui,sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="7" markerHeight="7" refX="7" refY="3.5" orient="auto">
+      <polygon points="0 0, 7 3.5, 0 7" fill="#2C3440"/>
+    </marker>
+    <pattern id="hatch" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="6" stroke="#1A6B7C" stroke-width="0.7" opacity="0.25"/>
+    </pattern>
+  </defs>
+  <rect x="10" y="100" width="80" height="110" rx="5" ry="5" fill="#E8A838" stroke="#C8922A" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="50" y="129" text-anchor="middle" font-size="9.5" font-weight="600" fill="#2C3440" font-family="system-ui,sans-serif">Data</text>
+  <text x="50" y="141" text-anchor="middle" font-size="9.5" font-weight="600" fill="#2C3440" font-family="system-ui,sans-serif">Augmentation</text>
+  <text x="50" y="155" text-anchor="middle" font-size="8"  fill="#2C3440" font-family="system-ui,sans-serif">rot · flip</text>
+  <text x="50" y="167" text-anchor="middle" font-size="8"  fill="#2C3440" font-family="system-ui,sans-serif">shift · zoom</text>
+  <text x="50" y="179" text-anchor="middle" font-size="7.5" font-style="italic" fill="#2C3440" font-family="system-ui,sans-serif">(train only)</text>
+  <line x1="90" y1="155" x2="117" y2="155" stroke="#2C3440" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="118" y="133" width="58" height="44" rx="4" ry="4" fill="#2C3440"/>
+  <text x="147" y="156" text-anchor="middle" font-size="9.5" font-weight="600" fill="#F7F4EF" font-family="system-ui,sans-serif">Input</text>
+  <text x="147" y="163" text-anchor="middle" font-size="8" fill="#F7F4EF" opacity="0.85" font-family="system-ui,sans-serif">64×64×3</text>
+  <line x1="176" y1="155" x2="193" y2="155" stroke="#2C3440" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="194" y="70" width="200" height="170" rx="6" ry="6" fill="#1A4A5A"/>
+  <rect x="194" y="70" width="200" height="170" rx="6" ry="6" fill="url(#hatch)"/>
+  <text x="294" y="123" text-anchor="middle" font-size="10" font-weight="600" fill="#F7F4EF" font-family="system-ui,sans-serif">MobileNetV2</text>
+  <text x="294" y="137" text-anchor="middle" font-size="10" font-weight="600" fill="#F7F4EF" font-family="system-ui,sans-serif">Base</text>
+  <text x="294" y="153" text-anchor="middle" font-size="8.5" fill="#F7F4EF" opacity="0.8" font-family="system-ui,sans-serif">ImageNet pre-trained</text>
+  <text x="294" y="169" text-anchor="middle" font-size="8" fill="#F7F4EF" opacity="0.8" font-family="system-ui,sans-serif">16× depthwise</text>
+  <text x="294" y="181" text-anchor="middle" font-size="8" fill="#F7F4EF" opacity="0.8" font-family="system-ui,sans-serif">separable blocks</text>
+  <line x1="394" y1="155" x2="411" y2="155" stroke="#2C3440" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="412" y="128" width="52" height="54" rx="4" ry="4" fill="#2C3440"/>
+  <text x="438" y="156" text-anchor="middle" font-size="9.5" font-weight="600" fill="#F7F4EF" font-family="system-ui,sans-serif">GAP</text>
+  <text x="438" y="163" text-anchor="middle" font-size="8" fill="#F7F4EF" opacity="0.85" font-family="system-ui,sans-serif">1280</text>
+  <line x1="464" y1="155" x2="481" y2="155" stroke="#2C3440" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="482" y="115" width="65" height="80" rx="4" ry="4" fill="#4E9E78"/>
+  <text x="514" y="156" text-anchor="middle" font-size="9.5" font-weight="600" fill="#F7F4EF" font-family="system-ui,sans-serif">Dense</text>
+  <text x="514" y="163" text-anchor="middle" font-size="8" fill="#F7F4EF" opacity="0.85" font-family="system-ui,sans-serif">128·ReLU</text>
+  <line x1="547" y1="155" x2="564" y2="155" stroke="#2C3440" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="565" y="128" width="45" height="54" rx="4" ry="4" fill="#8BB8A4"/>
+  <text x="587" y="156" text-anchor="middle" font-size="9.5" font-weight="600" fill="#2C3440" font-family="system-ui,sans-serif">Drop</text>
+  <text x="587" y="163" text-anchor="middle" font-size="8" fill="#2C3440" opacity="0.85" font-family="system-ui,sans-serif">0.5</text>
+  <line x1="610" y1="155" x2="627" y2="155" stroke="#2C3440" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="628" y="133" width="65" height="44" rx="4" ry="4" fill="#D95F4B"/>
+  <text x="660" y="156" text-anchor="middle" font-size="9.5" font-weight="600" fill="#F7F4EF" font-family="system-ui,sans-serif">Dense</text>
+  <text x="660" y="163" text-anchor="middle" font-size="8" fill="#F7F4EF" opacity="0.85" font-family="system-ui,sans-serif">1·Sigmoid</text>
+  <line x1="194" y1="36" x2="394" y2="36" stroke="#C8C8C8" stroke-width="1"/>
+  <line x1="194" y1="33" x2="194" y2="39" stroke="#C8C8C8" stroke-width="1"/>
+  <line x1="394" y1="33" x2="394" y2="39" stroke="#C8C8C8" stroke-width="1"/>
+  <text x="294" y="26" text-anchor="middle" font-size="9.5" fill="#AAAAAA" font-family="system-ui,sans-serif" letter-spacing="0.8">PRETRAINED BACKBONE</text>
+  <line x1="412" y1="36" x2="693" y2="36" stroke="#C8C8C8" stroke-width="1"/>
+  <line x1="412" y1="33" x2="412" y2="39" stroke="#C8C8C8" stroke-width="1"/>
+  <line x1="693" y1="33" x2="693" y2="39" stroke="#C8C8C8" stroke-width="1"/>
+  <text x="552" y="26" text-anchor="middle" font-size="9.5" fill="#AAAAAA" font-family="system-ui,sans-serif" letter-spacing="0.8">CUSTOM HEAD</text>
+  <rect x="198" y="212" width="126" height="20" rx="3" ry="3" fill="#E8A838" opacity="0.9"/>
+  <text x="261" y="226" text-anchor="middle" font-size="8" font-weight="600" fill="#2C3440" font-family="system-ui,sans-serif">Phase 2: top layers unfrozen</text>
+  <text x="294" y="250" text-anchor="middle" font-size="8.5" fill="#999999" font-family="system-ui,sans-serif">7×7×1280  →  GAP  →  1280</text>
+</svg>

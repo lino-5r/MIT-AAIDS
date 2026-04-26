@@ -723,6 +723,11 @@ td.worst-metric { color: var(--coral); }
 
   <p>CNN3 holds the architecture and augmentation pipeline constant and changes only the training setup. Because architecture and augmentation are unchanged between CNN2 and CNN3, performance differences between the two isolate the effect of training configuration — making CNN3 the first controlled experiment in the sequence.</p>
 
+  <div class="arch-fig">
+    <img src="fig_cnn3_architecture.svg" alt="CNN3 Architecture Diagram">
+    <div class="fig-caption"><strong>Architecture:</strong> CNN3 is structurally identical to CNN2. The amber class-weight badge (bottom right) annotates the training-only change: Parasitized cells incur twice the loss penalty of Uninfected cells.</div>
+  </div>
+
   <div class="subsection-title">Training Configuration Changes</div>
   <ul>
     <li><code>class_weight=&#123;0:1, 1:2&#125;</code> penalizes false negatives at twice the cost of false positives, shifting the optimizer's pressure toward correctly identifying Parasitized cells.</li>
@@ -766,6 +771,11 @@ td.worst-metric { color: var(--coral); }
     <li>Inverted residual blocks with linear bottlenecks improve gradient flow, making fine-tuning stable.</li>
     <li>Low parameter count means the model runs efficiently on modest hardware — a realistic candidate for clinical field deployment.</li>
   </ul>
+
+  <div class="arch-fig">
+    <img src="fig_mobilenetv2_architecture.svg" alt="MobileNetV2 Architecture Diagram">
+    <div class="fig-caption"><strong>Architecture:</strong> MobileNetV2 pre-trained backbone (ImageNet, 16 depthwise separable blocks) feeds into a custom classification head. The amber badge marks the layers unfrozen during Phase 2 fine-tuning.</div>
+  </div>
 
   <div class="subsection-title">Phase 1 — Feature Extraction</div>
   <p>The MobileNetV2 backbone was frozen. Only the classification head (GlobalAveragePooling2D → Dropout → Dense(128) → Dropout → Dense(1, sigmoid)) was trained. This leverages ImageNet-learned features without risking overwriting them with noisy gradients early in training.</p>
@@ -927,9 +937,24 @@ td.worst-metric { color: var(--coral); }
 
   <div id="appendix-a" class="subsection-title" data-nav-label="A. Architectures">A. Model Architectures (Summary)</div>
   <p><strong>CNN1 - Baseline:</strong> 3 convolutional blocks (Conv2D 32/64/128 filters, 3×3 kernel, ReLU, same padding) → MaxPooling2D after each block → Flatten → Dense(256, ReLU) → Dropout(0.5) → Dense(1, sigmoid)</p>
+  <div class="arch-fig">
+    <img src="fig_cnn1_architecture.svg" alt="CNN1 Architecture Diagram">
+  </div>
+
   <p><strong>CNN2 - Improved:</strong> 3 convolutional blocks with dual Conv2D layers per block (32/64/128 filters) + BatchNormalization + Dropout(0.25) after each block → GlobalAveragePooling2D → Dense(256, ReLU) → Dropout(0.5) → Dense(1, sigmoid). Data augmentation applied during training.</p>
+  <div class="arch-fig">
+    <img src="fig_cnn2_architecture.svg" alt="CNN2 Architecture Diagram">
+  </div>
+
   <p><strong>CNN3 - Recall-Optimized:</strong> Same architecture as CNN2. Trained with <code>class_weight=&#123;0:1.0, 1:2.0&#125;</code> and <code>keras.metrics.Recall</code> compiled alongside accuracy and loss. EarlyStopping monitors <code>val_loss</code>.</p>
+  <div class="arch-fig">
+    <img src="fig_cnn3_architecture.svg" alt="CNN3 Architecture Diagram">
+  </div>
+
   <p><strong>MobileNetV2 (Transfer Learning):</strong> Pre-trained MobileNetV2 backbone (ImageNet weights, top excluded) → GlobalAveragePooling2D → Dropout(0.3) → Dense(128, ReLU) → Dropout(0.3) → Dense(1, sigmoid). Phase 1: backbone frozen. Phase 2: last 30 layers unfrozen, retrained at learning rate 1e-5.</p>
+  <div class="arch-fig">
+    <img src="fig_mobilenetv2_architecture.svg" alt="MobileNetV2 Architecture Diagram">
+  </div>
 
   <div id="appendix-b" class="subsection-title" data-nav-label="B. Training Config">B. Training Configuration</div>
   <p>The following settings apply to all models unless noted otherwise.</p>
