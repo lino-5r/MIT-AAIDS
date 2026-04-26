@@ -148,6 +148,13 @@ body {
   font-size: 15px; font-weight: 400; color: var(--mid);
   margin-top: 4px;
 }
+.header-byline {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: var(--muted); margin-top: 6px;
+}
+.byline-author { font-weight: 500; color: var(--dark); }
+.byline-sep { color: var(--border-mid); }
+.byline-date { font-style: italic; }
 .header-meta {
   display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;
 }
@@ -425,6 +432,11 @@ td.worst-metric { color: var(--coral); }
     <div class="header-eyebrow">MIT Applied AI &amp; Data Science Program · Capstone Project</div>
     <div class="header-title">Malaria Detection<br>Using Deep Learning</div>
     <div class="header-subtitle">Milestone Submission Report</div>
+    <div class="header-byline">
+      <span class="byline-author">Lino Ghezzi-Buona</span>
+      <span class="byline-sep">·</span>
+      <span class="byline-date">Last updated <span id="header-updated-date">—</span></span>
+    </div>
     <div class="header-meta">
       <span class="meta-chip prog">Milestone Submission</span>
       <span class="meta-chip year">2026</span>
@@ -1131,6 +1143,11 @@ function populateAll(d) {
   // Header
   set('header-best-name',   d.best_model.name);
   set('header-best-recall', fmt.pct(d.best_model.recall));
+  if (d.generated_at) {
+    const dt = new Date(d.generated_at);
+    const formatted = dt.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    set('header-updated-date', formatted);
+  }
 
   // CNN1
   set('dyn-cnn1-epochs',        fmt.int(m.cnn1.training.epochs_trained));
