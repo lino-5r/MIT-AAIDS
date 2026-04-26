@@ -97,7 +97,7 @@ body {
   padding-left: 18px;
   display: flex; flex-direction: column; gap: 0;
 }
-.nav-sub.open { max-height: 180px; }
+.nav-sub.open { max-height: 200px; }
 
 .side-nav .sub-link {
   display: flex; align-items: center; gap: 8px;
@@ -409,7 +409,13 @@ td.worst-metric { color: var(--coral); }
 <!-- ══════ SIDE NAV ══════ -->
 <nav class="side-nav" id="side-nav">
   <a href="#s1" data-section="s1"><span class="dot"></span><span class="nav-label">1. Problem Definition</span></a>
-  <a href="#s2" data-section="s2"><span class="dot"></span><span class="nav-label">2. Data Exploration</span></a>
+  <a href="#s2" data-section="s2" id="nav-s2" class="nav-parent"><span class="dot"></span><span class="nav-label">2. Data Exploration</span></a>
+  <div class="nav-sub" id="nav-sub-s2">
+    <a href="#s2-1" data-section="s2-1" class="sub-link"><span class="subdot"></span><span class="nav-label">Data Description</span></a>
+    <a href="#s2-2" data-section="s2-2" class="sub-link"><span class="subdot"></span><span class="nav-label">Observations &amp; Insights</span></a>
+    <a href="#s2-3" data-section="s2-3" class="sub-link"><span class="subdot"></span><span class="nav-label">Pre-Processing</span></a>
+    <a href="#s2-4" data-section="s2-4" class="sub-link"><span class="subdot"></span><span class="nav-label">Dataset Balance</span></a>
+  </div>
   <a href="#s3" data-section="s3" id="nav-s3" class="nav-parent"><span class="dot"></span><span class="nav-label">3. Model Building</span></a>
   <div class="nav-sub" id="nav-sub-s3">
     <a href="#s3-1" data-section="s3-1" class="sub-link"><span class="subdot"></span><span class="nav-label">CNN1 Baseline</span></a>
@@ -504,7 +510,7 @@ td.worst-metric { color: var(--coral); }
   <div class="section-number">Section 2</div>
   <div class="section-title">Data Exploration</div>
 
-  <div class="subsection-title">2.1 Data Description</div>
+  <div id="s2-1" class="subsection-title">2.1 Data Description</div>
   <p>The dataset consists of colored microscopic images of individual red blood cells, sourced from the NIH Malaria Dataset. Each image depicts a single cell labeled as either Parasitized (containing the <em>Plasmodium</em> parasite) or Uninfected.</p>
 
   <table>
@@ -530,7 +536,7 @@ td.worst-metric { color: var(--coral); }
     </tbody>
   </table>
 
-  <div class="subsection-title">2.2 Observations &amp; Insights</div>
+  <div id="s2-2" class="subsection-title">2.2 Observations &amp; Insights</div>
 
   <div class="sub2-title">Class Balance</div>
   <p>The dataset is very nearly perfectly balanced — approximately 50% Parasitized and 50% Uninfected in both splits. This makes <span class="term" data-term="Accuracy">accuracy</span> a valid and interpretable metric: the model must genuinely learn to distinguish the two classes, and no resampling or class-weighting is required in the baseline setup.</p>
@@ -566,7 +572,7 @@ td.worst-metric { color: var(--coral); }
     <div class="fig-caption"><strong>Figure 5.</strong> Distribution of original image dimensions across the full dataset. Most images fall in the 100–200 pixel range in both width and height.</div>
   </div>
 
-  <div class="subsection-title">2.3 Pre-Processing Steps</div>
+  <div id="s2-3" class="subsection-title">2.3 Pre-Processing Steps</div>
   <table>
     <thead><tr><th>Step</th><th>Detail</th></tr></thead>
     <tbody>
@@ -577,7 +583,7 @@ td.worst-metric { color: var(--coral); }
     </tbody>
   </table>
 
-  <div class="subsection-title">2.4 Dataset Balance and Modeling Implications</div>
+  <div id="s2-4" class="subsection-title">2.4 Dataset Balance and Modeling Implications</div>
   <p>The near-perfect class balance has a direct implication for the modeling strategy: both classes are represented equally throughout training, so the optimizer faces equal pressure to learn features for both. There is no risk of a shortcut solution by defaulting to the dominant class. This simplifies the baseline training setup — no resampling or class weighting required — and means accuracy and recall can be expected to move broadly in concert throughout training.</p>
 </section>
 
@@ -1302,26 +1308,33 @@ function loadResults() {
 
 // ─── NAV ACTIVE STATE (IntersectionObserver) ───
 function initNav() {
-  const sectionIds = ['s1','s2','s3','s3-1','s3-2','s3-3','s3-4','s4','s5','appendix','notes'];
+  const sectionIds = ['s1','s2','s2-1','s2-2','s2-3','s2-4','s3','s3-1','s3-2','s3-3','s3-4','s4','s5','appendix','notes'];
   const navLinks = document.querySelectorAll('.side-nav a[data-section], .side-nav .sub-link[data-section]');
 
-  // Toggle subnav open when any s3-x section is active
-  const subNav = document.getElementById('nav-sub-s3');
+  const subNavS2 = document.getElementById('nav-sub-s2');
+  const s2Parent = document.getElementById('nav-s2');
+  const subNavS3 = document.getElementById('nav-sub-s3');
   const s3Parent = document.getElementById('nav-s3');
+
+  const s2Ids = ['s2','s2-1','s2-2','s2-3','s2-4'];
+  const s3Ids = ['s3','s3-1','s3-2','s3-3','s3-4'];
 
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         const id = entry.target.id;
         navLinks.forEach(a => {
-          const isActive = a.dataset.section === id;
-          a.classList.toggle('active', isActive);
+          a.classList.toggle('active', a.dataset.section === id);
         });
-        // Open subnav if any model section is active
-        const inModels = ['s3','s3-1','s3-2','s3-3','s3-4'].includes(id);
-        subNav.classList.toggle('open', inModels);
+        const inExploration = s2Ids.includes(id);
+        subNavS2.classList.toggle('open', inExploration);
+        if (inExploration) s2Parent.classList.add('active');
+        else s2Parent.classList.remove('active');
+
+        const inModels = s3Ids.includes(id);
+        subNavS3.classList.toggle('open', inModels);
         if (inModels) s3Parent.classList.add('active');
-        else if (!id.startsWith('s3')) s3Parent.classList.remove('active');
+        else s3Parent.classList.remove('active');
       }
     });
   }, { rootMargin: '-30% 0px -60% 0px', threshold: 0 });
