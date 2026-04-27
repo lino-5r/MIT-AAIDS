@@ -535,6 +535,76 @@ td.worst-metric { color: var(--coral); }
   .metric-row { flex-direction: column; }
   .metric-box { min-width: auto; }
 }
+
+/* ─── PRINT-ONLY TOC ─── */
+.print-toc { display: none; }
+@media print {
+  .print-toc {
+    display: block;
+    page-break-after: always;
+    padding: 40px 0 20px;
+  }
+  .print-toc-title {
+    font-size: 22px; font-weight: 700;
+    color: var(--dark); margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--teal);
+  }
+  .print-toc-list {
+    font-size: 15px; line-height: 2;
+    color: var(--dark); padding-left: 20px;
+  }
+  .print-toc-list ol {
+    font-size: 13px; line-height: 1.9;
+    color: var(--mid); padding-left: 20px;
+    margin: 0;
+  }
+}
+
+/* ─── PRINT / PDF ─── */
+@media print {
+  /* Hide interactive chrome */
+  .side-nav, #tooltip-popup, #data-notice,
+  #lightbox, #lightbox-prev, #lightbox-next, #lightbox-close { display: none !important; }
+
+  /* Hide arch-flow lists in print - SVG diagrams are sufficient */
+  .arch-flow { display: none !important; }
+
+  /* Full-width page, no margin offset for nav */
+  body { background: white; }
+  .page {
+    margin-left: 0; max-width: 100%;
+    box-shadow: none; padding: 0 32px;
+  }
+
+  /* Prevent awkward breaks only inside small self-contained elements */
+  .card, .note-item, .metric-row, .fig-caption { break-inside: avoid; }
+
+  /* Keep figures with their captions but allow natural page flow */
+  .fig-block { break-inside: avoid; }
+  .fig-caption { break-before: avoid; }
+
+  /* Keep all headings glued to the content that follows them */
+  .section-number, .section-title, .subsection-title, .sub2-title,
+  .card-label, h2, h3, h4 { break-after: avoid; }
+
+  /* Prevent lone lines stranded at the top or bottom of a page */
+  p { orphans: 3; widows: 3; }
+
+  /* Sections 3 and 4 always start on a new page */
+  #s3, #s4 { break-before: page; }
+
+  /* Links: show URL after anchor text — but suppress for TOC and nav links */
+  a[href]::after { content: " (" attr(href) ")"; font-size: 10px; color: #666; }
+  .header-live-link a::after, .meta-chip a::after,
+  .header-live-link a::after, .print-toc a::after { content: none; }
+
+  /* TOC link styling */
+  .print-toc a { color: inherit; text-decoration: none; }
+
+  /* Figures: don't let them overflow the page width */
+  .fig-block img, .arch-fig img { max-width: 100%; }
+}
 </style>
 </head>
 <body>
@@ -548,9 +618,9 @@ td.worst-metric { color: var(--coral); }
 <!-- ── HEADER ── -->
 <header class="doc-header">
   <div class="header-left">
-    <div class="header-eyebrow">MIT Applied AI &amp; Data Science Program · Capstone Project</div>
+    <div class="header-eyebrow">MIT Applied AI &amp; Data Science Program · Capstone Project · Milestone Submission Report</div>
     <div class="header-title">Malaria Detection<br>Using Deep Learning</div>
-    <div class="header-subtitle">Milestone Submission Report</div>
+    <div class="header-subtitle">Automated Malaria Cell Classification Using Convolutional Neural Networks and Transfer Learning on the NIH Cell Image Dataset</div>
     <div class="header-byline">
       <span class="byline-author">Lindsay Ogden-Herrera</span>
       <span class="byline-sep">·</span>
@@ -582,7 +652,65 @@ td.worst-metric { color: var(--coral); }
 
 
 <!-- ══════════════════════════════════ -->
-<!-- SECTION 1 - PROBLEM DEFINITION   -->
+<!-- PRINT-ONLY TOC                   -->
+<!-- ══════════════════════════════════ -->
+<div class="print-toc">
+  <div class="print-toc-title">Table of Contents</div>
+  <ol class="print-toc-list">
+    <li><a href="#s1">Problem Definition</a>
+      <ol>
+        <li><a href="#s1-1">Context</a></li>
+        <li><a href="#s1-2">Objectives</a></li>
+        <li><a href="#s1-3">Key Questions</a></li>
+        <li><a href="#s1-4">Problem Formulation</a></li>
+      </ol>
+    </li>
+    <li><a href="#s2">Data Exploration</a>
+      <ol>
+        <li><a href="#s2-1">Data Description</a></li>
+        <li><a href="#s2-2">Observations &amp; Insights</a></li>
+        <li><a href="#s2-3">Pre-Processing Steps</a></li>
+        <li><a href="#s2-4">Dataset Balance and Modeling Implications</a></li>
+      </ol>
+    </li>
+    <li><a href="#s3">Model Building</a>
+      <ol>
+        <li><a href="#s3-1">Baseline CNN (CNN1)</a></li>
+        <li><a href="#s3-2">Augmented CNN (CNN2)</a></li>
+        <li><a href="#s3-3">Recall-Optimized CNN (CNN3)</a></li>
+        <li><a href="#s3-4">Transfer Learning with MobileNetV2</a></li>
+      </ol>
+    </li>
+    <li><a href="#s4">Comparison of Techniques and Performance</a>
+      <ol>
+        <li><a href="#s4-1">Why Recall Is the Primary Metric</a></li>
+        <li><a href="#s4-2">Model Performance Comparison</a></li>
+        <li><a href="#s4-3">Confusion Matrix Analysis</a></li>
+        <li><a href="#s4-4">Pros, Cons, and Scope for Improvement</a></li>
+      </ol>
+    </li>
+    <li><a href="#s5">Proposal for Final Solution Design</a>
+      <ol>
+        <li><a href="#s5-1">Recommended Model</a></li>
+        <li><a href="#s5-2">Mechanisms Underlying CNN3's Performance Advantage</a></li>
+        <li><a href="#s5-3">How This Solves the Problem</a></li>
+        <li><a href="#s5-4">Triage Layer: Visual Evidence</a></li>
+        <li><a href="#s5-5">Performance-Interpretability Trade-off</a></li>
+      </ol>
+    </li>
+    <li><a href="#appendix">Appendix</a>
+      <ol>
+        <li><a href="#appendix-a">A. Model Architectures</a></li>
+        <li><a href="#appendix-b">B. Training Configuration</a></li>
+        <li><a href="#appendix-c">C. References</a></li>
+      </ol>
+    </li>
+    <li><a href="#notes">Working Notes</a></li>
+  </ol>
+</div>
+
+<!-- ══════════════════════════════════ -->
+<!-- SECTION 1 | PROBLEM DEFINITION     -->
 <!-- ══════════════════════════════════ -->
 <section id="s1" class="doc-section" data-nav-label="1. Problem Definition">
   <div class="section-number">Section 1</div>
@@ -613,7 +741,7 @@ td.worst-metric { color: var(--coral); }
   <p>The analytical task is formulated as a <strong>binary image classification</strong> problem addressed using supervised deep learning.</p>
   <ul>
     <li><strong>Input:</strong> A single RGB microscopic blood cell image, resized to 64×64 pixels.</li>
-    <li><strong>Output:</strong> A binary prediction - <code>1</code> (Parasitized) or <code>0</code> (Uninfected).</li>
+    <li><strong>Output:</strong> A binary prediction of <code>1</code> (Parasitized) or <code>0</code> (Uninfected).</li>
     <li><strong>Primary Metric:</strong> <span class="term" data-term="Recall">Recall</span> for the Parasitized class. In a medical screening context, the cost of a false negative far outweighs the cost of a false positive. Minimizing missed diagnoses is the governing objective.</li>
     <li><strong>Supporting Metrics:</strong> <span class="term" data-term="Accuracy">Accuracy</span>, <span class="term" data-term="Precision">Precision</span>, <span class="term" data-term="F1-Score">F1-Score</span>, and <span class="term" data-term="AUC-ROC">AUC-ROC</span>.</li>
   </ul>
@@ -622,7 +750,7 @@ td.worst-metric { color: var(--coral); }
 <hr class="section-divider">
 
 <!-- ══════════════════════════════════ -->
-<!-- SECTION 2 - DATA EXPLORATION     -->
+<!-- SECTION 2 | DATA EXPLORATION       -->
 <!-- ══════════════════════════════════ -->
 <section id="s2" class="doc-section" data-nav-label="2. Data Exploration">
   <div class="section-number">Section 2</div>
@@ -660,7 +788,7 @@ td.worst-metric { color: var(--coral); }
   <p>The dataset is approximately balanced, with approximately 50% Parasitized and 50% Uninfected images in both splits. This balance renders <span class="term" data-term="Accuracy">accuracy</span> a valid and interpretable primary metric: the model must learn to discriminate between classes rather than exploit a majority-class shortcut, and no resampling or class weighting is required in the baseline training configuration.</p>
 
   <div class="sub2-title">Visual Characteristics</div>
-  <p>Visual inspection reveals systematic and discriminable morphological differences between classes. Parasitized cells exhibit dark staining artifacts - the visible signature of <span class="term" data-term="Trophozoites"><em>Plasmodium</em> trophozoites</span> or ring-forms within the cell. Uninfected cells appear uniformly pale or pink with a smooth, homogeneous internal structure. These differences in texture, color distribution, and intracellular morphology constitute the spatial and spectral features that convolutional filter banks are suited to extract.</p>
+  <p>Visual inspection reveals systematic and discriminable morphological differences between classes. Parasitized cells exhibit dark staining artifacts which is the visible signature of <span class="term" data-term="Trophozoites"><em>Plasmodium</em> trophozoites</span> or ring-forms within the cell. Uninfected cells appear uniformly pale or pink with a smooth, homogeneous internal structure. These differences in texture, color distribution, and intracellular morphology constitute the spatial and spectral features that convolutional filter banks are suited to extract.</p>
 
   <div class="fig-block">
     <img src="fig_eda_sample_images.png" alt="Sample cell images by class">
@@ -675,7 +803,7 @@ td.worst-metric { color: var(--coral); }
     <div class="fig-caption"><strong>Figure N.</strong> Pixel intensity distributions (KDE) per RGB channel for Parasitized vs. Uninfected cells. The red channel suppression and blue channel elevation in Parasitized cells reflects the characteristic <span class="term" data-term="Giemsa">Giemsa</span> staining of the parasite.</div>
   </div>
 
-  <p>The same signal can also be visualized spatially. Mean pixel values computed per channel - Parasitized minus Uninfected - show where in the cell frame the chromatic difference is concentrated. In original (non-augmented) images, the signature clusters near the cell center, consistent with the parasite occupying a predictable position within the segmented crop.</p>
+  <p>The same signal can also be visualized spatially. Mean pixel values computed per channel (by subtracting Uninfected from Parasitized) show where in the cell frame the chromatic difference is concentrated. In original (non-augmented) images, the signature clusters near the cell center, consistent with the parasite occupying a predictable position within the segmented crop.</p>
 
   <div class="fig-block">
     <img src="fig_eda_spectral_channels.png" alt="Spectral difference maps">
@@ -708,7 +836,7 @@ td.worst-metric { color: var(--coral); }
 <hr class="section-divider">
 
 <!-- ══════════════════════════════════ -->
-<!-- SECTION 3 - MODEL BUILDING       -->
+<!-- SECTION 3 | MODEL BUILDING         -->
 <!-- ══════════════════════════════════ -->
 <section id="s3" class="doc-section" data-nav-label="3. Model Building">
   <div class="section-number">Section 3</div>
@@ -789,10 +917,10 @@ td.worst-metric { color: var(--coral); }
 
   <div class="fig-block">
     <img src="fig_eda_spectral_augmented.png" alt="Spectral difference maps: original vs augmented">
-    <div class="fig-caption"><strong>Figure N.</strong> Spectral Difference Maps: Original vs. Augmented Training Data. Each map shows mean(Parasitized) minus mean(Uninfected) per channel. In the original maps, the parasite signature clusters near the cell center. In the augmented maps, that signature diffuses across positions and orientations - forcing the model to learn the parasite's color and texture signature rather than its position.</div>
+    <div class="fig-caption"><strong>Figure N.</strong> Spectral Difference Maps: Original vs. Augmented Training Data. Each map shows mean(Parasitized) minus mean(Uninfected) per channel. In the original maps, the parasite signature clusters near the cell center. In the augmented maps, that signature diffuses across positions and orientations, forcing the model to learn the parasite's color and texture signature rather than its position.</div>
   </div>
 
-  <p>In the original maps, the parasite signature appears as a localized cluster concentrated toward the image center, reflecting the parasite's predictable position in pre-segmented crops. In the augmented maps, that signature becomes diffuse and rotationally symmetric. The core chromatic signal - red channel suppression and blue channel elevation caused by <span class="term" data-term="Giemsa">Giemsa</span> staining - remains detectable, but is distributed across positions and orientations rather than concentrated at a fixed spatial location. CNN2 is consequently trained on representations in which positional shortcuts are unavailable, compelling the model to rely on spectral and textural characteristics rather than spatial location for class discrimination.</p>
+  <p>In the original maps, the parasite signature appears as a localized cluster concentrated toward the image center, reflecting the parasite's predictable position in pre-segmented crops. In the augmented maps, that signature becomes diffuse and rotationally symmetric. The core chromatic signal caused by <span class="term" data-term="Giemsa">Giemsa</span> staining (red channel suppression, blue channel elevation) remains detectable throughout, but is distributed across positions and orientations rather than concentrated at a fixed spatial location. CNN2 is consequently trained on representations in which positional shortcuts are unavailable, compelling the model to rely on spectral and textural characteristics rather than spatial location for class discrimination.</p>
 
   <div class="card neutral">
     <div class="card-label">Note on Experimental Design</div>
@@ -802,7 +930,7 @@ td.worst-metric { color: var(--coral); }
   <div class="subsection-title">Key Finding</div>
   <div class="card">
     <div class="card-label">CNN2 - Training Curves</div>
-    <p>CNN2 trained for <strong><span id="dyn-cnn2-epochs">-</span> epochs</strong> before early stopping triggered - notably fewer than CNN1's <span id="dyn-cnn1-epochs-2">-</span>. Training accuracy (<span id="dyn-cnn2-train-acc" class="met neutral">-</span>) and validation accuracy (<span id="dyn-cnn2-val-acc" class="met neutral">-</span>) remained within 0.5% of each other throughout, a substantially tighter gap than CNN1. The augmentation and architectural changes appear to have attenuated overfitting pressure during training. The training curves do not, however, capture the output miscalibration that manifests upon evaluation.</p>
+    <p>CNN2 trained for <strong><span id="dyn-cnn2-epochs">-</span> epochs</strong> before early stopping triggered. This was notably fewer than CNN1's <span id="dyn-cnn1-epochs-2">-</span>. Training accuracy (<span id="dyn-cnn2-train-acc" class="met neutral">-</span>) and validation accuracy (<span id="dyn-cnn2-val-acc" class="met neutral">-</span>) remained within 0.5% of each other throughout, a substantially tighter gap than CNN1. The augmentation and architectural changes appear to have attenuated overfitting pressure during training. The training curves do not, however, capture the output miscalibration that manifests upon evaluation.</p>
   </div>
 
   <div class="fig-block">
@@ -813,7 +941,7 @@ td.worst-metric { color: var(--coral); }
   <div class="subsection-title">Threshold Analysis</div>
   <div class="card coral">
     <div class="card-label">Sigmoid Calibration Failure</div>
-    <p>Notwithstanding the favorable training curve characteristics, CNN2's default-threshold evaluation yields a recall of <span class="met bad" id="dyn-cnn2-recall-default">-</span> for the Parasitized class - <strong><span id="dyn-cnn2-fn-default">-</span> false negatives</strong> out of 1,300 Parasitized images. The AUC-ROC of <span class="met teal" id="dyn-cnn2-auc">-</span> confirms strong underlying discriminative capacity. This discrepancy is indicative of an output calibration failure: sigmoid output probabilities are concentrated substantially below 0.5, causing the default threshold to misclassify the majority of Parasitized cells as Uninfected.</p>
+    <p>Notwithstanding the favorable training curve characteristics, CNN2's default-threshold evaluation yields a recall of <span class="met bad" id="dyn-cnn2-recall-default">-</span> for the Parasitized class - <span id="dyn-cnn2-fn-default">-</span> false negatives out of 1,300 Parasitized images. The AUC-ROC of <span class="met teal" id="dyn-cnn2-auc">-</span> confirms strong underlying discriminative capacity. This discrepancy is indicative of an output calibration failure: sigmoid output probabilities are concentrated substantially below 0.5, causing the default threshold to misclassify the majority of Parasitized cells as Uninfected.</p>
   </div>
 
   <p>Thresholds from 0.01 to 0.55 were scanned and Recall, Precision, and F1-Score computed at each point. The scan identifies two clinically relevant operating points: the threshold that maximizes F1-Score, and the lowest threshold that achieves at least 95% recall.</p>
@@ -823,7 +951,7 @@ td.worst-metric { color: var(--coral); }
     <div class="fig-caption"><strong>Figure N.</strong> CNN2 Augmented - Threshold trade-off analysis. Left: Recall, Precision, and F1-Score as a function of classification threshold. Right: Precision-Recall curve. The high AUC-PR confirms discriminative ability; the low default-threshold recall confirms miscalibration.</div>
   </div>
 
-  <p>Re-evaluation at the optimal F1 threshold (<span class="met teal" id="dyn-cnn2-tuned-threshold">-</span>) reveals the model's latent discriminative performance, independent of the calibration artifact.</p>
+  <p>CNN2 actually learned to distinguish the two cell types quite well. Something about its training caused output probabilities to cluster near zero rather than spread naturally across the 0–1 range, meaning the model's learned signal was not being correctly translated into a usable confidence score at the default 0.5 cutoff. When the threshold is lowered to <span class="met teal" id="dyn-cnn2-tuned-threshold">-</span> to account for this, the model's real capability shows through.</p>
 
   <div class="metric-row">
     <div class="metric-box"><div class="mb-value" id="dyn-cnn2-tuned-recall">-</div><div class="mb-label">Recall (tuned)</div></div>
@@ -849,7 +977,7 @@ td.worst-metric { color: var(--coral); }
     </div>
   </div>
 
-  <p>This analysis motivates CNN3. Rather than relying on post-hoc threshold adjustment to recover discriminative performance, CNN3 addresses the underlying calibration failure through class weighting during training, so that output probabilities are appropriately distributed from the outset.</p>
+  <p>This analysis gave me the idea for CNN3. Rather than relying on post-hoc threshold adjustment to recover discriminative performance, CNN3 addresses the underlying calibration failure through class weighting during training, so that output probabilities are appropriately distributed from the outset.</p>
 </section>
 
 <!-- 3.3 CNN3 -->
@@ -866,15 +994,15 @@ td.worst-metric { color: var(--coral); }
 
   <div class="subsection-title">Training Configuration Changes</div>
   <ul>
-    <li><strong>Class weighting (2:1, Parasitized:Uninfected):</strong> Doubles the loss contribution of false negatives relative to false positives, directing the optimizer toward correct identification of Parasitized cells - the clinically consequential class.</li>
-    <li><strong>Early stopping on validation loss:</strong> An earlier experiment using raw recall as the stopping criterion produced model collapse - without a precision constraint, recall is trivially maximized by classifying all instances as Parasitized. Monitoring validation loss instead preserves the corrective effect of class weighting while preventing this degenerate outcome.</li>
+    <li><strong>Class weighting (2:1, Parasitized:Uninfected):</strong> Doubles the loss contribution of false negatives relative to false positives, directing the optimizer toward correct identification of Parasitized cells.</li>
+    <li><strong>Early stopping on validation loss:</strong> A first run of CNN3 using raw recall as the stopping criterion produced model collapse. Without a precision constraint, recall is erroneously maximized by classifying all instances as Parasitized. Monitoring validation loss instead preserves the corrective effect of class weighting while preventing this outcome.</li>
     <li><strong>Recall tracked during training:</strong> Recall was added as a monitored metric throughout training, enabling direct observation of whether class weighting was achieving its intended effect epoch by epoch.</li>
   </ul>
 
   <div class="subsection-title">Key Finding</div>
   <div class="card sage">
     <div class="card-label">CNN3 - Recall-Optimized</div>
-    <p>Class weighting eliminated the output miscalibration observed in CNN2. CNN3 achieves <span class="met good" id="dyn-cnn3-recall">-</span> recall at the default 0.5 threshold - compared to CNN2's <span class="met bad" id="dyn-cnn2-recall-ref">-</span> - with only <strong><span id="dyn-cnn3-fn">-</span></strong> missed Parasitized cells out of 1,300 (<span id="dyn-cnn3-fnr" class="met good">-</span> false negative rate). AUC-ROC reached <span class="met good" id="dyn-cnn3-auc">-</span>, the highest of any model evaluated. The model trained for <strong><span id="dyn-cnn3-epochs">-</span> epochs</strong>, with optimal weights restored from epoch <span id="dyn-cnn3-best-epoch">-</span>. The final validation recall of <span id="dyn-cnn3-val-recall" class="met good">-</span> closely approximates the test recall, consistent with stable generalization to held-out data. This improvement entailed a modest increase in false positives: <span id="dyn-cnn3-fp">-</span> Uninfected cells classified as Parasitized (<span id="dyn-cnn3-fpr" class="met warn">-</span> false positive rate). In a primary screening context, false positives precipitate confirmatory review rather than missed treatment, rendering this an acceptable trade-off.</p>
+    <p>Class weighting eliminated the output miscalibration observed in CNN2. CNN3 achieves <span class="met good" id="dyn-cnn3-recall">-</span> recall at the default 0.5 threshold - compared to CNN2's <span class="met bad" id="dyn-cnn2-recall-ref">-</span> - with only <span id="dyn-cnn3-fn">-</span> missed Parasitized cells out of 1,300 (<span id="dyn-cnn3-fnr" class="met good">-</span> false negative rate). AUC-ROC reached <span class="met good" id="dyn-cnn3-auc">-</span>, the highest of any model evaluated. The model trained for <span id="dyn-cnn3-epochs">-</span> epochs, with optimal weights restored from epoch <span id="dyn-cnn3-best-epoch">-</span>. The final validation recall of <span id="dyn-cnn3-val-recall" class="met good">-</span> closely approximates the test recall, consistent with stable generalization to held-out data. This improvement entailed a modest increase in false positives: <span id="dyn-cnn3-fp">-</span> Uninfected cells classified as Parasitized (<span id="dyn-cnn3-fpr" class="met warn">-</span> false positive rate). In a primary screening context, false positives precipitate confirmatory review rather than missed treatment, rendering this an acceptable trade-off.</p>
   </div>
 
   <div class="metric-row">
@@ -1072,7 +1200,7 @@ td.worst-metric { color: var(--coral); }
     <div class="fig-caption"><strong>Figure N.</strong> Breakdown of referred (borderline) predictions at confidence band 0.35–0.65. Left: confusion matrix for the referred subset only, using 0.5 as the implied decision boundary within the band. Right: outcome categories by count and proportion of total referred slides.</div>
   </div>
 
-  <p>The full triage confusion matrix below shows the three decision zones side by side. The cell to focus on is the confident false negative - Parasitized slides the model cleared automatically with high certainty. With the triage layer active, that count falls to <span id="dyn-triage-fn-confident-s54">-</span> out of 1,300 Parasitized images. The amber column shows what the referral layer intercepts: any Parasitized case in that column reaches a human reviewer rather than being silently passed through.</p>
+  <p>The full triage confusion matrix below shows the three decision zones side by side. The cell to focus on is the confident false negative which represents Parasitized slides the model cleared automatically with high certainty. With the triage layer active, that count falls to <span id="dyn-triage-fn-confident-s54">-</span> out of 1,300 Parasitized images. The amber column shows what the referral layer intercepts: any Parasitized case in that column reaches a human reviewer rather than being silently passed through.</p>
 
   <div class="fig-block">
     <img src="fig_cnn3_triage_full_cm.png" alt="CNN3 full triage confusion matrix">
@@ -1232,7 +1360,7 @@ td.worst-metric { color: var(--coral); }
   <div class="note-item">
     <div class="note-tag">Future Architecture</div>
     <h4>Two-Stage Detection Pipeline</h4>
-    <p>The current models are single-stage classifiers: given a pre-segmented cell image, predict infected or uninfected. A more robust production architecture would decouple the problem into Stage 1 (spot detection - identify candidate locations within a cell where a suspicious inclusion is present) and Stage 2 (spot classification - classify each cropped candidate region as Plasmodium ring form, platelet, staining artifact, etc.). This mirrors clinical workflow, improves interpretability, and allows explicit contaminant rejection. <strong>Prior art:</strong> Hung et al. (2017, CVPR) applied Faster R-CNN to blood smear images, achieving 98% accuracy vs. 59% for a single-stage model. Baum et al. (2021) built a production-ready version (PlasmoCount) with AUC-ROC 0.98 on <em>P. falciparum</em>.</p>
+    <p>The current models are single-stage classifiers: given a pre-segmented cell image, predict infected or uninfected. A more robust production architecture would decouple the problem into Stage 1 (spot detection: identify candidate locations within a cell where a suspicious inclusion is present) and Stage 2 (spot classification: classify each cropped candidate region as Plasmodium ring form, platelet, staining artifact, etc.). This mirrors clinical workflow, improves interpretability, and allows explicit contaminant rejection. <strong>Prior art:</strong> Hung et al. (2017, CVPR) applied Faster R-CNN to blood smear images, achieving 98% accuracy vs. 59% for a single-stage model. Baum et al. (2021) built a production-ready version (PlasmoCount) with AUC-ROC 0.98 on <em>P. falciparum</em>.</p>
   </div>
 
   <div class="note-item">
@@ -1289,8 +1417,8 @@ const GLOSSARY = {
   "Plasmodium": "The genus of single-celled parasitic protozoa that cause malaria. Five species infect humans; P. falciparum is the most widespread and deadly, and is the species in this dataset.",
   "Anopheles": "The genus of mosquito responsible for transmitting malaria to humans. Only the female Anopheles mosquito feeds on blood, during which she can inject Plasmodium parasites.",
   "Trophozoites": "The active, feeding stage of the Plasmodium parasite inside red blood cells. In Giemsa-stained smears, ring-form trophozoites appear as thin blue rings with a red nucleus dot.",
-  "Overfitting": "When a model learns training data too precisely - including noise - and performs well on training examples but poorly on new data. Detected by diverging training and validation loss curves.",
-  "CNN": "Convolutional Neural Network. A class of deep learning model designed for image data. Stacked layers of learnable filters detect patterns - edges, textures, shapes - at progressively higher levels of abstraction.",
+  "Overfitting": "When a model learns training data too precisely, including noise, and performs well on training examples but poorly on new data. Detected by diverging training and validation loss curves.",
+  "CNN": "Convolutional Neural Network. A class of deep learning model designed for image data. Stacked layers of learnable filters detect patterns such as edges, textures, shapes at progressively higher levels of abstraction.",
   "Preprocessing": "Transformations applied to raw data before it is fed into a model. Includes resizing, normalization, and train/val/test splitting.",
   "Data Augmentation": "Artificially expanding the training dataset by applying random but realistic transformations (rotations, flips, zooms) without collecting new data. Reduces overfitting.",
   "Transfer Learning": "Reusing a model pre-trained on one large dataset as a starting point for a related task. Pre-trained features (edges, textures) transfer effectively, reducing data and compute required.",
@@ -1298,7 +1426,7 @@ const GLOSSARY = {
   "ImageNet": "A large-scale image database with 14+ million labeled images across 20,000+ categories. Widely used to train and benchmark computer vision models.",
   "Accuracy": "The proportion of all predictions that were correct. Can be misleading in imbalanced datasets; here it is valid given the near-50/50 class split.",
   "Precision": "Of all cases flagged as Parasitized, the proportion that were actually Parasitized. Calculated as TP / (TP + FP). High precision means few false alarms.",
-  "Recall": "Of all actual Parasitized cases, the proportion the model correctly identified. Also called sensitivity or true positive rate. Calculated as TP / (TP + FN). The primary metric here - a missed diagnosis carries greater cost than a false alarm.",
+  "Recall": "Of all actual Parasitized cases, the proportion the model correctly identified. Also called sensitivity or true positive rate. Calculated as TP / (TP + FN). The primary metric here because a missed diagnosis carries greater cost than a false alarm.",
   "F1-Score": "The harmonic mean of Precision and Recall. Balances the trade-off between the two; useful when both false positives and false negatives matter.",
   "AUC-ROC": "Area Under the ROC Curve. Summarizes a model's discriminative ability across all possible thresholds. 0.5 = random; 1.0 = perfect.",
   "Stratified Split": "A data splitting strategy that preserves original class proportions in each subset. Prevents accidental class imbalance due to random sampling.",
