@@ -138,6 +138,28 @@
         "best_epoch": 21,
         "final_train_recall": 1.0,
         "final_val_recall": 0.9845
+      },
+      "triage": {
+        "conf_low": 0.35,
+        "conf_high": 0.65,
+        "n_total": 2600,
+        "n_automated_uninf": 1254,
+        "n_automated_para": 1302,
+        "n_borderline": 44,
+        "pct_referred": 1.69,
+        "fn_in_auto_bucket": 5,
+        "parasitized_in_borderline": 13
+      },
+      "triage_full_cm": {
+        "conf_low": 0.35,
+        "conf_high": 0.65,
+        "tn_auto": 1249,
+        "fp_confident": 20,
+        "fn_confident": 5,
+        "tp_auto": 1282,
+        "referred_uninfected": 31,
+        "referred_parasitized": 13,
+        "n_total": 2600
       }
     },
     "mobilenetv2": {
