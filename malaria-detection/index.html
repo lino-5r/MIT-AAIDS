@@ -591,8 +591,8 @@ td.worst-metric { color: var(--coral); }
   /* Prevent lone lines stranded at the top or bottom of a page */
   p { orphans: 3; widows: 3; }
 
-  /* Sections 3 and 4 always start on a new page */
-  #s3, #s4 { break-before: page; }
+  /* Sections 3, 4, and Working Notes always start on a new page */
+  #s3, #s4, #notes { break-before: page; }
 
   /* Links: show URL after anchor text — but suppress for TOC and nav links */
   a[href]::after { content: " (" attr(href) ")"; font-size: 10px; color: #666; }
