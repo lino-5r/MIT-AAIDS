@@ -614,13 +614,80 @@ td.worst-metric { color: var(--coral); }
   "page_id": "malaria-milestone",
   "page_type": "academic-report",
   "primary_entity": "proj_malaria-detection",
-  "modules_rendered": ["report-nav", "doc-section", "metric-row", "fig-block"],
+  "modules_rendered": [
+    "report-nav",
+    "doc-section",
+    "metric-row",
+    "fig-block"
+  ],
   "locale": "en-US",
   "market": "claros",
-  "session": { "interactionCount": 0 },
+  "session": {
+    "interactionCount": 0
+  },
   "ddo": {
     "enabled": true,
     "endpointUrl": "https://lino-strategy-apps.vercel.app/api/analytics-event"
+  },
+  "registry": {
+    "components": [
+      {
+        "component_id": "report-nav",
+        "component_category": "navigation",
+        "events": [
+          {
+            "event_name": "component_view",
+            "trigger": "impression"
+          },
+          {
+            "event_name": "cta_click",
+            "trigger": "nav-section"
+          }
+        ]
+      },
+      {
+        "component_id": "doc-section",
+        "component_category": "content",
+        "events": [
+          {
+            "event_name": "component_view",
+            "trigger": "impression"
+          },
+          {
+            "event_name": "cta_click",
+            "trigger": "section-engage"
+          }
+        ]
+      },
+      {
+        "component_id": "metric-row",
+        "component_category": "metrics",
+        "events": [
+          {
+            "event_name": "component_view",
+            "trigger": "impression"
+          },
+          {
+            "event_name": "cta_click",
+            "trigger": "metric-engage"
+          }
+        ]
+      },
+      {
+        "component_id": "fig-block",
+        "component_category": "content",
+        "events": [
+          {
+            "event_name": "component_view",
+            "trigger": "impression"
+          },
+          {
+            "event_name": "cta_click",
+            "trigger": "figure-engage"
+          }
+        ]
+      }
+    ]
   }
 }
 </script>
