@@ -1,0 +1,124 @@
+{
+  "schema_version": "1.0",
+  "generated": "2026-05-02",
+  "description": "Component registry for the Malaria Detection capstone project. Defines the four instrumented component types across Milestone_Report.html, Final_Report.html, and Presentation_Slides.html. Consumed at runtime by analytics-core.js for action-map building.",
+  "components": [
+
+    {
+      "component_id": "report-nav",
+      "display_name": "Report Side Navigation",
+      "component_category": "navigation",
+      "current_version": "1.0",
+      "versions": ["1.0"],
+      "description": "Fixed side navigation with section labels and dot indicators. Dynamically built at runtime from data-nav-label attributes. Persists across the session. One per report page.",
+      "required_root_attrs": [
+        "data-component",
+        "data-component-version",
+        "data-component-category",
+        "data-analytics-persistent"
+      ],
+      "events": [
+        {
+          "event_name": "component_view",
+          "trigger": "impression",
+          "description": "Fires once per session when the nav first enters the viewport at 50% threshold.",
+          "required_properties": ["component_id", "component_version", "component_category"]
+        },
+        {
+          "event_name": "cta_click",
+          "trigger": "nav-section",
+          "description": "Fires when the reader clicks a section or subsection link in the side nav.",
+          "required_properties": ["component_id", "cta_action", "cta_label"]
+        }
+      ]
+    },
+
+    {
+      "component_id": "doc-section",
+      "display_name": "Document Section",
+      "component_category": "content",
+      "current_version": "1.0",
+      "versions": ["1.0"],
+      "description": "A top-level or model-level report section (e.g. Problem Definition, CNN1 Baseline). Also used for individual slides in Presentation_Slides.html. Use data-component-instance for the section or slide ID.",
+      "required_root_attrs": [
+        "data-component",
+        "data-component-version",
+        "data-component-category",
+        "data-component-instance"
+      ],
+      "events": [
+        {
+          "event_name": "component_view",
+          "trigger": "impression",
+          "description": "Fires when the section scrolls into the viewport. Impression rate reveals how far readers progress through the document.",
+          "required_properties": ["component_id", "component_instance", "component_version"]
+        },
+        {
+          "event_name": "cta_click",
+          "trigger": "section-engage",
+          "description": "Fires on any click interaction within the section body.",
+          "required_properties": ["component_id", "component_instance", "cta_action", "cta_label"]
+        }
+      ]
+    },
+
+    {
+      "component_id": "fig-block",
+      "display_name": "Figure Block",
+      "component_category": "content",
+      "current_version": "1.0",
+      "versions": ["1.0"],
+      "description": "A figure or chart block containing an image and caption. Used for training curves, confusion matrices, ROC curves, EDA plots, and triage charts. Use data-component-instance for the figure slug (e.g. confusion-roc-cnn3).",
+      "required_root_attrs": [
+        "data-component",
+        "data-component-version",
+        "data-component-category",
+        "data-component-instance"
+      ],
+      "events": [
+        {
+          "event_name": "component_view",
+          "trigger": "impression",
+          "description": "Fires when the figure enters the viewport. Impression rate across figure instances shows which charts readers actually reached.",
+          "required_properties": ["component_id", "component_instance", "component_version"]
+        },
+        {
+          "event_name": "cta_click",
+          "trigger": "figure-engage",
+          "description": "Fires when the reader clicks on a figure (zoom-in interaction).",
+          "required_properties": ["component_id", "component_instance", "cta_action", "cta_label"]
+        }
+      ]
+    },
+
+    {
+      "component_id": "metric-row",
+      "display_name": "Model KPI Metrics Row",
+      "component_category": "metrics",
+      "current_version": "1.0",
+      "versions": ["1.0"],
+      "description": "A row of KPI metric boxes for a single model (recall, accuracy, AUC, FN count). Use data-component-instance for the model slug (e.g. cnn3, mobilenetv2, comparison).",
+      "required_root_attrs": [
+        "data-component",
+        "data-component-version",
+        "data-component-category",
+        "data-component-instance"
+      ],
+      "events": [
+        {
+          "event_name": "component_view",
+          "trigger": "impression",
+          "description": "Fires when the metric row enters the viewport. Impression rate across model instances reveals which model results readers examined.",
+          "required_properties": ["component_id", "component_instance", "component_version"]
+        },
+        {
+          "event_name": "cta_click",
+          "trigger": "metric-engage",
+          "description": "Fires when the reader clicks on a metric row or individual metric box.",
+          "required_properties": ["component_id", "component_instance", "cta_action", "cta_label"]
+        }
+      ]
+    }
+
+  ]
+}

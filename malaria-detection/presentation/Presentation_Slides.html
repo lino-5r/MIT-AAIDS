@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Malaria Detection · Final Presentation · Claros 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --teal:    #1A6B7C;
+  --teal-d:  #114d59;
+  --teal-l:  #e4f3f6;
+  --amber:   #E8A838;
+  --amber-l: #fef5e0;
+  --coral:   #D95F4B;
+  --coral-l: #fdf0ee;
+  --sage:    #4E9E78;
+  --sage-l:  #eaf6f0;
+  --dark:    #1E2833;
+  --mid:     #4a5568;
+  --muted:   #718096;
+  --ivory:   #F7F4EF;
+  --white:   #FFFFFF;
+  --slide-w: 1100px;
+  --slide-h: 618px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: #e8e4de;
+  color: var(--dark);
+}
+
+/* ── SLIDE WRAPPER ── */
+.slides-container {
+  max-width: var(--slide-w);
+  margin: 0 auto;
+  padding: 32px 0 80px;
+}
+
+.slide {
+  width: var(--slide-w);
+  min-height: var(--slide-h);
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 8px 40px rgba(26,107,124,0.12), 0 2px 8px rgba(0,0,0,0.06);
+  margin-bottom: 28px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.slide-number {
+  position: absolute;
+  bottom: 18px; right: 24px;
+  font-size: 11px; font-weight: 500;
+  color: rgba(113,128,150,0.6);
+  letter-spacing: 0.06em;
+}
+
+/* ── SLIDE TYPES ── */
+
+/* Title slide */
+.slide.title-slide {
+  background: linear-gradient(135deg, var(--teal-d) 0%, var(--teal) 60%, #1e8a9e 100%);
+  color: #fff;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 64px 80px;
+}
+.title-slide .eyebrow {
+  font-size: 12px; font-weight: 600; letter-spacing: 0.12em;
+  text-transform: uppercase; color: rgba(255,255,255,0.65);
+  margin-bottom: 20px;
+}
+.title-slide .main-title {
+  font-size: 48px; font-weight: 800; line-height: 1.1;
+  letter-spacing: -0.03em; color: #fff;
+  margin-bottom: 12px;
+}
+.title-slide .subtitle {
+  font-size: 19px; font-weight: 300; color: rgba(255,255,255,0.8);
+  line-height: 1.45; max-width: 600px;
+  margin-bottom: 40px;
+}
+.title-slide .byline {
+  font-size: 14px; color: rgba(255,255,255,0.7);
+}
+.title-logo {
+  position: absolute; right: 80px; top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.title-logo .logo-name {
+  font-size: 18px; font-weight: 800; color: rgba(255,255,255,0.9);
+  letter-spacing: 0.1em;
+}
+.title-logo .logo-tagline {
+  font-size: 10px; color: rgba(255,255,255,0.55);
+  letter-spacing: 0.1em; text-transform: uppercase;
+}
+.title-slide .headline-stat {
+  margin-top: 32px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 10px;
+  padding: 14px 22px;
+  display: inline-flex; align-items: baseline; gap: 10px;
+}
+.title-slide .headline-stat .big { font-size: 36px; font-weight: 800; color: var(--amber); }
+.title-slide .headline-stat .label { font-size: 14px; color: rgba(255,255,255,0.75); }
+
+/* Standard content layout */
+.slide-header {
+  background: var(--teal);
+  padding: 22px 48px 18px;
+  display: flex; align-items: baseline; gap: 14px;
+}
+.slide-tag {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.1em; color: rgba(255,255,255,0.55);
+  border: 1px solid rgba(255,255,255,0.25);
+  padding: 2px 8px; border-radius: 20px;
+  flex-shrink: 0;
+}
+.slide-title {
+  font-size: 22px; font-weight: 700; color: #fff;
+  line-height: 1.2; letter-spacing: -0.01em;
+}
+.slide-body {
+  flex: 1; padding: 32px 48px 36px;
+  display: flex; flex-direction: column; justify-content: center;
+}
+
+/* Two-column layout */
+.two-col {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
+  align-items: start;
+}
+.two-col-65-35 { grid-template-columns: 65fr 35fr; }
+.two-col-40-60 { grid-template-columns: 40fr 60fr; }
+
+/* Bullet lists */
+.bullet-list { list-style: none; padding: 0; }
+.bullet-list li {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(26,107,124,0.07);
+  font-size: 15px; line-height: 1.5; color: var(--dark);
+}
+.bullet-list li:last-child { border-bottom: none; }
+.bullet-list li::before {
+  content: '';
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--teal); flex-shrink: 0; margin-top: 7px;
+}
+
+/* Stat blocks */
+.stat-row {
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 14px;
+  margin-bottom: 20px;
+}
+.stat-block {
+  background: var(--teal-l);
+  border: 1px solid rgba(26,107,124,0.15);
+  border-radius: 10px;
+  padding: 16px 14px 12px;
+  text-align: center;
+}
+.stat-block.amber { background: var(--amber-l); border-color: rgba(232,168,56,0.25); }
+.stat-block.sage  { background: var(--sage-l);  border-color: rgba(78,158,120,0.2); }
+.stat-block.coral { background: var(--coral-l); border-color: rgba(217,95,75,0.2); }
+.stat-block .val {
+  font-size: 28px; font-weight: 800; color: var(--teal);
+  letter-spacing: -0.03em; line-height: 1;
+  margin-bottom: 5px;
+}
+.stat-block.amber .val { color: #b07a10; }
+.stat-block.sage  .val { color: var(--sage); }
+.stat-block.coral .val { color: var(--coral); }
+.stat-block .lbl {
+  font-size: 11px; font-weight: 600; color: var(--mid);
+  text-transform: uppercase; letter-spacing: 0.05em;
+  line-height: 1.3;
+}
+
+/* Model comparison table */
+.model-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 13.5px; margin-bottom: 0;
+}
+.model-table thead tr { background: var(--teal); }
+.model-table thead th {
+  padding: 9px 12px; text-align: left; color: #fff;
+  font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.model-table tbody tr { border-bottom: 1px solid rgba(26,107,124,0.08); }
+.model-table tbody tr:last-child { border-bottom: none; }
+.model-table tbody td { padding: 9px 12px; line-height: 1.35; }
+.model-table tbody tr.best { background: var(--sage-l); }
+.badge { display: inline-block; background: var(--sage); color: #fff;
+  font-size: 9.5px; font-weight: 700; padding: 2px 6px; border-radius: 8px;
+  letter-spacing: 0.04em; text-transform: uppercase; margin-left: 4px;
+  vertical-align: middle; }
+
+/* Callout box */
+.callout {
+  border-left: 3px solid var(--teal);
+  background: var(--teal-l);
+  border-radius: 0 8px 8px 0;
+  padding: 14px 18px;
+  margin: 0;
+}
+.callout.amber { border-color: var(--amber); background: var(--amber-l); }
+.callout.sage  { border-color: var(--sage);  background: var(--sage-l); }
+.callout.coral { border-color: var(--coral); background: var(--coral-l); }
+.callout-title {
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.07em; color: var(--teal); margin-bottom: 5px;
+}
+.callout.amber .callout-title { color: #b07a10; }
+.callout.sage  .callout-title { color: var(--sage); }
+.callout.coral .callout-title { color: var(--coral); }
+.callout p { font-size: 14px; line-height: 1.5; color: var(--dark); }
+
+/* Figure embed */
+.fig-embed {
+  border: 1px solid rgba(26,107,124,0.12);
+  border-radius: 8px; overflow: hidden; background: var(--ivory);
+}
+.fig-embed img { display: block; width: 100%; height: auto; }
+.fig-label {
+  font-size: 11.5px; color: var(--muted); padding: 7px 12px;
+  border-top: 1px solid rgba(26,107,124,0.1);
+  line-height: 1.4;
+}
+
+/* Roadmap steps */
+.mini-roadmap { margin: 0; }
+.mini-step {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(26,107,124,0.07);
+}
+.mini-step:last-child { border-bottom: none; }
+.step-dot {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--teal); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; flex-shrink: 0;
+}
+.step-content { flex: 1; }
+.step-title { font-size: 14px; font-weight: 700; color: var(--dark); }
+.step-desc  { font-size: 13px; color: var(--mid); line-height: 1.45; margin-top: 2px; }
+
+/* Risk grid (compact) */
+.mini-risk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.mini-risk {
+  border: 1px solid rgba(26,107,124,0.12);
+  border-radius: 8px; padding: 12px 14px;
+  background: var(--white);
+}
+.mini-risk .rt { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 3px; }
+.mini-risk .rb { font-size: 12.5px; color: var(--mid); line-height: 1.45; }
+
+/* Section divider slide */
+.slide.section-slide {
+  background: linear-gradient(135deg, #f0f7f9 0%, #e8f4f7 100%);
+  border-left: 6px solid var(--teal);
+  justify-content: center;
+  align-items: flex-start;
+  padding: 64px 80px;
+  min-height: 180px;
+}
+.section-slide .sec-num {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.12em; color: var(--teal); margin-bottom: 10px;
+}
+.section-slide .sec-title {
+  font-size: 34px; font-weight: 800; color: var(--dark);
+  letter-spacing: -0.02em;
+}
+.section-slide .sec-sub {
+  font-size: 16px; font-weight: 400; color: var(--mid); margin-top: 8px;
+}
+
+/* Closing slide */
+.slide.closing-slide {
+  background: linear-gradient(135deg, var(--teal-d) 0%, var(--teal) 100%);
+  justify-content: center; align-items: center;
+  text-align: center; padding: 48px;
+}
+.closing-slide .close-title {
+  font-size: 36px; font-weight: 800; color: #fff;
+  letter-spacing: -0.02em; margin-bottom: 16px;
+}
+.closing-slide .close-sub {
+  font-size: 17px; color: rgba(255,255,255,0.75);
+  max-width: 580px; line-height: 1.5; margin-bottom: 32px;
+}
+.close-stats {
+  display: flex; gap: 32px; justify-content: center;
+  margin-bottom: 28px;
+}
+.close-stat { text-align: center; }
+.close-stat .cv { font-size: 34px; font-weight: 800; color: var(--amber); }
+.close-stat .cl { font-size: 12px; color: rgba(255,255,255,0.65); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 4px; }
+.claros-footer {
+  font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 8px;
+  letter-spacing: 0.06em;
+}
+
+/* ── Data notice ── */
+.data-notice {
+  background: var(--dark); color: #fff;
+  font-size: 11px; padding: 6px 14px; border-radius: 20px;
+  font-family: 'Inter', sans-serif;
+  opacity: 1; transition: opacity 1s;
+  pointer-events: none;
+}
+.data-notice.loaded { background: var(--sage); }
+.data-notice.error  { background: var(--coral); }
+
+/* Print */
+@media print {
+  @page { size: 1100px 618px; margin: 0; }
+  body { background: white; }
+  .slides-container { padding: 0; max-width: none; }
+  .slide {
+    width: 1100px; min-height: 618px; height: 618px;
+    margin-bottom: 0; box-shadow: none; border-radius: 0;
+    page-break-after: always; break-after: page;
+    overflow: hidden;
+  }
+  .slide:last-child { page-break-after: auto; break-after: auto; }
+}
+</style>
+<script id="__page-ctx" type="application/json">
+{
+  "page_id": "malaria-presentation",
+  "page_type": "academic-report",
+  "primary_entity": "proj_malaria-detection",
+  "modules_rendered": ["doc-section", "fig-block", "metric-row"],
+  "locale": "en-US",
+  "market": "claros",
+  "session": { "interactionCount": 0 },
+  "ddo": {
+    "enabled": true,
+    "endpointUrl": "https://lino-strategy-apps.vercel.app/api/analytics-event"
+  }
+}
+</script>
+<script src="https://lino-strategy-apps.vercel.app/driven_global-strategy/analytics-core.js"></script>
+</head>
+<body>
+
+<div class="slides-container">
+
+<!-- ── SLIDE 1: TITLE ── -->
+<div class="slide title-slide" data-component="doc-section" data-component-version="1.0" data-component-category="content" data-component-instance="slide-1" data-cta-action="section-engage" data-cta-label="Slide 1">
+  <div class="eyebrow">MIT Applied AI &amp; Data Science Program &middot; Capstone Project &middot; May 2026</div>
+  <div class="main-title">Malaria Detection<br>Using Deep Learning</div>
+  <div class="subtitle">Automated cell-level screening to reduce missed diagnoses in high-burden, low-resource settings</div>
+  <div class="byline">Lindsay Ogden-Herrera &middot; Claros &middot; Pathology Intelligence</div>
+  <div class="headline-stat">
+    <span class="big" id="dyn-s-recall">-</span>
+    <span class="label">recall &amp; <span id="dyn-s-acc">-</span> overall accuracy &mdash; <span id="dyn-s-fn">-</span> missed infections out of 1,300</span>
+  </div>
+  <div class="title-logo">
+    <svg viewBox="0 0 72 72" width="90" height="90" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="36" cy="36" r="32" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="5"/>
+      <circle cx="36" cy="36" r="32" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <circle cx="36" cy="36" r="20" fill="none" stroke="#E8A838" stroke-width="4.5"/>
+      <circle cx="43" cy="29" r="4" fill="#D95F4B"/>
+    </svg>
+    <div class="logo-name">CLAROS</div>
+    <div class="logo-tagline">Pathology Intelligence</div>
+  </div>
+  <div class="slide-number">1 / 11</div>
+</div>
+
+<!-- ── SLIDE 2: THE PROBLEM ── -->
+<div class="slide" data-component="doc-section" data-component-version="1.0" data-component-category="content" data-component-instance="slide-2" data-cta-action="section-engage" data-cta-label="Slide 2">
+  <div class="slide-header">
+    <span class="slide-tag">The Problem</span>
+    <span class="slide-title">Malaria kills 400,000 people per year. The bottleneck is diagnosis.</span>
+  </div>
+  <div class="slide-body">
+    <div class="two-col">
+      <div>
+        <ul class="bullet-list">
+          <li><strong>229 million cases</strong> and ~400,000 deaths globally per year (WHO 2019). 94% of deaths occur in Sub-Saharan Africa; 67% are children under five.</li>
+          <li>Standard diagnosis requires a trained microscopist to manually examine <strong>Giemsa-stained blood smear slides</strong> under a microscope, cell by cell.</li>
+          <li>Each slide takes <strong>5–15 minutes</strong> to examine properly. A lab handling 100 slides per day needs 8–25 hours of skilled microscopist time.</li>
+          <li>In high-burden regions, that expertise is <strong>scarce, unevenly distributed, and subject to fatigue</strong>. Inter-rater agreement degrades at scale.</li>
+          <li>Result: delayed diagnoses, missed infections, ongoing transmission.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="callout coral">
+          <div class="callout-title">The core error</div>
+          <p>A <strong>missed infection</strong> (false negative) sends a patient home without treatment. The infection progresses; the patient transmits. A <strong>false alarm</strong> (false positive) triggers a follow-up test. These errors are not symmetric. In this project, minimizing false negatives is the governing objective.</p>
+        </div>
+        <br>
+        <div class="callout">
+          <div class="callout-title">The AI opportunity</div>
+          <p>Classify individual cell images as Parasitized or Uninfected automatically, at any scale, with consistent accuracy, on modest hardware. Route only the borderline cases to a human reviewer.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-number">2 / 11</div>
+</div>
+
+<!-- ── SLIDE 3: THE DATA ── -->
+<div class="slide" data-component="doc-section" data-component-version="1.0" data-component-category="content" data-component-instance="slide-3" data-cta-action="section-engage" data-cta-label="Slide 3">
+  <div class="slide-header">
+    <span class="slide-tag">The Data</span>
+    <span class="slide-title">27,558 labeled cell images from the NIH Malaria Dataset</span>
+  </div>
+  <div class="slide-body">
+    <div class="two-col-40-60">
+      <div>
+        <div class="stat-row" style="grid-template-columns:1fr 1fr; margin-bottom:16px;">
+          <div class="stat-block"><div class="val">27.5K</div><div class="lbl">Total cell images</div></div>
+          <div class="stat-block amber"><div class="val">50/50</div><div class="lbl">Class balance (train + test)</div></div>
+          <div class="stat-block sage"><div class="val">64×64</div><div class="lbl">Input resolution (pixels)</div></div>
+          <div class="stat-block coral"><div class="val">2,600</div><div class="lbl">Held-out test images</div></div>
+        </div>
+        <ul class="bullet-list" style="font-size:13.5px;">
+          <li>Each image is a single red blood cell: either <strong>Parasitized</strong> (infected with <em>Plasmodium</em>) or <strong>Uninfected</strong>.</li>
+          <li>Pre-segmented by the NIH; stained with Giemsa dye, which makes the parasite visible as a dark inclusion.</li>
+          <li>Pre-split into train and test sets. An 80/20 stratified split creates a validation subset from training data.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="fig-embed" data-component="fig-block" data-component-version="1.0" data-component-category="content" data-component-instance="cell-samples" data-cta-action="figure-engage" data-cta-label="Cell Samples Figure">
+          <img src="../figures/fig_eda_sample_images.png" alt="Sample cell images">
+          <div class="fig-label">Parasitized cells (top) show dark staining from <em>Plasmodium</em> ring forms. Uninfected cells (bottom) appear uniformly pale. These visual differences are learnable by a CNN.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-number">3 / 11</div>
+</div>
+
+<!-- ── SLIDE 4: OUR APPROACH ── -->
+<div class="slide" data-component="doc-section" data-component-version="1.0" data-component-category="content" data-component-instance="slide-4" data-cta-action="section-engage" data-cta-label="Slide 4">
+  <div class="slide-header">
+    <span class="slide-tag">Approach</span>
+    <span class="slide-title">Four models. A deliberate experimental progression. One winner.</span>
+  </div>
+  <div class="slide-body">
+    <div class="two-col">
+      <div>
+        <div class="mini-roadmap">
+          <div class="mini-step">
+            <div class="step-dot">1</div>
+            <div class="step-content">
+              <div class="step-title">CNN1 &mdash; Baseline</div>
+              <div class="step-desc">Simple 3-layer CNN. Establishes whether the visual signal is learnable. Trains in 8 epochs. Gives us a baseline to beat.</div>
+            </div>
+          </div>
+          <div class="mini-step">
+            <div class="step-dot">2</div>
+            <div class="step-content">
+              <div class="step-title">CNN2 &mdash; Augmented</div>
+              <div class="step-desc">Adds data augmentation (rotation, flip, zoom) and architectural improvements (BatchNormalization, GlobalAveragePooling2D). Reduces overfitting. Exposes a calibration problem.</div>
+            </div>
+          </div>
+          <div class="mini-step">
+            <div class="step-dot">3</div>
+            <div class="step-content">
+              <div class="step-title">CNN3 &mdash; Recall-Optimized</div>
+              <div class="step-desc">Same architecture as CNN2. Adds class weighting (Parasitized at 2&times; cost) and recall tracking during training. Fixes the calibration failure. Best overall result.</div>
+            </div>
+          </div>
+          <div class="mini-step">
+            <div class="step-dot">4</div>
+            <div class="step-content">
+              <div class="step-title">MobileNetV2 &mdash; Transfer Learning</div>
+              <div class="step-desc">Pre-trained on 1.28M ImageNet images. Two-phase training (frozen backbone, then fine-tune). The expected winner. Underperformed at 64&times;64 pixel resolution.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="callout" style="margin-bottom:14px;">
+          <div class="callout-title">Why this sequence?</div>
+          <p>Each step changes one variable. CNN1&rarr;CNN2 combined augmentation + architecture changes. CNN2&rarr;CNN3 changes only the training objective. CNN3 is therefore the first <em>controlled experiment</em> in the sequence, isolating the effect of class weighting.</p>
+        </div>
+        <div class="callout amber">
+          <div class="callout-title">Evaluation criteria</div>
+          <p><strong>Recall</strong> (% of infected cells correctly identified) is the primary clinical metric — missed infections are the highest-cost error. <strong>Overall accuracy</strong> must also be high to be clinically trusted. AUC measures discriminative power across all thresholds.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-number">4 / 11</div>
+</div>
+
+<!-- ── SLIDE 5: MODEL RESULTS ── -->
+<div class="slide" data-component="doc-section" data-component-version="1.0" data-component-category="content" data-component-instance="slide-5" data-cta-action="section-engage" data-cta-label="Slide 5">
+  <div class="slide-header">
+    <span class="slide-tag">Key Findings</span>
+    <span class="slide-title">CNN3: <span id="dyn-s5-recall-title">-</span> recall and <span id="dyn-s5-acc-title">-</span> overall accuracy</span>
+  </div>
+  <div class="slide-body">
+    <div class="stat-row" style="margin-bottom:18px;">
+      <div class="stat-block"><div class="val" id="dyn-s5-recall">-</div><div class="lbl">CNN3 recall</div></div>
+      <div class="stat-block amber"><div class="val" id="dyn-s5-fn">-</div><div class="lbl">False negatives (CNN3)</div></div>
+      <div class="stat-block sage"><div class="val" id="dyn-s5-auc">-</div><div class="lbl">AUC-ROC (CNN3)</div></div>
+      <div class="stat-block sage"><div class="val" id="dyn-s5-acc">-</div><div class="lbl">Overall accuracy (CNN3)</div></div>
+    </div>
+    <table class="model-table">
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th>% Infected cells correctly identified</th>
+          <th>Missed infections / 1,300</th>
+          <th>Overall accuracy</th>
+          <th>AUC (disc. power)</th>
+        </tr>
+      </thead>
+      <tbody id="slides-comparison-tbody"><tr><td colspan="5" style="color:#999;font-style:italic;padding:10px">Loading…</td></tr></tbody>
+    </table>
+  </div>
+  <div class="slide-number">5 / 11</div>
+</div>
+
+<!-- ── SLIDE 6: WHY CNN3 WON ── -->
+<div class="slide" data-component="doc-section" data-component-version="1.0" data-component-category="content" data-component-instance="slide-6" data-cta-action="section-engage" data-cta-label="Slide 6">
+  <div class="slide-header">
+    <span class="slide-tag">The Key Insight</span>
+    <span class="slide-title">CNN2 and CNN3 have the same architecture. The training objective made the difference.</span>
+  </div>
+  <div class="slide-body">
+    <div class="two-col">
+      <div>
+        <ul class="bullet-list">
+          <li><strong>CNN2's problem:</strong> The model's confidence scores clustered near zero. At the standard 50% decision threshold, almost every infected cell scored below the cutoff. Result: <span id="dyn-s6-cnn2-fn">-</span> missed infections. Yet AUC was 0.98 &mdash; the model <em>could</em> distinguish classes. The problem was calibration, not capability.</li>
+          <li><strong>The fix:</strong> CNN3 adds a class weight of 2:1 (Parasitized costs twice as much to miss). The optimizer is directly penalized for the failure mode that matters most. The model learns to score infected cells above 0.5.</li>
+          <li><strong>The result:</strong> From <span id="dyn-s6-cnn2-fn-2">-</span> missed infections to <span id="dyn-s6-cnn3-fn">-</span>, with no change to the architecture, the data pipeline, or the test set.</li>
+          <li><strong>The implication:</strong> Architecture complexity is not the limiting factor. Training objective alignment to clinical goals is.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="fig-embed" data-component="fig-block" data-component-version="1.0" data-component-category="content" data-component-instance="confusion-roc-cnn3" data-cta-action="figure-engage" data-cta-label="Confusion Roc Cnn3 Figure" style="margin-bottom:14px;">
+          <img src="../figures/fig_cnn3_evaluation.png" alt="CNN3 confusion matrix">
+          <div class="fig-label">CNN3 confusion matrix: 1,289 of 1,300 infected cells correctly identified. 11 missed. <span id="dyn-s6-cnn3-fp">-</span> false alarms (flagged for follow-up).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-number">6 / 11</div>
+</div>
+
+<!-- ── SLIDE 7: TRIAGE MODE ── -->
+<div class="slide" data-component="doc-section" data-component-version="1.0" data-component-category="content" data-component-instance="slide-7" data-cta-action="section-engage" data-cta-label="Slide 7">
+  <div class="slide-header">
+    <span class="slide-tag">Operating Model</span>
+    <span class="slide-title">98.31% of cells auto-classified. Only 1.69% referred to human review.</span>
+  </div>
+  <div class="slide-body">
+    <div class="two-col-40-60">
+      <div>
+        <div class="stat-row" style="grid-template-columns:1fr; margin-bottom:14px;">
+          <div class="stat-block sage"><div class="val" id="dyn-s7-auto-pct">-</div><div class="lbl">Auto-classified with high confidence</div></div>
+        </div>
+        <div class="stat-row" style="grid-template-columns:1fr 1fr; margin-bottom:14px;">
+          <div class="stat-block"><div class="val" id="dyn-s7-auto-uninf">-</div><div class="lbl">Auto: Uninfected</div></div>
+          <div class="stat-block amber"><div class="val" id="dyn-s7-auto-para">-</div><div class="lbl">Auto: Parasitized</div></div>
+        </div>
+        <div class="stat-row" style="grid-template-columns:1fr; margin-bottom:0;">
+          <div class="stat-block coral"><div class="val" id="dyn-s7-borderline">-</div><div class="lbl">Referred for human review (<span id="dyn-s7-pct-referred">-</span>)</div></div>
+        </div>
+        <br>
+        <div class="callout" style="font-size:13px;">
+          <div class="callout-title">How triage works</div>
+          <p>Scores below <span id="dyn-s7-low">-</span>: auto-classify Uninfected. Above <span id="dyn-s7-high">-</span>: auto-classify Parasitized. Between <span id="dyn-s7-low-2">-</span>–<span id="dyn-s7-high-2">-</span>: flag for microscopist review. The window is tunable.</p>
+        </div>
+      </div>
+      <div>
+        <div class="fig-embed" data-component="fig-block" data-component-version="1.0" data-component-category="content" data-component-instance="triage-sweep" data-cta-action="figure-engage" data-cta-label="Triage Sweep Figure">
+          <img src="../figures/fig_cnn3_triage_sweep.png" alt="Triage sweep">
+          <div class="fig-label">Triage threshold sweep: as the confidence window narrows, fewer cases are referred and recall holds. The selected operating point balances high recall with a minimal human review workload.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-number">7 / 11</div>
+</div>
+
+<!-- ── SLIDE 8: IMPLEMENTATION ── -->
+<div class="slide" data-component="doc-section" data-component-version="1.0" data-component-category="content" data-component-instance="slide-8" data-cta-action="section-engage" data-cta-label="Slide 8">
+  <div class="slide-header">
+    <span class="slide-tag">Implementation</span>
+    <span class="slide-title">Four phases from pilot to scale</span>
+  </div>
+  <div class="slide-body">
+    <div class="two-col">
+      <div class="mini-roadmap">
+        <div class="mini-step">
+          <div class="step-dot">1</div>
+          <div class="step-content">
+            <div class="step-title">Pilot validation (months 1–3)</div>
+            <div class="step-desc">Deploy CNN3 in parallel with manual review at one partner lab. Run both systems on 2,000+ slides. Confirm false negative rate under real staining conditions.</div>
+          </div>
+        </div>
+        <div class="mini-step">
+          <div class="step-dot">2</div>
+          <div class="step-content">
+            <div class="step-title">Triage integration (months 3–6)</div>
+            <div class="step-desc">Integrate CNN3 as first-pass screener in the lab information system. High-confidence cases auto-classified. Borderline <span id="dyn-s8-pct-referred">-</span> routed to microscopist. Track disagreements.</div>
+          </div>
+        </div>
+        <div class="mini-step">
+          <div class="step-dot">3</div>
+          <div class="step-content">
+            <div class="step-title">Full slide pipeline (months 6–12)</div>
+            <div class="step-desc">Add cell segmentation to extract individual cells from whole slides automatically. This closes the remaining manual step and enables fully automated batch processing.</div>
+          </div>
+        </div>
+        <div class="mini-step">
+          <div class="step-dot">4</div>
+          <div class="step-content">
+            <div class="step-title">Multi-site validation (months 12–18)</div>
+            <div class="step-desc">Validate across 3–5 partner labs with different equipment and staining protocols. Test on <em>P. vivax</em>-endemic regions. Required before claiming broad deployability.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="callout sage" style="margin-bottom:14px;">
+          <div class="callout-title">The model is already small</div>
+          <p>CNN3 is <strong>~2.1 MB</strong> saved to disk. It runs on any modern laptop with no GPU required. Deployment hardware cost per site: <strong>$300–$500</strong>. No cloud subscription needed for inference.</p>
+        </div>
+        <div class="callout amber">
+          <div class="callout-title">Estimated time savings</div>
+          <p>For a lab processing 100 slides/day: manual screening requires <strong>8–25 person-hours/day</strong>. CNN3 with triage reduces that to <strong>~8 minutes/day</strong> of microscopist time for borderline case review. The other <span id="dyn-s8-auto-pct">-</span> of cells are handled automatically.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-number">8 / 11</div>
+</div>
+
+<!-- ── SLIDE 9: RISKS ── -->
+<div class="slide" data-component="doc-section" data-component-version="1.0" data-component-category="content" data-component-instance="slide-9" data-cta-action="section-engage" data-cta-label="Slide 9">
+  <div class="slide-header">
+    <span class="slide-tag">Risks &amp; Challenges</span>
+    <span class="slide-title">Six known limitations, four high-priority next steps</span>
+  </div>
+  <div class="slide-body">
+    <div class="two-col" style="gap: 28px;">
+      <div>
+        <p style="font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; color:var(--teal); margin-bottom:10px;">Key risks</p>
+        <div class="mini-risk-grid">
+          <div class="mini-risk">
+            <div class="rt">Single-source data</div>
+            <div class="rb">One institution, one staining protocol. Cross-site performance not yet validated.</div>
+          </div>
+          <div class="mini-risk">
+            <div class="rt">Species gap</div>
+            <div class="rb">Trained on <em>P. falciparum</em> only. Other species have different morphology. Model not validated on <em>P. vivax</em> etc.</div>
+          </div>
+          <div class="mini-risk">
+            <div class="rt">No whole-slide pipeline</div>
+            <div class="rb">Requires pre-segmented cell images. Cell extraction from full slides not yet built.</div>
+          </div>
+          <div class="mini-risk">
+            <div class="rt">Interpretability</div>
+            <div class="rb">No heatmaps showing <em>why</em> the model flagged a cell. Grad-CAM is a planned addition.</div>
+          </div>
+          <div class="mini-risk">
+            <div class="rt">Staining variability</div>
+            <div class="rb">Model may need site-specific fine-tuning if local staining differs from training distribution.</div>
+          </div>
+          <div class="mini-risk">
+            <div class="rt">Regulatory pathway</div>
+            <div class="rb">Diagnostic software requires clearance in most markets. Framed as decision support to manage burden.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p style="font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; color:var(--teal); margin-bottom:10px;">Priority next steps</p>
+        <ul class="bullet-list" style="font-size:13.5px;">
+          <li><strong>Cross-site validation</strong> on 500–1,000 slides from two additional labs. Required before clinical deployment.</li>
+          <li><strong>Grad-CAM interpretability maps</strong> to show which region of the cell drove each prediction. Builds clinician trust.</li>
+          <li><strong>Higher input resolution</strong> (128&times;128 or 224&times;224). Likely to improve recall and may change the MobileNetV2 comparison.</li>
+          <li><strong>Two-stage detection pipeline</strong>: add cell segmentation (Stage 1) before CNN3 classification (Stage 2). Prior art (Hung et al., 2017) shows 98% accuracy vs. 59% for single-stage on the same task.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="slide-number">9 / 11</div>
+</div>
+
+<!-- ── SLIDE 10: STAKEHOLDER ACTIONS ── -->
+<div class="slide" data-component="doc-section" data-component-version="1.0" data-component-category="content" data-component-instance="slide-10" data-cta-action="section-engage" data-cta-label="Slide 10">
+  <div class="slide-header">
+    <span class="slide-tag">Actionables</span>
+    <span class="slide-title">What stakeholders need to do to move from prototype to pilot</span>
+  </div>
+  <div class="slide-body">
+    <table class="model-table">
+      <thead>
+        <tr><th>Stakeholder</th><th>Action</th><th>Timeline</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Lab Directors</strong></td>
+          <td>Identify pilot site with existing digitization. Allocate 2 weeks of parallel-run data collection. Assign a microscopist to review borderline cases and provide ground truth.</td>
+          <td>Month 1</td>
+        </tr>
+        <tr>
+          <td><strong>Clinical Staff</strong></td>
+          <td>Complete a 2-hour training module. Model outputs are decision support &mdash; final diagnosis remains with the clinician. Record all disagreements with model flags.</td>
+          <td>Month 2–3</td>
+        </tr>
+        <tr>
+          <td><strong>IT / Procurement</strong></td>
+          <td>Procure one laptop or mini-PC per site ($300–$500), USB microscopy camera adapter if needed, local storage. No GPU or internet required for inference.</td>
+          <td>Month 1–2</td>
+        </tr>
+        <tr>
+          <td><strong>Program / Donors</strong></td>
+          <td>Budget $15,000–$25,000 across two pilot sites: hardware, setup, training, 0.5 FTE data coordinator for 6 months of validation.</td>
+          <td>Pre-launch</td>
+        </tr>
+        <tr>
+          <td><strong>Regulatory / Ethics</strong></td>
+          <td>Initiate IRB review. Confirm tool is framed as decision support in all patient-facing materials. Review in-country digital health regulations for diagnostic software.</td>
+          <td>Month 1–2</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="margin-top:14px;">
+      <div class="callout amber">
+        <div class="callout-title">Bottom line</div>
+        <p>CNN3 is ready for a structured pilot. The next step is not more model development. It is a 6-month, 2-site pilot at $15,000–$25,000 to confirm that 99.15% recall holds under real-world conditions before committing to scale.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-number">10 / 11</div>
+</div>
+
+<!-- ── SLIDE 11: CLOSING ── -->
+<div class="slide closing-slide">
+  <div class="close-title">Summary</div>
+  <div class="close-sub">CNN3 correctly identifies 99.15% of infected cells. Only 1.69% of cases need human review. The model runs on a $400 laptop. It is ready for a pilot.</div>
+  <div class="close-stats">
+    <div class="close-stat"><div class="cv" id="dyn-s11-recall">-</div><div class="cl">Recall on test set</div></div>
+    <div class="close-stat"><div class="cv" id="dyn-s11-fn">-</div><div class="cl">Missed of 1,300 infected</div></div>
+    <div class="close-stat"><div class="cv" id="dyn-s11-pct-referred">-</div><div class="cl">Referred for human review</div></div>
+    <div class="close-stat"><div class="cv">~2.1 MB</div><div class="cl">Model size (no GPU needed)</div></div>
+  </div>
+  <div class="claros-footer">Lindsay Ogden-Herrera &middot; Claros &middot; MIT Applied AI &amp; Data Science Program &middot; 2026</div>
+  <div class="slide-number" style="color:rgba(255,255,255,0.4);">11 / 11</div>
+</div>
+
+
+<div class="data-notice" id="data-notice-slides" style="position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:600"></div>
+</div><!-- /slides-container -->
+
+<script>
+// ─── FORMAT HELPERS ───
+const fmt = {
+  pct:    v => (v * 100).toFixed(2) + '%',
+  pct1:   v => (v * 100).toFixed(1) + '%',
+  dec4:   v => parseFloat(v).toFixed(4),
+  int:    v => parseInt(v).toLocaleString(),
+  thresh: v => parseFloat(v).toFixed(2),
+};
+
+function set(id, val) {
+  const el = document.getElementById(id);
+  if (el && val !== undefined && val !== null) el.textContent = val;
+}
+
+function populateAll(d) {
+  const m = d.models;
+
+  // Slide 1
+  set('dyn-s-recall',       fmt.pct(m.cnn3.test.recall));
+  set('dyn-s-acc',          fmt.pct(m.cnn3.test.accuracy));
+  set('dyn-s-fn',           fmt.int(m.cnn3.test.confusion_matrix[1][0]));
+
+  // Slide 5 stat blocks + title
+  set('dyn-s5-recall',      fmt.pct(m.cnn3.test.recall));
+  set('dyn-s5-recall-title',fmt.pct(m.cnn3.test.recall));
+  set('dyn-s5-fn',          fmt.int(m.cnn3.test.confusion_matrix[1][0]));
+  set('dyn-s5-auc',         fmt.dec4(m.cnn3.test.auc_roc));
+  set('dyn-s5-acc',         fmt.pct(m.cnn3.test.accuracy));
+  set('dyn-s5-acc-title',   fmt.pct(m.cnn3.test.accuracy));
+
+  // Slide 6 bullets + fig label
+  set('dyn-s6-cnn2-fn',     fmt.int(m.cnn2.test.confusion_matrix[1][0]));
+  set('dyn-s6-cnn2-fn-2',   fmt.int(m.cnn2.test.confusion_matrix[1][0]));
+  set('dyn-s6-cnn3-fn',     fmt.int(m.cnn3.test.confusion_matrix[1][0]));
+  set('dyn-s6-cnn3-fp',     fmt.int(m.cnn3.test.confusion_matrix[0][1]));
+  set('dyn-s6-cnn3-tp',     fmt.int(m.cnn3.test.confusion_matrix[1][1]));
+  set('dyn-s6-cnn3-fn-3',   fmt.int(m.cnn3.test.confusion_matrix[1][0]));
+  set('dyn-s6-cnn3-fp-2',   fmt.int(m.cnn3.test.confusion_matrix[0][1]));
+
+  // Slide 7 triage
+  if (m.cnn3.triage) {
+    const tr = m.cnn3.triage;
+    const autoPct = (100 - tr.pct_referred).toFixed(2) + '%';
+    const refPct  = tr.pct_referred.toFixed(2) + '%';
+    set('dyn-s7-auto-pct',    autoPct);
+    set('dyn-s7-auto-uninf',  fmt.int(tr.n_automated_uninf));
+    set('dyn-s7-auto-para',   fmt.int(tr.n_automated_para));
+    set('dyn-s7-borderline',  fmt.int(tr.n_borderline));
+    set('dyn-s7-pct-referred',refPct);
+    set('dyn-s7-low',         fmt.thresh(tr.conf_low));
+    set('dyn-s7-high',        fmt.thresh(tr.conf_high));
+    set('dyn-s7-low-2',       fmt.thresh(tr.conf_low));
+    set('dyn-s7-high-2',      fmt.thresh(tr.conf_high));
+    set('dyn-s8-auto-pct',    autoPct);
+    set('dyn-s8-pct-referred',refPct);
+    set('dyn-s11-pct-referred',refPct);
+  }
+
+  // Slide 11 closing
+  set('dyn-s11-recall',     fmt.pct(m.cnn3.test.recall));
+  set('dyn-s11-fn',         fmt.int(m.cnn3.test.confusion_matrix[1][0]));
+
+  // Comparison table
+  buildSlidesTable(d);
+}
+
+function buildSlidesTable(d) {
+  const m = d.models;
+  const rows = [
+    { label: 'CNN1 &ndash; Baseline',                   key: m.cnn1 },
+    { label: 'CNN2 &ndash; Augmented (default)',         key: m.cnn2 },
+    { label: 'CNN2 &ndash; Augmented (threshold fixed)', key: m.cnn2_tuned },
+    { label: 'CNN3 &ndash; Recall-Optimized',            key: m.cnn3, best: true },
+    { label: 'MobileNetV2 &ndash; Transfer Learning',    key: m.mobilenetv2 },
+  ];
+  const bestRecall = Math.max(...rows.filter(r => r.key).map(r => r.key.test.recall));
+  const tbody = document.getElementById('slides-comparison-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = rows.map(r => {
+    if (!r.key) return '';
+    const t = r.key.test;
+    return `<tr${r.best ? ' class="best"' : ''}>
+      <td>${r.best ? `<strong>${r.label}</strong> <span class="badge">Best</span>` : r.label}</td>
+      <td style="${t.recall === bestRecall ? 'font-weight:700' : t.recall < 0.5 ? 'color:#c00' : ''}">${fmt.pct(t.recall)}</td>
+      <td>${fmt.int(t.confusion_matrix[1][0])}</td>
+      <td>${fmt.pct(t.accuracy)}</td>
+      <td>${fmt.dec4(t.auc_roc)}</td>
+    </tr>`;
+  }).join('');
+}
+
+function loadResults() {
+  const doFetch = typeof fetch !== 'undefined'
+    ? fetch('../results.json').then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    : Promise.reject(new Error('fetch unavailable'));
+
+  doFetch.catch(() => new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', '../results.json', false);
+    try { xhr.send(); resolve(JSON.parse(xhr.responseText)); }
+    catch(e) { reject(e); }
+  })).then(data => {
+    populateAll(data);
+    const notice = document.getElementById('data-notice-slides');
+    if (notice) {
+      const ts = data.generated_at ? ` · generated ${data.generated_at}` : '';
+      notice.textContent = 'results.json loaded' + ts;
+      notice.classList.add('loaded');
+      setTimeout(() => { notice.style.opacity = '0'; }, 6000);
+    }
+  }).catch(err => {
+    const notice = document.getElementById('data-notice-slides');
+    if (notice) {
+      notice.textContent = 'results.json not found — serve via: python3 -m http.server 8765';
+      notice.classList.add('error');
+    }
+    console.warn('Could not load results.json:', err);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', loadResults);
+</script>
+
+<!-- ══ PRESENT BUTTON ══ -->
+<button id="present-btn" title="Enter presentation mode (P)">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+  Present
+</button>
+
+<!-- ══ PRESENTATION MODE OVERLAY ══ -->
+<div id="present-overlay">
+  <div id="present-stage">
+    <!-- slides are cloned here at runtime -->
+  </div>
+  <div id="present-nav">
+    <button id="pnav-prev" title="Previous (←)">&#8592;</button>
+    <span id="pnav-counter">1 / 11</span>
+    <button id="pnav-next" title="Next (→ or Space)">&#8594;</button>
+  </div>
+  <button id="present-exit" title="Exit (Esc)">&times;</button>
+</div>
+
+<style>
+/* ── Present button (floating) ── */
+#present-btn {
+  position: fixed;
+  bottom: 28px; right: 28px;
+  display: flex; align-items: center; gap: 8px;
+  background: var(--teal); color: #fff;
+  border: none; border-radius: 28px;
+  padding: 12px 22px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px; font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(26,107,124,0.35);
+  transition: background 0.18s, transform 0.15s;
+  z-index: 500;
+}
+#present-btn:hover { background: var(--teal-d); transform: translateY(-2px); }
+@media print { #present-btn { display: none; } }
+
+/* ── Presentation overlay ── */
+#present-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: #0d1a1e;
+  z-index: 9000;
+  align-items: center; justify-content: center;
+  flex-direction: column;
+}
+#present-overlay.active { display: flex; }
+
+#present-stage {
+  width: 100vw;
+  height: calc(100vh - 56px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0 32px;
+}
+
+#present-stage .slide {
+  flex-shrink: 0;
+  width: 1100px;
+  min-height: 618px;
+  border-radius: 12px;
+  box-shadow: 0 16px 64px rgba(0,0,0,0.5);
+  display: none !important;
+  margin: 0;
+}
+#present-stage .slide.current { display: flex !important; }
+
+/* Nav bar */
+#present-nav {
+  height: 56px;
+  display: flex; align-items: center; gap: 20px;
+  color: rgba(255,255,255,0.7);
+  font-family: 'Inter', sans-serif; font-size: 14px;
+}
+#present-nav button {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff; border-radius: 8px;
+  width: 36px; height: 36px;
+  font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+}
+#present-nav button:hover { background: rgba(255,255,255,0.2); }
+#pnav-counter { font-weight: 600; letter-spacing: 0.04em; min-width: 60px; text-align: center; }
+
+#present-exit {
+  position: fixed; top: 18px; right: 22px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff; border-radius: 8px;
+  width: 36px; height: 36px; font-size: 22px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+  z-index: 9001;
+}
+#present-exit:hover { background: rgba(255,255,255,0.2); }
+</style>
+
+<script>
+(function () {
+  const overlay  = document.getElementById('present-overlay');
+  const stage    = document.getElementById('present-stage');
+  const counter  = document.getElementById('pnav-counter');
+  const btnPrev  = document.getElementById('pnav-prev');
+  const btnNext  = document.getElementById('pnav-next');
+  const btnExit  = document.getElementById('present-exit');
+  const btnOpen  = document.getElementById('present-btn');
+
+  let slides = [];
+  let current = 0;
+
+  function buildStage() {
+    stage.innerHTML = '';
+    const originals = document.querySelectorAll('.slides-container .slide');
+    originals.forEach(s => {
+      const clone = s.cloneNode(true);
+      stage.appendChild(clone);
+    });
+    slides = Array.from(stage.querySelectorAll('.slide'));
+  }
+
+  function scaleCurrentSlide() {
+    const slide = slides[current];
+    if (!slide) return;
+    // Reset zoom to measure natural width
+    slide.style.zoom = 1;
+    const slideW = slide.offsetWidth; // 1100px
+    const stageW = stage.clientWidth;
+    const ratio = (stageW - 40) / slideW; // 40px total horizontal breathing room
+    slide.style.zoom = ratio;
+    stage.scrollTop = 0;
+  }
+
+  function show(idx) {
+    slides.forEach((s, i) => {
+      s.classList.toggle('current', i === idx);
+      if (i !== idx) s.style.zoom = 1;
+    });
+    current = idx;
+    counter.textContent = `${idx + 1} / ${slides.length}`;
+    btnPrev.disabled = idx === 0;
+    btnNext.disabled = idx === slides.length - 1;
+    requestAnimationFrame(() => requestAnimationFrame(() => scaleCurrentSlide()));
+  }
+
+  function open() {
+    buildStage();
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    overlay.requestFullscreen?.().catch(() => {});
+    // Wait for overlay to be visible before measuring
+    requestAnimationFrame(() => show(0));
+  }
+
+  function close() {
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+    document.exitFullscreen?.().catch(() => {});
+  }
+
+  function next() { if (current < slides.length - 1) show(current + 1); }
+  function prev() { if (current > 0) show(current - 1); }
+
+  btnOpen.addEventListener('click', open);
+  btnExit.addEventListener('click', close);
+  btnNext.addEventListener('click', next);
+  btnPrev.addEventListener('click', prev);
+
+  window.addEventListener('resize', () => {
+    if (overlay.classList.contains('active')) {
+      requestAnimationFrame(() => scaleCurrentSlide());
+    }
+  });
+
+  document.addEventListener('keydown', e => {
+    if (!overlay.classList.contains('active')) {
+      if (e.key === 'p' || e.key === 'P') { open(); return; }
+      return;
+    }
+    if (e.key === 'Escape')                          close();
+    if (e.key === 'ArrowRight' || e.key === ' ')     { e.preventDefault(); next(); }
+    if (e.key === 'ArrowLeft')                       prev();
+  });
+})();
+</script>
+</body>
+</html>

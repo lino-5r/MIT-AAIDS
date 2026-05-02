@@ -609,11 +609,27 @@ td.worst-metric { color: var(--coral); }
   .fig-block img, .arch-fig img { max-width: 100%; }
 }
 </style>
+<script id="__page-ctx" type="application/json">
+{
+  "page_id": "malaria-milestone",
+  "page_type": "academic-report",
+  "primary_entity": "proj_malaria-detection",
+  "modules_rendered": ["report-nav", "doc-section", "metric-row", "fig-block"],
+  "locale": "en-US",
+  "market": "claros",
+  "session": { "interactionCount": 0 },
+  "ddo": {
+    "enabled": true,
+    "endpointUrl": "https://lino-strategy-apps.vercel.app/api/analytics-event"
+  }
+}
+</script>
+<script src="https://lino-strategy-apps.vercel.app/driven_global-strategy/analytics-core.js"></script>
 </head>
 <body>
 
 <!-- ══════ SIDE NAV ══════ -->
-<nav class="side-nav" id="side-nav"></nav>
+<nav class="side-nav" id="side-nav" data-component="report-nav" data-component-version="1.0" data-component-category="navigation" data-analytics-persistent="true"></nav>
 
 <!-- ══════ PAGE ══════ -->
 <div class="page">
@@ -715,7 +731,7 @@ td.worst-metric { color: var(--coral); }
 <!-- ══════════════════════════════════ -->
 <!-- SECTION 1 | PROBLEM DEFINITION     -->
 <!-- ══════════════════════════════════ -->
-<section id="s1" class="doc-section" data-nav-label="1. Problem Definition">
+<section id="s1" class="doc-section" data-nav-label="1. Problem Definition" data-component="doc-section" data-component-version="1.0" data-component-category="content" data-component-instance="s1" data-cta-action="section-engage" data-cta-label="1. Problem Definition">
   <div class="section-number">Section 1</div>
   <div class="section-title">Problem Definition</div>
 
@@ -755,7 +771,7 @@ td.worst-metric { color: var(--coral); }
 <!-- ══════════════════════════════════ -->
 <!-- SECTION 2 | DATA EXPLORATION       -->
 <!-- ══════════════════════════════════ -->
-<section id="s2" class="doc-section" data-nav-label="2. Data Exploration">
+<section id="s2" class="doc-section" data-nav-label="2. Data Exploration" data-component="doc-section" data-component-version="1.0" data-component-category="content" data-component-instance="s2" data-cta-action="section-engage" data-cta-label="2. Data Exploration">
   <div class="section-number">Section 2</div>
   <div class="section-title">Data Exploration</div>
 
@@ -770,7 +786,7 @@ td.worst-metric { color: var(--coral); }
     </tbody>
   </table>
 
-  <div class="fig-block">
+  <div class="fig-block" data-component="fig-block" data-component-version="1.0" data-component-category="content" data-component-instance="class-distribution" data-cta-action="figure-engage" data-cta-label="Class Distribution Figure">
     <img src="figures/fig_eda_class_distribution.png" alt="Class distribution bar chart">
     <div class="fig-caption"><strong>Figure N.</strong> Class distribution across training and test splits. Both splits are very nearly balanced at 50/50.</div>
   </div>
@@ -793,7 +809,7 @@ td.worst-metric { color: var(--coral); }
   <div class="sub2-title">Visual Characteristics</div>
   <p>Visual inspection reveals systematic and discriminable morphological differences between classes. Parasitized cells exhibit dark staining artifacts which is the visible signature of <span class="term" data-term="Trophozoites"><em>Plasmodium</em> trophozoites</span> or ring-forms within the cell. Uninfected cells appear uniformly pale or pink with a smooth, homogeneous internal structure. These differences in texture, color distribution, and intracellular morphology constitute the spatial and spectral features that convolutional filter banks are suited to extract.</p>
 
-  <div class="fig-block">
+  <div class="fig-block" data-component="fig-block" data-component-version="1.0" data-component-category="content" data-component-instance="cell-samples" data-cta-action="figure-engage" data-cta-label="Cell Samples Figure">
     <img src="figures/fig_eda_sample_images.png" alt="Sample cell images by class">
     <div class="fig-caption"><strong>Figure N.</strong> Sample cell images by class. Parasitized cells (top row) show dark staining artifacts from <em>Plasmodium</em> trophozoites; uninfected cells (bottom row) appear uniformly pale with a smooth, regular internal structure.</div>
   </div>
@@ -801,14 +817,14 @@ td.worst-metric { color: var(--coral); }
   <div class="sub2-title">Pixel Intensity Patterns</div>
   <p>Analysis of per-channel pixel intensity distributions reveals subtle but systematic differences between classes. Parasitized cells exhibit intensity shifts most prominently in the red and blue channels, consistent with the selective absorption and binding properties of <span class="term" data-term="Giemsa">Giemsa</span> stain in the presence of the parasite.</p>
 
-  <div class="fig-block">
+  <div class="fig-block" data-component="fig-block" data-component-version="1.0" data-component-category="content" data-component-instance="pixel-intensity-kde" data-cta-action="figure-engage" data-cta-label="Pixel Intensity Kde Figure">
     <img src="figures/fig_eda_pixel_intensity.png" alt="Pixel intensity KDE distributions">
     <div class="fig-caption"><strong>Figure N.</strong> Pixel intensity distributions (KDE) per RGB channel for Parasitized vs. Uninfected cells. The red channel suppression and blue channel elevation in Parasitized cells reflects the characteristic <span class="term" data-term="Giemsa">Giemsa</span> staining of the parasite.</div>
   </div>
 
   <p>The same signal can also be visualized spatially. Mean pixel values computed per channel (by subtracting Uninfected from Parasitized) show where in the cell frame the chromatic difference is concentrated. In original (non-augmented) images, the signature clusters near the cell center, consistent with the parasite occupying a predictable position within the segmented crop.</p>
 
-  <div class="fig-block">
+  <div class="fig-block" data-component="fig-block" data-component-version="1.0" data-component-category="content" data-component-instance="spectral-diff-maps" data-cta-action="figure-engage" data-cta-label="Spectral Diff Maps Figure">
     <img src="figures/fig_eda_spectral_channels.png" alt="Spectral difference maps">
     <div class="fig-caption"><strong>Figure N.</strong> Spectral difference maps (original images): mean(Parasitized) minus mean(Uninfected) per RGB channel. Red regions indicate pixels where Parasitized cells are brighter; blue regions where Uninfected cells are brighter. The spatial concentration of the signal toward the cell center reflects the parasite's typical position in pre-segmented crops.</div>
   </div>
@@ -816,7 +832,7 @@ td.worst-metric { color: var(--coral); }
   <div class="sub2-title">Image Size Variability</div>
   <p>Original images vary in pixel dimensions, ranging approximately from 100 to 200 pixels in width and height. A uniform input size of <strong>64×64 pixels</strong> was selected, balancing spatial detail against computational efficiency. Images were resized using <span class="term" data-term="bilinear interpolation">bilinear interpolation</span> via <span class="term" data-term="PIL">PIL</span>.</p>
 
-  <div class="fig-block">
+  <div class="fig-block" data-component="fig-block" data-component-version="1.0" data-component-category="content" data-component-instance="image-dimensions" data-cta-action="figure-engage" data-cta-label="Image Dimensions Figure">
     <img src="figures/fig_eda_image_dimensions.png" alt="Original image dimension distribution">
     <div class="fig-caption"><strong>Figure N.</strong> Distribution of original image dimensions across the full dataset. Most images fall in the 100-200 pixel range in both width and height.</div>
   </div>
@@ -841,14 +857,14 @@ td.worst-metric { color: var(--coral); }
 <!-- ══════════════════════════════════ -->
 <!-- SECTION 3 | MODEL BUILDING         -->
 <!-- ══════════════════════════════════ -->
-<section id="s3" class="doc-section" data-nav-label="3. Model Building">
+<section id="s3" class="doc-section" data-nav-label="3. Model Building" data-component="doc-section" data-component-version="1.0" data-component-category="content" data-component-instance="s3" data-cta-action="section-engage" data-cta-label="3. Model Building">
   <div class="section-number">Section 3</div>
   <div class="section-title">Model Building</div>
   <p>Three distinct modeling approaches were implemented and evaluated, progressing from a simple baseline through to a fine-tuned transfer learning model. A fourth model (CNN3) was added as a controlled experiment to isolate the effect of training configuration on the CNN2 architecture.</p>
 </section>
 
 <!-- 3.1 CNN1 -->
-<section id="s3-1" class="doc-section" data-nav-label="CNN1 Baseline">
+<section id="s3-1" class="doc-section" data-nav-label="CNN1 Baseline" data-component="doc-section" data-component-version="1.0" data-component-category="content" data-component-instance="s3-1" data-cta-action="section-engage" data-cta-label="CNN1 Baseline">
   <div class="section-number">Section 3.1</div>
   <div class="section-title">Baseline CNN (CNN1)</div>
 
@@ -865,25 +881,25 @@ td.worst-metric { color: var(--coral); }
     <p>The baseline CNN trained for <strong><span id="dyn-cnn1-epochs">-</span> epochs</strong> before early stopping triggered, with optimal weights restored from epoch <strong><span id="dyn-cnn1-best-epoch">-</span></strong> (validation loss: <strong><span id="dyn-cnn1-best-val-loss">-</span></strong>). Training accuracy reached <span id="dyn-cnn1-train-acc" class="met neutral">-</span>, while validation accuracy held at <span id="dyn-cnn1-val-acc" class="met neutral">-</span>. The loss curves diverge from the best epoch onward: training loss continued to decline while validation loss increased, the characteristic signature of <span class="term" data-term="Overfitting">overfitting</span>. Generalizable learning was concentrated in the early epochs; subsequent training epochs extracted noise rather than transferable signal. Although the accuracy differential is modest (~1%), the loss divergence indicates that continued training extracts training-specific noise rather than generalizable signal. This pattern motivates the architectural and training modifications introduced in CNN2.</p>
   </div>
 
-  <div class="metric-row" id="cnn1-metrics">
+  <div class="metric-row data-component="metric-row" data-component-version="1.0" data-component-category="metrics" data-component-instance="cnn1" data-cta-action="metric-engage" data-cta-label="CNN1 Baseline Metrics"" id="cnn1-metrics">
     <div class="metric-box"><div class="mb-value" id="dyn-cnn1-recall">-</div><div class="mb-label">Recall</div></div>
     <div class="metric-box"><div class="mb-value" id="dyn-cnn1-acc">-</div><div class="mb-label">Accuracy</div></div>
     <div class="metric-box"><div class="mb-value" id="dyn-cnn1-auc">-</div><div class="mb-label">AUC-ROC</div></div>
     <div class="metric-box"><div class="mb-value" id="dyn-cnn1-fn">-</div><div class="mb-label">False Negatives</div></div>
   </div>
 
-  <div class="fig-block">
+  <div class="fig-block" data-component="fig-block" data-component-version="1.0" data-component-category="content" data-component-instance="training-curves-cnn1" data-cta-action="figure-engage" data-cta-label="Training Curves Cnn1 Figure">
     <img src="figures/fig_cnn1_training_history.png" alt="CNN1 training history">
     <div class="fig-caption"><strong>Figure N.</strong> CNN1 Baseline - Training and validation accuracy and loss over epochs. Diverging loss curves indicate mild overfitting; early stopping triggered before further degradation.</div>
   </div>
-  <div class="fig-block">
+  <div class="fig-block" data-component="fig-block" data-component-version="1.0" data-component-category="content" data-component-instance="confusion-roc-cnn1" data-cta-action="figure-engage" data-cta-label="Confusion Roc Cnn1 Figure">
     <img src="figures/fig_cnn1_evaluation.png" alt="CNN1 confusion matrix and ROC curve">
     <div class="fig-caption"><strong>Figure N.</strong> CNN1 Baseline - Confusion matrix and ROC curve on the test set (2,600 images).</div>
   </div>
 </section>
 
 <!-- 3.2 CNN2 -->
-<section id="s3-2" class="doc-section" data-nav-label="CNN2 Augmented">
+<section id="s3-2" class="doc-section" data-nav-label="CNN2 Augmented" data-component="doc-section" data-component-version="1.0" data-component-category="content" data-component-instance="s3-2" data-cta-action="section-engage" data-cta-label="CNN2 Augmented">
   <div class="section-number">Section 3.2</div>
   <div class="section-title">Augmented CNN (CNN2)</div>
 
@@ -911,14 +927,14 @@ td.worst-metric { color: var(--coral); }
   <div class="subsection-title">Effect of Augmentation on the Training Signal</div>
   <p>The augmentation pipeline applies random transformations to each training batch. The examples below illustrate the range of variation a single cell image may undergo prior to presentation to the model.</p>
 
-  <div class="fig-block">
+  <div class="fig-block" data-component="fig-block" data-component-version="1.0" data-component-category="content" data-component-instance="augmentation-examples" data-cta-action="figure-engage" data-cta-label="Augmentation Examples Figure">
     <img src="figures/fig_eda_augmentation_examples.png" alt="Data augmentation examples">
     <div class="fig-caption"><strong>Figure N.</strong> Data augmentation examples. Each row shows the same source image after different random augmentation draws, illustrating the rotation, flip, shift, and zoom variation the model trains on.</div>
   </div>
 
   <p>The difference maps below compare mean pixel differences between classes computed on original images (top row) and augmented images (bottom row), across all three channels.</p>
 
-  <div class="fig-block">
+  <div class="fig-block" data-component="fig-block" data-component-version="1.0" data-component-category="content" data-component-instance="spectral-diff-augmented" data-cta-action="figure-engage" data-cta-label="Spectral Diff Augmented Figure">
     <img src="figures/fig_eda_spectral_augmented.png" alt="Spectral difference maps: original vs augmented">
     <div class="fig-caption"><strong>Figure N.</strong> Spectral Difference Maps: Original vs. Augmented Training Data. Each map shows mean(Parasitized) minus mean(Uninfected) per channel. In the original maps, the parasite signature clusters near the cell center. In the augmented maps, that signature diffuses across positions and orientations, forcing the model to learn the parasite's color and texture signature rather than its position.</div>
   </div>
@@ -936,7 +952,7 @@ td.worst-metric { color: var(--coral); }
     <p>CNN2 trained for <strong><span id="dyn-cnn2-epochs">-</span> epochs</strong> before early stopping triggered. This was notably fewer than CNN1's <span id="dyn-cnn1-epochs-2">-</span>. Training accuracy (<span id="dyn-cnn2-train-acc" class="met neutral">-</span>) and validation accuracy (<span id="dyn-cnn2-val-acc" class="met neutral">-</span>) remained within 0.5% of each other throughout, a substantially tighter gap than CNN1. The augmentation and architectural changes appear to have attenuated overfitting pressure during training. The training curves do not, however, capture the output miscalibration that manifests upon evaluation.</p>
   </div>
 
-  <div class="fig-block">
+  <div class="fig-block" data-component="fig-block" data-component-version="1.0" data-component-category="content" data-component-instance="training-curves-cnn2" data-cta-action="figure-engage" data-cta-label="Training Curves Cnn2 Figure">
     <img src="figures/fig_cnn2_training_history.png" alt="CNN2 training history">
     <div class="fig-caption"><strong>Figure N.</strong> CNN2 Augmented - Training and validation accuracy and loss over epochs. Compare loss curve divergence to CNN1.</div>
   </div>
@@ -949,7 +965,7 @@ td.worst-metric { color: var(--coral); }
 
   <p>Thresholds from 0.01 to 0.55 were scanned and Recall, Precision, and F1-Score computed at each point. The scan identifies two clinically relevant operating points: the threshold that maximizes F1-Score, and the lowest threshold that achieves at least 95% recall.</p>
 
-  <div class="fig-block">
+  <div class="fig-block" data-component="fig-block" data-component-version="1.0" data-component-category="content" data-component-instance="cnn2-threshold-analysis" data-cta-action="figure-engage" data-cta-label="Cnn2 Threshold Analysis Figure">
     <img src="figures/fig_cnn2_threshold_analysis.png" alt="CNN2 threshold analysis">
     <div class="fig-caption"><strong>Figure N.</strong> CNN2 Augmented - Threshold trade-off analysis. Left: Recall, Precision, and F1-Score as a function of classification threshold. Right: Precision-Recall curve. The high AUC-PR confirms discriminative ability; the low default-threshold recall confirms miscalibration.</div>
   </div>
@@ -966,14 +982,14 @@ td.worst-metric { color: var(--coral); }
   <div class="fig-compare fig-compare--stacked">
     <div class="fig-compare-panel">
       <div class="fig-compare-label">Tuned threshold (<span id="dyn-cnn2-tuned-threshold-fig">best F1</span>)</div>
-      <div class="fig-block">
+      <div class="fig-block" data-component="fig-block" data-component-version="1.0" data-component-category="content" data-component-instance="confusion-roc-cnn2" data-cta-action="figure-engage" data-cta-label="Confusion Roc Cnn2 Figure">
         <img src="figures/fig_cnn2_tuned_evaluation.png" alt="CNN2 tuned threshold evaluation">
         <div class="fig-caption"><strong>Figure N.</strong> CNN2 at the tuned threshold - the same model, recalibrated post-hoc. Compare false negative count directly to Figure 11.</div>
       </div>
     </div>
     <div class="fig-compare-panel">
       <div class="fig-compare-label">Default threshold (0.5)</div>
-      <div class="fig-block">
+      <div class="fig-block" data-component="fig-block" data-component-version="1.0" data-component-category="content" data-component-instance="confusion-roc-cnn2-default" data-cta-action="figure-engage" data-cta-label="Confusion Roc Cnn2 Default Figure">
         <img src="figures/fig_cnn2_evaluation.png" alt="CNN2 default threshold evaluation">
         <div class="fig-caption"><strong>Figure N.</strong> CNN2 at default threshold - high AUC alongside collapsed recall confirms sigmoid calibration failure, not poor discriminative ability.</div>
       </div>
@@ -984,7 +1000,7 @@ td.worst-metric { color: var(--coral); }
 </section>
 
 <!-- 3.3 CNN3 -->
-<section id="s3-3" class="doc-section" data-nav-label="CNN3 Recall-Optimized">
+<section id="s3-3" class="doc-section" data-nav-label="CNN3 Recall-Optimized" data-component="doc-section" data-component-version="1.0" data-component-category="content" data-component-instance="s3-3" data-cta-action="section-engage" data-cta-label="CNN3 Recall-Optimized">
   <div class="section-number">Section 3.3</div>
   <div class="section-title">Recall-Optimized CNN (CNN3)</div>
 
@@ -1015,18 +1031,18 @@ td.worst-metric { color: var(--coral); }
     <div class="metric-box"><div class="mb-value" id="dyn-cnn3-acc-box">-</div><div class="mb-label">Accuracy</div></div>
   </div>
 
-  <div class="fig-block">
+  <div class="fig-block" data-component="fig-block" data-component-version="1.0" data-component-category="content" data-component-instance="training-curves-cnn3" data-cta-action="figure-engage" data-cta-label="Training Curves Cnn3 Figure">
     <img src="figures/fig_cnn3_training_history.png" alt="CNN3 training history">
     <div class="fig-caption"><strong>Figure N.</strong> CNN3 Recall-Optimized - Training and validation accuracy, loss, and recall over epochs. The recall panel shows class weighting shifting the model toward correctly identifying Parasitized cells throughout training.</div>
   </div>
-  <div class="fig-block">
+  <div class="fig-block" data-component="fig-block" data-component-version="1.0" data-component-category="content" data-component-instance="confusion-roc-cnn3" data-cta-action="figure-engage" data-cta-label="Confusion Roc Cnn3 Figure">
     <img src="figures/fig_cnn3_evaluation.png" alt="CNN3 evaluation">
     <div class="fig-caption"><strong>Figure N.</strong> CNN3 Recall-Optimized - Confusion matrix and ROC curve on the test set at the default 0.5 threshold.</div>
   </div>
 </section>
 
 <!-- 3.4 MobileNetV2 -->
-<section id="s3-4" class="doc-section" data-nav-label="MobileNetV2">
+<section id="s3-4" class="doc-section" data-nav-label="MobileNetV2" data-component="doc-section" data-component-version="1.0" data-component-category="content" data-component-instance="s3-4" data-cta-action="section-engage" data-cta-label="MobileNetV2">
   <div class="section-number">Section 3.4</div>
   <div class="section-title">Transfer Learning with MobileNetV2</div>
 
@@ -1046,14 +1062,14 @@ td.worst-metric { color: var(--coral); }
 
   <div class="subsection-title">Phase 1 - Feature Extraction</div>
   <p>The MobileNetV2 backbone was frozen in its entirety, preserving all features learned from ImageNet. Only the custom classification head appended to the backbone was trained. This approach leverages the pre-trained feature representations without risk of overwriting them before the classifier has stabilized.</p>
-  <div class="fig-block">
+  <div class="fig-block" data-component="fig-block" data-component-version="1.0" data-component-category="content" data-component-instance="training-curves-mv2-transfer" data-cta-action="figure-engage" data-cta-label="Training Curves Mv2 Transfer Figure">
     <img src="figures/fig_mobilenetv2_transfer_training_history.png" alt="MobileNetV2 feature extraction training">
     <div class="fig-caption"><strong>Figure N.</strong> MobileNetV2 - Feature Extraction Phase training curves. With the backbone frozen, only the classification head trains.</div>
   </div>
 
   <div class="subsection-title">Phase 2 - Fine-Tuning</div>
   <p>The deepest layers of the backbone were unfrozen and retrained at a substantially reduced learning rate. This permits those layers to adapt to the morphological characteristics specific to <span class="term" data-term="Giemsa">Giemsa</span>-stained malaria microscopy, while the earlier layers - which encode broadly transferable low-level features - remain stable.</p>
-  <div class="fig-block">
+  <div class="fig-block" data-component="fig-block" data-component-version="1.0" data-component-category="content" data-component-instance="training-curves-mv2" data-cta-action="figure-engage" data-cta-label="Training Curves Mv2 Figure">
     <img src="figures/fig_mobilenetv2_finetuned_training_history.png" alt="MobileNetV2 fine-tuning training">
     <div class="fig-caption"><strong>Figure N.</strong> MobileNetV2 - Fine-Tuning Phase training curves. Lower learning rate and partial backbone unfreezing produce more gradual convergence.</div>
   </div>
@@ -1071,7 +1087,7 @@ td.worst-metric { color: var(--coral); }
     <div class="metric-box"><div class="mb-value" id="dyn-mv2-acc-box">-</div><div class="mb-label">Accuracy</div></div>
   </div>
 
-  <div class="fig-block">
+  <div class="fig-block" data-component="fig-block" data-component-version="1.0" data-component-category="content" data-component-instance="confusion-roc-mv2" data-cta-action="figure-engage" data-cta-label="Confusion Roc Mv2 Figure">
     <img src="figures/fig_mobilenetv2_finetuned_evaluation.png" alt="MobileNetV2 evaluation">
     <div class="fig-caption"><strong>Figure N.</strong> MobileNetV2 Fine-Tuned - Confusion matrix and ROC curve on the test set. The false negative count is the primary comparison point against CNN1, CNN2, and CNN3.</div>
   </div>
@@ -1082,7 +1098,7 @@ td.worst-metric { color: var(--coral); }
 <!-- ══════════════════════════════════ -->
 <!-- SECTION 4 - COMPARISON           -->
 <!-- ══════════════════════════════════ -->
-<section id="s4" class="doc-section" data-nav-label="4. Model Comparison">
+<section id="s4" class="doc-section" data-nav-label="4. Model Comparison" data-component="doc-section" data-component-version="1.0" data-component-category="content" data-component-instance="s4" data-cta-action="section-engage" data-cta-label="4. Model Comparison">
   <div class="section-number">Section 4</div>
   <div class="section-title">Comparison of Techniques and Performance</div>
 
@@ -1164,7 +1180,7 @@ td.worst-metric { color: var(--coral); }
 <!-- ══════════════════════════════════ -->
 <!-- SECTION 5 - RECOMMENDATION       -->
 <!-- ══════════════════════════════════ -->
-<section id="s5" class="doc-section" data-nav-label="5. Recommendation">
+<section id="s5" class="doc-section" data-nav-label="5. Recommendation" data-component="doc-section" data-component-version="1.0" data-component-category="content" data-component-instance="s5" data-cta-action="section-engage" data-cta-label="5. Recommendation">
   <div class="section-number">Section 5</div>
   <div class="section-title">Proposal for Final Solution Design</div>
 
@@ -1198,14 +1214,14 @@ td.worst-metric { color: var(--coral); }
 
   <p>The two figures below present the complete miscategorization picture under the confidence-based triage configuration (band <span id="dyn-triage-low-s54">0.35</span>–<span id="dyn-triage-high-s54">0.65</span>). The first examines what happens within the referred bucket - how the <span id="dyn-triage-n-borderline-s54">-</span> slides flagged for review break down by ground truth and implied model prediction. The second extends the view to the full test set, showing all three decision zones simultaneously.</p>
 
-  <div class="fig-block">
+  <div class="fig-block" data-component="fig-block" data-component-version="1.0" data-component-category="content" data-component-instance="triage-evidence" data-cta-action="figure-engage" data-cta-label="Triage Evidence Figure">
     <img src="figures/fig_cnn3_triage_heatmap.png" alt="CNN3 confidence band breakdown">
     <div class="fig-caption"><strong>Figure N.</strong> Breakdown of referred (borderline) predictions at confidence band 0.35–0.65. Left: confusion matrix for the referred subset only, using 0.5 as the implied decision boundary within the band. Right: outcome categories by count and proportion of total referred slides.</div>
   </div>
 
   <p>The full triage confusion matrix below shows the three decision zones side by side. The cell to focus on is the confident false negative which represents Parasitized slides the model cleared automatically with high certainty. With the triage layer active, that count falls to <span id="dyn-triage-fn-confident-s54">-</span> out of 1,300 Parasitized images. The amber column shows what the referral layer intercepts: any Parasitized case in that column reaches a human reviewer rather than being silently passed through.</p>
 
-  <div class="fig-block">
+  <div class="fig-block" data-component="fig-block" data-component-version="1.0" data-component-category="content" data-component-instance="triage-evidence-cm" data-cta-action="figure-engage" data-cta-label="Triage Evidence Cm Figure">
     <img src="figures/fig_cnn3_triage_full_cm.png" alt="CNN3 full triage confusion matrix">
     <div class="fig-caption"><strong>Figure N.</strong> Full triage confusion matrix across all three decision zones. Sage cells represent correct automated decisions; amber cells represent cases referred for expert review; coral cells represent confident errors. The confident false negative count (coral, top-left) is the primary clinical risk metric.</div>
   </div>
@@ -1219,7 +1235,7 @@ td.worst-metric { color: var(--coral); }
 <!-- ══════════════════════════════════ -->
 <!-- APPENDIX                         -->
 <!-- ══════════════════════════════════ -->
-<section id="appendix" class="doc-section" data-nav-label="Appendix">
+<section id="appendix" class="doc-section" data-nav-label="Appendix" data-component="doc-section" data-component-version="1.0" data-component-category="content" data-component-instance="appendix" data-cta-action="section-engage" data-cta-label="Appendix">
   <div class="section-number">Appendix</div>
   <div class="section-title">A. Model Architectures / B. Training Configuration / C. References</div>
 
@@ -1726,16 +1742,16 @@ function buildNav() {
     const kids    = childrenOf[id] || [];
 
     if (kids.length) {
-      html += `<a href="#${id}" data-section="${id}" id="nav-${id}" class="nav-parent">` +
+      html += `<a href="#${id}" data-section="${id}" id="nav-${id}" class="nav-parent" data-cta-action="nav-section" data-cta-label="${label}">` +
               `<span class="dot"></span><span class="nav-label">${label}</span></a>` +
               `<div class="nav-sub" id="nav-sub-${id}">`;
       kids.forEach(k => {
-        html += `<a href="#${k.id}" data-section="${k.id}" class="sub-link">` +
+        html += `<a href="#${k.id}" data-section="${k.id}" class="sub-link" data-cta-action="nav-section" data-cta-label="${k.dataset.navLabel}">` +
                 `<span class="subdot"></span><span class="nav-label">${k.dataset.navLabel}</span></a>`;
       });
       html += `</div>`;
     } else {
-      html += `<a href="#${id}" data-section="${id}">` +
+      html += `<a href="#${id}" data-section="${id}" data-cta-action="nav-section" data-cta-label="${label}">` +
               `<span class="dot"></span><span class="nav-label">${label}</span></a>`;
     }
   });
