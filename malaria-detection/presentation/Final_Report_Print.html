@@ -1,0 +1,2387 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="noindex, nofollow" name="robots"/>
+<link href="../favicon.svg" rel="icon" type="image/svg+xml"/>
+<link href="../favicon.ico" rel="alternate icon" type="image/x-icon"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Malaria Detection · Final Submission Report · Claros 2026</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&amp;display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --teal:        #1A6B7C;
+  --teal-light:  #e8f4f7;
+  --teal-mid:    rgba(26,107,124,0.12);
+  --amber:       #E8A838;
+  --amber-light: #fef8ec;
+  --coral:       #D95F4B;
+  --coral-light: #fdf0ee;
+  --sage:        #4E9E78;
+  --sage-light:  #edf7f2;
+  --dark:        #2C3440;
+  --mid:         #5a6475;
+  --muted:       #8a94a0;
+  --ivory:       #F7F4EF;
+  --white:       #FFFFFF;
+  --border:      rgba(26,107,124,0.14);
+  --border-mid:  rgba(44,52,64,0.1);
+  --shadow:      0 2px 12px rgba(26,107,124,0.08);
+  --radius:      10px;
+  --content-w:   1000px;
+  --nav-offset:  240px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  font-size: 17px;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 400;
+  background: var(--ivory);
+  color: var(--dark);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ─── SIDE NAV ─── */
+.side-nav {
+  position: fixed;
+  top: 50%;
+  left: max(12px, calc(50vw - var(--content-w)/2 - var(--nav-offset)));
+  transform: translateY(-50%);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 90vh;
+  overflow: visible;
+}
+.side-nav a {
+  display: flex; align-items: center; gap: 10px;
+  padding: 5px 10px 5px 0;
+  text-decoration: none;
+  transition: all 0.22s ease;
+}
+.side-nav a .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  border: 1.5px solid rgba(26,107,124,0.3);
+  background: transparent; flex-shrink: 0;
+  transition: all 0.22s ease;
+}
+.side-nav a.active .dot { background: var(--teal); border-color: var(--teal); box-shadow: 0 0 6px rgba(26,107,124,0.4); }
+.side-nav a:hover  .dot { border-color: var(--teal); }
+.side-nav a .nav-label {
+  font-size: 12px; font-weight: 400;
+  letter-spacing: 0.03em;
+  color: var(--muted); white-space: nowrap;
+  transition: color 0.22s ease;
+}
+.side-nav a.active .nav-label { color: var(--teal); font-weight: 600; }
+.side-nav a:hover  .nav-label { color: var(--dark); }
+.nav-sub {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.3s ease;
+  padding-left: 18px;
+  display: flex; flex-direction: column; gap: 0;
+}
+.nav-sub.open { max-height: 200px; }
+.side-nav .sub-link {
+  display: flex; align-items: center; gap: 8px;
+  padding: 3px 0; text-decoration: none; transition: all 0.18s;
+}
+.side-nav .sub-link .subdot {
+  width: 5px; height: 5px; border-radius: 50%;
+  border: 1px solid rgba(26,107,124,0.25);
+  background: transparent; flex-shrink: 0; transition: all 0.18s;
+}
+.side-nav .sub-link.active .subdot { background: var(--teal); border-color: var(--teal); }
+.side-nav .sub-link:hover  .subdot { border-color: var(--teal); }
+.side-nav .sub-link .nav-label { font-size: 11px; color: rgba(90,100,117,0.65); }
+.side-nav .sub-link.active .nav-label { color: var(--teal); font-weight: 600; }
+.side-nav .sub-link:hover  .nav-label { color: var(--dark); }
+
+/* ─── LAYOUT ─── */
+.page {
+  max-width: var(--content-w);
+  margin: 0 auto;
+  padding: 48px 48px 80px;
+  background: var(--white);
+  min-height: 100vh;
+}
+
+/* ─── HEADER ─── */
+.doc-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 32px;
+  border-bottom: 2px solid var(--teal);
+  margin-bottom: 56px;
+}
+.header-left { display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.header-eyebrow {
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--teal);
+}
+.header-title {
+  font-size: clamp(26px, 3.5vw, 38px); font-weight: 700; line-height: 1.15;
+  color: var(--dark); letter-spacing: -0.02em;
+}
+.header-subtitle {
+  font-size: 15px; font-weight: 400; color: var(--mid);
+  margin-top: 4px;
+}
+.header-byline {
+  font-size: 13px; color: var(--muted); display: flex; gap: 8px; align-items: center;
+}
+.byline-author { font-weight: 500; color: var(--dark); }
+.byline-sep { color: var(--border-mid); }
+.header-meta { display: flex; flex-wrap: wrap; gap: 8px; }
+.meta-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 10px; border-radius: 20px;
+  font-size: 11.5px; font-weight: 500; letter-spacing: 0.02em;
+}
+.meta-chip.prog  { background: var(--teal-light); color: var(--teal); border: 1px solid var(--border); }
+.meta-chip.year  { background: var(--ivory); color: var(--mid); border: 1px solid var(--border-mid); }
+.meta-chip.best  { background: var(--sage-light); color: var(--sage); border: 1px solid rgba(78,158,120,0.2); }
+.header-live-link {
+  margin-top: 14px;
+  padding: 8px 14px;
+  background: var(--teal);
+  border-radius: 6px;
+  display: inline-block;
+}
+.header-live-link a {
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.header-live-link a:hover { text-decoration: underline; }
+.header-logo { display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; }
+.logo-name { font-size: 13px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--teal); }
+.logo-tagline { font-size: 9px; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+
+/* ─── SECTIONS ─── */
+.doc-section { padding: 40px 0; }
+.section-number {
+  font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--teal); margin-bottom: 4px;
+}
+.section-title {
+  font-size: 26px; font-weight: 700; color: var(--dark);
+  letter-spacing: -0.02em; margin-bottom: 28px; line-height: 1.2;
+}
+.subsection-title {
+  font-size: 17px; font-weight: 600; color: var(--dark);
+  margin-top: 32px; margin-bottom: 12px; padding-top: 4px;
+  border-top: 1px solid var(--border-mid);
+}
+.section-divider {
+  border: none; border-top: 1px solid var(--border-mid); margin: 0;
+}
+
+/* ─── PROSE ─── */
+p { margin-bottom: 16px; font-size: 16px; }
+p:last-child { margin-bottom: 0; }
+ul, ol { padding-left: 24px; margin-bottom: 16px; }
+li { margin-bottom: 6px; font-size: 16px; }
+#s3 > ol > li { margin-bottom: 30px; }
+strong { font-weight: 600; color: var(--dark); }
+em { font-style: italic; }
+code {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 13px; background: var(--teal-mid); color: var(--teal);
+  padding: 1px 5px; border-radius: 4px;
+}
+
+/* ─── TERM TOOLTIPS ─── */
+.term {
+  border-bottom: 1px dashed var(--teal);
+  cursor: help; position: relative; display: inline;
+}
+.term::after {
+  content: attr(data-tip);
+  position: absolute; bottom: calc(100% + 6px); left: 50%;
+  transform: translateX(-50%);
+  background: var(--dark); color: #fff;
+  font-size: 12px; line-height: 1.4; font-style: normal; font-weight: 400;
+  padding: 7px 12px; border-radius: 6px;
+  width: 240px; white-space: normal; text-align: left;
+  pointer-events: none; opacity: 0; transition: opacity 0.18s;
+  z-index: 1000; box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+}
+.term:hover::after { opacity: 1; }
+
+/* inline reference superscripts */
+a.ref-sup {
+  font-size: 0.7em; vertical-align: super; line-height: 0;
+  color: var(--teal); text-decoration: none; font-weight: 600;
+  margin-left: 1px;
+}
+a.ref-sup:hover { text-decoration: underline; }
+
+/* header tooltip — same bubble, no underline, dotted bottom border for hint */
+.tip-hdr {
+  border-bottom: 1px dotted rgba(255,255,255,0.35);
+  cursor: help; position: relative; display: inline-block;
+}
+.tip-hdr::after {
+  content: attr(data-tip);
+  position: absolute; top: calc(100% + 6px); left: 50%;
+  transform: translateX(-50%);
+  background: var(--dark); color: #fff;
+  font-size: 12px; line-height: 1.4; font-style: normal; font-weight: 400;
+  padding: 7px 12px; border-radius: 6px;
+  width: 180px; white-space: normal; text-align: center;
+  pointer-events: none; opacity: 0; transition: opacity 0.18s;
+  z-index: 9999; box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+}
+.tip-hdr:hover::after { opacity: 1; }
+
+/* ─── HERO STAT STRIP ─── */
+.stat-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin: 28px 0 36px;
+}
+.stat-card {
+  background: var(--teal-light);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 18px 16px;
+  text-align: center;
+}
+.stat-card.amber { background: var(--amber-light); border-color: rgba(232,168,56,0.25); }
+.stat-card.sage  { background: var(--sage-light);  border-color: rgba(78,158,120,0.2); }
+.stat-card.coral { background: var(--coral-light); border-color: rgba(217,95,75,0.2); }
+.stat-value {
+  font-size: 28px; font-weight: 700; color: var(--teal);
+  letter-spacing: -0.02em; line-height: 1;
+  margin-bottom: 6px;
+}
+.stat-card.amber .stat-value { color: #b07a10; }
+.stat-card.sage  .stat-value { color: var(--sage); }
+.stat-card.coral .stat-value { color: var(--coral); }
+.stat-label {
+  font-size: 11.5px; font-weight: 500; color: var(--mid);
+  text-transform: uppercase; letter-spacing: 0.05em; line-height: 1.3;
+}
+
+/* ─── MODEL COMPARISON TABLE ─── */
+table {
+  width: 100%; border-collapse: collapse;
+  margin: 20px 0 24px; font-size: 14.5px;
+}
+thead tr { background: var(--teal); color: #fff; }
+thead th {
+  padding: 10px 14px; text-align: left;
+  font-weight: 600; font-size: 12.5px;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  cursor: pointer; user-select: none; white-space: normal;
+}
+thead th:hover { background: var(--mid); }
+thead th .sort-arrow { margin-left: 5px; opacity: 0.4; font-size: 10px; }
+thead th.sort-asc .sort-arrow::after  { content: '▲'; opacity: 1; }
+thead th.sort-desc .sort-arrow::after { content: '▼'; opacity: 1; }
+thead th:not(.sort-asc):not(.sort-desc) .sort-arrow::after { content: '⇅'; }
+}
+tbody tr { border-bottom: 1px solid var(--border-mid); }
+tbody tr:last-child { border-bottom: none; }
+tbody tr.highlight { background: var(--sage-light); }
+tbody td {
+  padding: 10px 14px; vertical-align: middle;
+  line-height: 1.4;
+}
+tbody tr:hover { background: var(--teal-light); }
+tbody tr.highlight:hover { background: rgba(78,158,120,0.12); }
+.badge-best {
+  display: inline-block; background: var(--sage);
+  color: #fff; font-size: 10.5px; font-weight: 600;
+  padding: 2px 7px; border-radius: 10px;
+  letter-spacing: 0.04em; margin-left: 6px;
+  vertical-align: middle; text-transform: uppercase;
+}
+
+/* ─── CALLOUT CARDS ─── */
+.findings-synthesis {
+  margin-top: 20px;
+  padding: 13px 18px;
+  background: rgba(42,127,127,0.04);
+  border-left: 3px solid var(--teal);
+  border-radius: 0 6px 6px 0;
+  font-weight: 500;
+  color: var(--dark);
+  line-height: 1.65;
+}
+.callout {
+  border-left: 3px solid var(--teal);
+  background: var(--teal-light);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 20px 0;
+}
+.callout.amber { border-color: var(--amber); background: var(--amber-light); }
+.callout.sage  { border-color: var(--sage);  background: var(--sage-light); }
+.callout.coral { border-color: var(--coral); background: var(--coral-light); }
+.callout-title {
+  font-size: 12px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--teal); margin-bottom: 6px;
+}
+.callout.amber .callout-title { color: #b07a10; }
+.callout.sage  .callout-title { color: var(--sage); }
+.callout.coral .callout-title { color: var(--coral); }
+.callout p { margin-bottom: 0; font-size: 15px; }
+
+/* ── Triage Slider Widget ── */
+.tsw { background: var(--ivory); border: 1px solid var(--border-mid); border-radius: var(--radius); padding: 22px 24px; margin: 20px 0; }
+.tsw-header { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--teal); margin-bottom: 6px; }
+.tsw-subhead { font-size: 13px; color: var(--mid); margin-bottom: 14px; }
+#rpt-tsw-low::-webkit-slider-thumb  { background: var(--teal); }
+#rpt-tsw-high::-webkit-slider-thumb { background: var(--coral); }
+#rpt-tsw-low::-moz-range-thumb  { background: var(--teal); }
+#rpt-tsw-high::-moz-range-thumb { background: var(--coral); }
+.tsw-zones { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.tsw-zone-block { border-radius: 8px; padding: 12px 10px; text-align: center; }
+.tsw-zone-block.uninf  { background: #d6ede8; }
+.tsw-zone-block.border { background: #fff3cd; }
+.tsw-zone-block.para   { background: #fde8e8; }
+.tsw-zone-count { font-size: 26px; font-weight: 700; color: var(--dark); line-height: 1.1; }
+.tsw-zone-lbl { font-size: 11px; color: var(--mid); margin-top: 2px; }
+.tsw-zone-pct { font-size: 11px; font-weight: 600; color: var(--dark); }
+.tsw-risk { display: flex; gap: 12px; }
+.tsw-risk-item { flex:1; display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:8px; }
+.tsw-risk-item.fn { background: #fde8e8; }
+.tsw-risk-item.fp { background: #fef9ec; }
+.tsw-risk-count { font-size: 32px; font-weight: 700; min-width: 36px; text-align: center; line-height: 1; }
+.tsw-risk-item.fn .tsw-risk-count { color: #CC0000; }
+.tsw-risk-item.fp .tsw-risk-count { color: #b07a10; }
+.tsw-risk-lbl { font-size: 13px; color: var(--dark); line-height: 1.4; }
+.tsw-risk-lbl small { font-size: 11px; color: var(--mid); }
+.hist-reset-btn { flex-shrink:0; padding:5px 14px; font-size:12px; font-weight:600; color:var(--dark); background:var(--ivory); border:1px solid var(--border-mid); border-radius:5px; cursor:pointer; white-space:nowrap; }
+.hist-reset-btn:hover { background:#e8e4de; }
+
+/* ─── FIGURE BLOCKS ─── */
+.fig-block {
+  margin: 28px 0;
+  background: var(--ivory);
+  border: 1px solid var(--border-mid);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.fig-block img {
+  display: block; width: 100%; height: auto;
+  cursor: zoom-in;
+}
+.fig-caption {
+  padding: 10px 16px;
+  font-size: 13px; color: var(--mid); line-height: 1.5;
+  border-top: 1px solid var(--border-mid);
+}
+
+/* ─── RISK GRID ─── */
+.risk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+.risk-card {
+  border: 1px solid var(--border-mid);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  background: var(--white);
+}
+.risk-title { font-size: 13.5px; font-weight: 700; color: var(--dark); margin-bottom: 6px; }
+.risk-body  { font-size: 14px; color: var(--mid); line-height: 1.5; }
+
+
+
+/* ─── FLEX UTILITIES ────────────────────────────────────────────────────── */
+.flex-col-center { display:flex; flex-direction:column; align-items:center; }
+
+/* ─── DEPLOYMENT PATH — structural ──────────────────────────────────────── */
+.path-inner  { padding:12px 12px 4px; background:#fff; }
+.path-footer { padding:8px 0 8px; border-top:1px solid var(--border); }
+.path-choice-title { font-weight:600; color:var(--dark); margin-bottom:6px; font-size:11px; }
+.path-choice-list  { margin:0; padding-left:16px; color:var(--mid); line-height:1.7; font-size:11px; }
+
+/* ─── TRIAGE SPLIT CELLS (Path A / Path B inline triage breakdown) ───────── */
+.split-grid  { margin-bottom:3px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:4px; align-self:center; }
+.split-cell  { border-radius:5px; padding:5px 6px; text-align:center; }
+.split-cell.teal  { background:rgba(42,127,127,0.1);  border:1px solid rgba(42,127,127,0.25); }
+.split-cell.amber { background:#fdf6e3;                border:1px solid rgba(212,160,23,0.3);  }
+.split-cell.coral { background:rgba(224,96,96,0.08);  border:1px solid rgba(224,96,96,0.2);  }
+.split-lbl   { font-size:9px; color:var(--mid); }
+/* ─── GANTT CHART ─────────────────────────────────────────────────────── */
+.gantt-row        { display:flex; align-items:flex-start; margin-bottom:6px; gap:10px; }
+.gantt-label      { width:130px; flex-shrink:0; text-align:right; padding-right:2px; padding-top:5px; }
+.gantt-label-title { font-size:11px; font-weight:700; color:var(--dark); }
+.gantt-track-col  { flex:1; display:flex; flex-direction:column; gap:4px; }
+.gantt-track      { position:relative; height:26px; background:rgba(90,100,117,0.05); border-radius:4px; overflow:hidden; }
+.gantt-gridline   { position:absolute; top:0; bottom:0; width:1px; background:rgba(90,100,117,0.12); }
+.gantt-desc       { font-size:11px; color:var(--mid); line-height:1.5; padding-left:2px; }
+
+/* ─── GANTT <-> EXIT CRITERIA CROSS-HIGHLIGHT ──────────────────────────── */
+.gantt-row        { cursor:default; border-radius:4px; transition:background 0.15s; }
+.gantt-row[data-phase="1"]:hover, .gantt-row[data-phase="1"].phase-hover { background:rgba(224,96,96,0.07); }
+.gantt-row[data-phase="2"]:hover, .gantt-row[data-phase="2"].phase-hover { background:rgba(42,127,127,0.07); }
+.gantt-row[data-phase="3"]:hover, .gantt-row[data-phase="3"].phase-hover { background:rgba(122,158,126,0.09); }
+.gantt-row[data-phase="4"]:hover, .gantt-row[data-phase="4"].phase-hover { background:rgba(212,160,23,0.08); }
+.pec-row          { transition:background 0.15s; }
+.pec-row[data-phase="1"]:hover, .pec-row[data-phase="1"].phase-hover { background:rgba(224,96,96,0.07) !important; }
+.pec-row[data-phase="2"]:hover, .pec-row[data-phase="2"].phase-hover { background:rgba(42,127,127,0.07) !important; }
+.pec-row[data-phase="3"]:hover, .pec-row[data-phase="3"].phase-hover { background:rgba(122,158,126,0.09) !important; }
+.pec-row[data-phase="4"]:hover, .pec-row[data-phase="4"].phase-hover { background:rgba(212,160,23,0.08) !important; }
+
+/* ─── RACI STAKEHOLDER TABLE ───────────────────────────────────────────── */
+.raci-th          { color:#fff; font-size:11px; font-weight:700; padding:8px 6px; text-align:center; width:78px; }
+.raci-th.task     { text-align:left; padding:8px 10px; font-size:12px; font-weight:600; width:auto; min-width:80px; }
+.raci-th.tline    { text-align:left; padding:8px 10px; font-size:11px; font-weight:600; width:auto; min-width:280px; }
+.raci-row         { border-bottom:1px solid var(--border-mid); }
+.raci-task        { padding:6px 10px; color:var(--dark); }
+.raci-dot         { text-align:center; font-size:14px; }
+.raci-bar-cell    { padding:4px 10px; }
+.raci-bar         { position:relative; height:12px; background:rgba(90,100,117,0.07); border-radius:3px; }
+.raci-phase       { padding:8px 10px 3px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; }
+
+/* ─── PHASE-EXIT CRITERIA TABLE ────────────────────────────────────────── */
+.pec-th           { text-align:left; padding:7px 10px; border-bottom:2px solid rgba(42,127,127,0.2); color:var(--dark); cursor:default; }
+.pec-th:hover     { background:transparent !important; }
+.pec-phase        { padding:7px 10px; font-weight:700; }
+.pec-go           { padding:7px 10px; color:var(--dark); }
+.pec-nogo         { padding:7px 10px; color:var(--mid); }
+
+/* ─── BUDGET TABLE ─────────────────────────────────────────────────────── */
+.bud-th           { text-align:left; padding:7px 10px; color:var(--dark); }
+.bud-th.num       { text-align:right; white-space:nowrap; }
+.bud-td           { padding:7px 10px; color:var(--dark); }
+.bud-td.num       { text-align:right; }
+.bud-td.cat       { font-weight:700; }
+.bud-row-sep      { border-bottom:1px solid rgba(42,127,127,0.07); }
+.bud-row-alt      { border-bottom:1px solid rgba(42,127,127,0.07); background:rgba(42,127,127,0.02); }
+
+/* ─── DESIGN PRINCIPLES STEP LIST ──────────────────────────────────────── */
+.step-row         { display:flex; gap:12px; align-items:flex-start; }
+.step-badge       { width:28px; height:28px; border-radius:50%; color:#fff; font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+.step-label       { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; }
+.step-desc        { font-size:11px; color:var(--mid); margin-top:2px; }
+.step-connector   { border-left:2px dashed rgba(90,100,117,0.2); height:14px; margin-left:13px; }
+
+/* ─── SYSTEM COMPARISON CARDS ──────────────────────────────────────────── */
+.sys-card         { border-radius:8px; padding:14px; }
+.sys-card.plain   { border:1px solid rgba(90,100,117,0.25); }
+.sys-card.teal-c  { border:1px solid var(--teal); background:var(--teal-light); }
+.sys-card-title   { font-weight:700; font-size:11px; margin-bottom:10px; text-transform:uppercase; letter-spacing:0.04em; }
+.sys-card-body    { display:flex; flex-direction:column; gap:7px; }
+.sys-card-row     { display:flex; justify-content:space-between; }
+.sys-card-row.sep    { border-bottom:1px solid rgba(90,100,117,0.1); padding-bottom:6px; }
+.sys-card-row.tl-sep { border-bottom:1px solid rgba(42,127,127,0.15); padding-bottom:6px; }
+.sys-card-lbl     { font-size:11px; color:var(--mid); }
+.sys-card-val     { font-size:12px; font-weight:700; }
+
+/* ─── TIME COMPARISON BARS ──────────────────────────────────────────────── */
+.time-row         { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+.time-label       { width:160px; flex-shrink:0; color:var(--mid); font-weight:600; }
+.time-bar-wrap    { flex:1; background:#eee; border-radius:4px; height:22px; position:relative; }
+.time-bar-side    { width:130px; flex-shrink:0; color:var(--muted); font-size:11px; }
+
+/* ─── MODEL COMPARISON BOX ──────────────────────────────────────────────── */
+.vs-col-coral     { border:1px solid rgba(224,96,96,0.3); border-radius:7px 0 0 7px; padding:14px 16px; background:rgba(224,96,96,0.04); }
+.vs-col-teal      { border:1px solid rgba(42,127,127,0.3); border-radius:0 7px 7px 0; padding:14px 16px; background:rgba(42,127,127,0.04); }
+.vs-header        { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px; }
+.vs-body          { font-size:12px; color:var(--dark); line-height:1.6; margin-bottom:10px; }
+.vs-metrics       { display:flex; gap:10px; }
+.vs-metric        { text-align:center; }
+.vs-metric-val    { font-size:18px; font-weight:800; }
+.vs-metric-lbl    { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; }
+
+/* ─── BOTTLENECK FLOW ───────────────────────────────────────────────────── */
+.flow-box-coral   { background:rgba(224,96,96,0.07); border:1px solid rgba(224,96,96,0.25); border-radius:8px; padding:12px 14px; text-align:center; }
+.flow-box-amber   { background:rgba(212,160,23,0.07); border:1px solid rgba(212,160,23,0.3); border-radius:8px; padding:12px 14px; text-align:center; }
+.flow-stat        { font-size:22px; font-weight:800; letter-spacing:-0.02em; line-height:1; }
+.flow-lbl         { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:var(--mid); margin-top:4px; }
+.flow-desc        { font-size:11px; color:var(--dark); margin-top:6px; }
+.flow-arrow       { font-size:18px; color:rgba(224,96,96,0.35); padding:0 8px; }
+
+/* ─── CHANGE CARDS (S1-2) ───────────────────────────────────────────────── */
+.change-card      { border:1px solid rgba(42,127,127,0.25); border-radius:7px; padding:14px 16px; background:rgba(42,127,127,0.04); }
+.change-lbl       { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.09em; color:var(--teal); margin-bottom:6px; }
+.change-val       { font-size:22px; font-weight:800; color:var(--teal); line-height:1; margin-bottom:6px; }
+.change-body      { font-size:12px; color:var(--dark); line-height:1.5; }
+
+/* ─── DEPLOYMENT PATH DIAGRAMS ──────────────────────────────────────────── */
+.path-lbl         { font-size:10px; font-weight:600; padding-top:5px; align-self:start; line-height:1.2; }
+.path-pipe        { width:2px; flex:1; opacity:0.25; }
+.path-step        { border-radius:5px; padding:6px 10px; margin-bottom:3px; min-height:36px; display:flex; align-items:center; }
+.path-step.teal   { background:var(--teal-light); }
+.path-step.grey   { background:#f5f5f5; }
+.path-step-title  { font-weight:600; color:var(--dark); }
+.path-step-desc   { font-size:10px; color:var(--mid); }
+/* ─── PRINT TOC ─── */
+.print-toc {
+  display: none;
+  page-break-after: always;
+  padding: 24px 0 32px;
+}
+.print-toc-title {
+  font-size: 22px; font-weight: 700;
+  color: var(--dark); margin-bottom: 24px;
+}
+.print-toc-list { padding-left: 24px; }
+.print-toc-list li { font-size: 15px; margin-bottom: 8px; }
+.print-toc-list ol { margin-top: 6px; margin-bottom: 0; padding-left: 20px; }
+.print-toc-list ol li { font-size: 13.5px; margin-bottom: 4px; }
+
+/* ─── DATA NOTICE ─── */
+.data-notice {
+  position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+  background: var(--dark); color: #fff;
+  font-size: 11.5px; padding: 6px 16px; border-radius: 20px;
+  opacity: 1; transition: opacity 1s; z-index: 500;
+  pointer-events: none;
+}
+.data-notice.loaded { background: var(--sage); }
+.data-notice.error  { background: var(--coral); }
+@media print { .data-notice { display: none; } }
+
+/* ─── PRINT STYLES ─── */
+@media print {
+  @page { size: A4; margin: 22mm 18mm 18mm 18mm; }
+
+  body  { background: #fff; font-size: 11.5px; }
+  .page { max-width: none; padding: 0; box-shadow: none; min-height: auto; }
+  .side-nav { display: none; }
+
+  .print-toc { display: block; }
+
+  .doc-header { page-break-after: avoid; }
+
+  #s2, #s3 { break-before: page; }
+
+  .section-number, .section-title, .subsection-title, .stat-strip { break-inside: avoid; }
+  .callout    { break-inside: avoid; }
+  .risk-card  { break-inside: avoid; }
+  .fig-block  { break-inside: avoid; }
+  .fig-caption { break-before: avoid; }
+
+  p { orphans: 3; widows: 3; }
+
+  a[href]::after { content: " (" attr(href) ")"; font-size: 9px; color: #777; }
+  .header-live-link a::after,
+  .meta-chip a::after { content: none; }
+
+  .print-toc a { color: inherit; text-decoration: none; }
+
+  .fig-block img { max-width: 100%; }
+  .stat-strip { grid-template-columns: repeat(4, 1fr); }
+}
+</style>
+<script id="__page-ctx" type="application/json">
+{
+  "page_id": "malaria-final",
+  "page_type": "academic-report",
+  "primary_entity": "proj_malaria-detection",
+  "modules_rendered": [
+    "report-nav",
+    "doc-section",
+    "fig-block"
+  ],
+  "locale": "en-US",
+  "market": "claros",
+  "session": {
+    "interactionCount": 0
+  },
+  "ddo": {
+    "enabled": true,
+    "endpointUrl": "https://lino-strategy-apps.vercel.app/api/analytics-event"
+  },
+  "registry": {
+    "components": [
+      {
+        "component_id": "report-nav",
+        "component_category": "navigation",
+        "events": [
+          {
+            "event_name": "component_view",
+            "trigger": "impression"
+          },
+          {
+            "event_name": "cta_click",
+            "trigger": "nav-section"
+          }
+        ]
+      },
+      {
+        "component_id": "doc-section",
+        "component_category": "content",
+        "events": [
+          {
+            "event_name": "component_view",
+            "trigger": "impression"
+          },
+          {
+            "event_name": "cta_click",
+            "trigger": "section-engage"
+          }
+        ]
+      },
+      {
+        "component_id": "metric-row",
+        "component_category": "metrics",
+        "events": [
+          {
+            "event_name": "component_view",
+            "trigger": "impression"
+          },
+          {
+            "event_name": "cta_click",
+            "trigger": "metric-engage"
+          }
+        ]
+      },
+      {
+        "component_id": "fig-block",
+        "component_category": "content",
+        "events": [
+          {
+            "event_name": "component_view",
+            "trigger": "impression"
+          },
+          {
+            "event_name": "cta_click",
+            "trigger": "figure-engage"
+          }
+        ]
+      }
+    ]
+  }
+}
+</script>
+<script src="https://lino-strategy-apps.vercel.app/driven_global-strategy/analytics-core.js"></script>
+<style>
+/* ─── CONTINUOUS-PAGE PRINT OVERRIDE (from make_final_report_print.py) ─── */
+@media print {
+  @page { size: auto; margin: 0; }
+
+  html, body { margin: 0 !important; padding: 0 !important; }
+
+  /* Reset every inherited page-break rule so nothing forces a break. */
+  *, *::before, *::after {
+    break-before: auto !important;
+    break-after:  auto !important;
+    break-inside: auto !important;
+    page-break-before: auto !important;
+    page-break-after:  auto !important;
+    page-break-inside: auto !important;
+  }
+
+  /* The on-screen report's existing print rule sets .page { padding: 0 } so
+     A4 @page margins handle the gutter. With @page margin: 0 (continuous
+     mode), we need .page to carry the gutter itself. 56px ≈ 0.58in matches
+     the visual breathing room of the original on-screen layout. */
+  .page {
+    max-width: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 56px 64px !important;
+    box-sizing: border-box !important;
+  }
+}
+</style></head>
+<body>
+<!-- ══════ SIDE NAV ══════ -->
+
+<!-- ══════ PAGE ══════ -->
+<div class="page">
+<!-- ── HEADER ── -->
+<header class="doc-header">
+<div class="header-left">
+<div class="header-eyebrow">MIT Applied AI &amp; Data Science Program · Capstone Project · Final Submission Report</div>
+<div class="header-title">Malaria Detection<br/>Using Deep Learning</div>
+<div class="header-subtitle">Automated Cell Classification for Malaria Screening in Low-Resource Settings</div>
+<div class="header-byline">
+<span class="byline-author">Lindsay Ogden-Herrera</span>
+<span class="byline-sep">·</span>
+<span class="byline-date">May 2026</span>
+</div>
+<div class="header-meta">
+<span class="meta-chip prog">Final Submission</span>
+<span class="meta-chip year">2026</span>
+<span class="meta-chip best">Recommended model: <span id="dyn-best-name-chip">-</span> · <span id="dyn-recall-pct">-</span> recall</span>
+</div>
+<div class="header-live-link">
+<a href="https://lino-5r.github.io/MIT-AAIDS/malaria-detection/presentation/Final_Report.html" rel="noopener" target="_blank">
+<svg fill="none" height="13" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" style="vertical-align:-1px" viewbox="0 0 24 24" width="13"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" x2="21" y1="14" y2="3"></line></svg>View interactive report at lino-5r.github.io/MIT-AAIDS
+      </a>
+</div>
+</div>
+<div class="header-logo">
+<svg aria-label="Claros logo" height="80" role="img" viewbox="0 0 72 72" width="80" xmlns="http://www.w3.org/2000/svg">
+<circle cx="36" cy="36" fill="none" r="32" stroke="#1A6B7C" stroke-width="5"></circle>
+<circle cx="36" cy="36" fill="none" opacity="0.3" r="32" stroke="#1A6B7C" stroke-dasharray="4 3" stroke-width="1.5"></circle>
+<circle cx="36" cy="36" fill="none" r="20" stroke="#E8A838" stroke-width="4.5"></circle>
+<circle cx="43" cy="29" fill="#D95F4B" r="4"></circle>
+</svg>
+<div class="logo-name">Claros</div>
+<div class="logo-tagline">Pathology Intelligence</div>
+</div>
+</header>
+<!-- ── PRINT-ONLY TOC ── -->
+<div class="print-toc">
+<div class="print-toc-title">Table of Contents</div>
+<ol class="print-toc-list">
+<li><a href="#s1">Executive Summary</a>
+<ol>
+<li><a href="#s1-1">Most Important Findings</a></li>
+<li><a href="#s1-2">Final Model Specifications</a></li>
+</ol>
+</li>
+<li><a href="#s2">Problem and Solution Summary</a>
+<ol>
+<li><a href="#s2-1">The Problem</a></li>
+<li><a href="#s2-2">Solution Design and Rationale</a></li>
+<li><a href="#s2-3">How This Affects the Business</a></li>
+</ol>
+</li>
+<li><a href="#s3">Recommendations for Implementation</a>
+<ol>
+<li><a href="#s3-1">Proposed Deployment Roadmap</a></li>
+<li><a href="#s3-2">Stakeholder Actionables</a></li>
+<li><a href="#s3-3">Expected Benefits and Cost Assumptions</a></li>
+<li><a href="#s3-4">Key Risks and Challenges</a></li>
+<li><a href="#s3-5">Further Analysis Required</a></li>
+</ol>
+</li>
+</ol>
+</div>
+<!-- ══════════════════════════════════ -->
+<!-- SECTION 1 | EXECUTIVE SUMMARY      -->
+<!-- ══════════════════════════════════ -->
+<section class="doc-section" data-component="doc-section" data-component-category="content" data-component-instance="s1" data-component-version="1.0" data-cta-action="section-engage" data-cta-label="1. Executive Summary" data-nav-label="1. Executive Summary" id="s1">
+<div class="section-number">Section 1</div>
+<div class="section-title">Executive Summary</div>
+<p>This project built and tested a set of AI models that automatically scan microscopic images of red blood cells and flag which ones are infected with malaria. The goal was to catch as many infections as possible while keeping the false alarm rate low enough for clinical use. Six model versions were trained and tested on 27,558 labeled cell images from the NIH Malaria Dataset. The best-performing model, <strong><span id="dyn-best-name-intro">-</span></strong>, correctly identifies <strong><span id="dyn-best-recall-intro">-</span></strong> of infected cells and achieves <strong><span id="dyn-best-acc-intro">-</span> overall accuracy</strong>, missing fewer than 1 in 200 infections (<strong><span id="dyn-best-fnr-intro">-</span></strong> miss rate).</p>
+<!-- Stat strip -->
+<div class="stat-strip">
+<div class="stat-card">
+<div class="stat-value" id="dyn-stat-recall">-</div>
+<div class="stat-label">Recall<br/>(Parasitized class)</div>
+</div>
+<div class="stat-card amber">
+<div class="stat-value" id="dyn-stat-fn">-</div>
+<div class="stat-label">False negatives<br/>out of 1,300 infected</div>
+</div>
+<div class="stat-card sage">
+<div class="stat-value" id="dyn-stat-acc">-</div>
+<div class="stat-label">Overall accuracy<br/>(test set)</div>
+</div>
+<div class="stat-card coral">
+<div class="stat-value" id="dyn-stat-auc">-</div>
+<div class="stat-label">AUC-ROC<br/>(discriminative power)</div>
+</div>
+</div>
+<!-- ── Milestone findings at a glance ───────────────────────── -->
+<div style="background:rgba(42,127,127,0.05); border:1px solid rgba(42,127,127,0.2); border-radius:8px; padding:16px 20px; margin:20px 0;">
+<div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.09em; color:var(--teal); margin-bottom:10px;">Milestone Analysis: Findings at a Glance</div>
+<div style="display:grid; grid-template-columns:auto 1fr; gap:5px 12px; font-size:12px; align-items:baseline;">
+<span style="color:var(--teal); font-weight:700;">1</span><span><strong>Simple AI is sufficient for this task.</strong> The first model detected <span id="dyn-cnn1-recall-gl">-</span> of infected cells after minimal training, confirming that the visual difference between infected and healthy cells is clear enough for AI to learn reliably.</span>
+<span style="color:var(--teal); font-weight:700;">2</span><span><strong>Improving the design broke the decision-making.</strong> The second model was more sophisticated but became overly cautious: it detected almost nothing at standard settings (<span id="dyn-cnn2-recall-gl">-</span>), despite being able to distinguish infected from healthy cells internally. Strong underlying ability, broken outputs.</span>
+<span style="color:var(--teal); font-weight:700;">3</span><span><strong>Adjusting sensitivity after training fixed the symptom, not the cause.</strong> Tuning the model's alert threshold recovered detection to <span id="dyn-cnn2t-recall-gl">-</span>. It worked, but this manual adjustment must be redone after every model update.</span>
+<span style="color:var(--teal); font-weight:700;">4</span><span><strong>Weighing False Negatives more heavily than False Positives improved detection dramatically.</strong> With that single change to the training objective, detection recovered to <span id="dyn-cnn3-recall-gl">-</span> with only <span id="dyn-cnn3-fn-gl">-</span> missed infections. No manual tuning required.</span>
+</div>
+<div style="border-top:1px solid rgba(42,127,127,0.15); margin:12px 0 10px;"></div>
+<div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.09em; color:var(--muted); margin-bottom:8px;">Final Analysis Extensions</div>
+<div style="display:grid; grid-template-columns:auto 1fr; gap:5px 12px; font-size:12px; align-items:baseline;">
+<span style="color:var(--muted); font-weight:700;">5</span><span><strong>Using smaller images made the model more accurate, not less.</strong> Halving the input image size improved detection to <span id="dyn-cnn3-32-recall-gl">-</span> with only <span id="dyn-cnn3-32-fn-gl">-</span> missed infections. Reducing background detail appears to help the model focus on the parasite itself. This is the recommended model.</span>
+<span style="color:var(--muted); font-weight:700;">6</span><span><strong>A general-purpose AI trained on everyday photos underperformed.</strong> A model pre-trained on millions of photographs of objects, animals, and scenes achieved only <span id="dyn-mv2-recall-gl">-</span> detection. Microscope images of blood cells look nothing like the images it learned from.</span>
+</div>
+<div style="margin-top:12px; background:var(--teal); color:#fff; border-radius:5px; padding:9px 14px; font-size:12px; font-weight:600;">
+      Recommended for deployment: <strong style="color:#fff; background:rgba(255,255,255,0.18); border-radius:3px; padding:1px 6px;"><span id="dyn-best-name-gl">-</span></strong>. Detects <span id="dyn-cnn3-32-recall-rec">-</span> of infections, misses only <span id="dyn-cnn3-32-fn-rec">-</span> in 1,300 tested, fits on a USB drive (~2.1 MB), runs on any standard laptop.
+    </div>
+</div>
+<!-- ── end milestone glance ──────────────────────────────────── -->
+<div class="subsection-title" data-nav-label="Key Findings" id="s1-1">1.1 Most Important Findings</div>
+<p><strong>The primary metric is how many infections are caught, but overall accuracy must also be high.</strong> A missed infection sends a patient home without treatment while undetected malaria can progress to organ failure and death. A false alarm triggers an unnecessary follow-up test. The two errors carry different clinical weights, and the model is built to reflect that. The target is a model that catches the overwhelming majority of infected cells while remaining accurate enough to be trusted by clinical staff. The winning model meets both conditions.</p>
+<p><strong>Finding 1: A simple model sets a strong baseline.</strong> The first model, CNN1, achieves <span id="dyn-cnn1-recall">-</span> detection rate, <span id="dyn-cnn1-acc">-</span> overall accuracy, and <span id="dyn-cnn1-auc">-</span> discrimination score after just 8 rounds of training. This confirms that the visual difference between an infected and a healthy cell is large enough for even a small AI model to learn reliably, and that high detection and high accuracy are achievable together from the start.</p>
+<p><strong>Finding 2: A better-designed model still failed in practice, and revealed why.</strong> CNN2 added training variation and structural improvements that made it more stable. But when run at standard settings, it detected almost nothing: detection rate collapsed to <span id="dyn-cnn2-recall-default">-</span>, despite a strong overall discrimination score of <span id="dyn-cnn2-auc">-</span>. The model was reading the right signal (it could tell infected from healthy) but hedged every prediction, never committing confidently enough to trigger an alert. Adjusting the sensitivity threshold at which it calls a cell "infected" recovered <span id="dyn-cnn2-tuned-recall">-</span> detection. A model can be technically capable and still fail in practice if it isn't calibrated to act on its own outputs. How a model is trained matters as much as how it is designed.</p>
+<p><strong>Finding 3: Retraining with a corrected cost structure eliminated the need for a threshold patch.</strong> CNN3 keeps CNN2's design identical and changes only one thing in training: a missed infection is penalized twice as heavily as a false alarm. Where CNN2 required a post-hoc threshold adjustment to recover recall, CNN3 achieves <span id="dyn-cnn3-recall-2">-</span> detection at the default threshold, with only <span id="dyn-cnn3-fn">-</span> missed infections out of 1,300 infected test cells and overall accuracy (<span id="dyn-cnn3-acc-f3">-</span>) comparable to the baseline. The class weighting trained the model to commit to its own signal, so no calibration patch was needed. Because everything else is identical to CNN2, this result isolates the cause: re-weighting the cost of errors during training fixed what a threshold adjustment could only compensate for.</p>
+<p><strong>Finding 4: A pre-trained industry model underperformed the custom approach.</strong> MobileNetV2, a well-regarded AI model pre-trained on 1.28 million everyday photographs, achieved only <span id="dyn-mv2-recall">-</span> detection (<span id="dyn-mv2-fn">-</span> missed infections) despite a competitive overall score of <span id="dyn-mv2-auc">-</span>. The likely explanation: what it learned from photographs of cats, cars, and landscapes doesn't translate well to microscope images of stained blood cells at this scale. A model trained from scratch on the specific task outperformed one that arrived pre-loaded with unrelated knowledge. MobileNetV2 was also tested at 128px; recall fell further to approximately 72%. Higher resolution did not help.</p>
+<p><strong>Finding 5: Using smaller images produced the best result in the study.</strong> CNN3-32px keeps everything from CNN3 identical and changes only the input image size, from 64 to 32 pixels. The result is the best-performing model: <span id="dyn-cnn3-32-recall-f5">-</span> detection with only <span id="dyn-cnn3-32-fn-f5">-</span> missed infections, a discrimination score of <span id="dyn-cnn3-32-auc-f5">-</span>, and a smaller, faster model. The mechanism is not fully understood, but smaller images appear to reduce background noise and focus the model on the parasite itself rather than surrounding cell detail.</p>
+<p class="findings-synthesis">A small, purpose-built model trained from scratch can be viable in a resource-constrained clinic and can even strongly outperform a commercial pre-trained alternative. The decisive changes for our experiments were weighting missed diagnoses more heavily during training and reducing the input image size.</p>
+<div class="subsection-title" data-nav-label="Model Specifications" id="s1-2">1.2 Final Model Specifications</div>
+<p>The recommended model is <strong><span id="dyn-best-name-spec">-</span></strong>, a custom-built neural network identical in structure to CNN2, with two targeted changes:</p>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:14px 0 18px;">
+<div class="change-card">
+<div class="change-lbl">Change 1 · Training objective</div>
+<div class="change-val">2× penalty</div>
+<div class="change-body">Missing an infection is penalized twice as heavily as a false alarm during training. This corrects the cost structure that caused CNN2 to hedge at the default threshold.</div>
+</div>
+<div class="change-card">
+<div class="change-lbl">Change 2 · Input resolution</div>
+<div class="change-val"><span id="dyn-best-input-size-spec2">32</span> px <span style="font-size:13px; font-weight:500; color:var(--muted);">(down from 64)</span></div>
+<div class="change-body">Halving the image size reduced background noise and improved detection. Smaller images appear to focus the model on the parasite itself rather than surrounding cell detail.</div>
+</div>
+</div>
+<table>
+<thead>
+<tr><th>Parameter</th><th>Value</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>Architecture</strong></td><td>Custom 3-stage neural network with regularization layers to prevent overfitting</td></tr>
+<tr><td><strong>Feature detectors</strong></td><td>32 → 64 → 128 per stage (increasing detail at each stage)</td></tr>
+<tr><td><strong>Output</strong></td><td>Single binary prediction: Infected or Not Infected</td></tr>
+<tr><td><strong>Input image size</strong></td><td><span id="dyn-best-input-size">-</span> pixels, color</td></tr>
+<tr><td><strong>Error cost weighting</strong></td><td>Missing an infection costs 2× more than a false alarm</td></tr>
+<tr><td><strong>Training stopping rule</strong></td><td>Automatically stopped when performance stopped improving (prevents over-training)</td></tr>
+<tr><td><strong>Training variation</strong></td><td>Images randomly rotated, flipped, and shifted during training to improve robustness</td></tr>
+<tr><td><strong>Training rounds</strong></td><td><span id="dyn-cnn3-epochs-spec">-</span> (best result from round <span id="dyn-cnn3-best-epoch-spec">-</span>)</td></tr>
+<tr><td><strong>Deployed model size</strong></td><td>~2.1 MB (fits on any USB drive)</td></tr>
+<tr class="highlight"><td><strong>Detection rate (test set)</strong></td><td><strong><span id="dyn-cnn3-recall-spec">-</span></strong>; <span id="dyn-cnn3-fn-spec">-</span> missed infections out of 1,300 infected test images</td></tr>
+<tr class="highlight"><td><strong>Discrimination score</strong></td><td><strong><span id="dyn-cnn3-auc-spec">-</span></strong> (1.0 = perfect; 0.5 = random)</td></tr>
+<tr class="highlight"><td><strong>Overall accuracy</strong></td><td><strong><span id="dyn-cnn3-acc-spec">-</span></strong></td></tr>
+</tbody>
+</table>
+<p>The complete model performance comparison across all evaluated architectures is shown below.</p>
+<table>
+<thead id="final-comparison-thead">
+<tr>
+<th onclick="sortComparisonTable(0)">Model<span class="sort-arrow"></span></th>
+<th onclick="sortComparisonTable(1)">Recall<span class="sort-arrow"></span></th>
+<th onclick="sortComparisonTable(2)" title="Out of 1,300 Parasitized test cells">False Negatives<span class="sort-arrow"></span></th>
+<th onclick="sortComparisonTable(3)">Accuracy<span class="sort-arrow"></span></th>
+<th onclick="sortComparisonTable(4)">AUC-ROC<span class="sort-arrow"></span></th>
+<th onclick="sortComparisonTable(5)">ms / image (pipeline)<span class="sort-arrow"></span></th>
+<th onclick="sortComparisonTable(6)">RAM (MB)<span class="sort-arrow"></span></th>
+<th onclick="sortComparisonTable(7)">Parameters<span class="sort-arrow"></span></th>
+</tr>
+</thead>
+<tbody id="final-comparison-tbody"><tr><td colspan="8" style="color:var(--muted);font-style:italic;padding:16px">Loading…</td></tr></tbody>
+</table>
+</section>
+<hr class="section-divider"/>
+<!-- ══════════════════════════════════ -->
+<!-- SECTION 2 | PROBLEM & SOLUTION     -->
+<!-- ══════════════════════════════════ -->
+<section class="doc-section" data-component="doc-section" data-component-category="content" data-component-instance="s2" data-component-version="1.0" data-cta-action="section-engage" data-cta-label="2. Problem &amp; Solution Summary" data-nav-label="2. Problem &amp; Solution Summary" id="s2">
+<div class="section-number">Section 2</div>
+<div class="section-title">Problem and Solution Summary</div>
+<div class="subsection-title" data-nav-label="The Problem" id="s2-1">2.1 The Problem</div>
+<p>Malaria is caused by <em>Plasmodium</em> parasites transmitted through the bites of infected <em>Anopheles</em> mosquitoes. Once in the bloodstream, the parasites invade red blood cells, and in the absence of timely treatment, the infection can progress to organ failure and death. According to the WHO, more than <strong>229 million malaria cases</strong> and approximately <strong>400,000 deaths</strong> were reported globally in 2019.<a class="ref-sup" href="#ref-1">[1]</a> Sub-Saharan Africa bears 94% of that burden; children under five account for 67% of all malaria deaths worldwide.<a class="ref-sup" href="#ref-1">[1]</a></p>
+<p>The standard diagnostic method, microscopic examination of <span class="term" data-tip="A staining technique using Giemsa dye that makes Plasmodium parasites visible under a microscope inside red blood cells.">Giemsa</span>-stained blood smear slides, is time-intensive and entirely dependent on the availability of trained microscopists. In low-resource, high-burden settings, that expertise is typically scarce, unevenly distributed, and subject to operator fatigue over long shifts. Inter-observer variability further undermines diagnostic consistency: studies report that agreement between expert microscopists on the same slide falls significantly in resource-constrained settings.<a class="ref-sup" href="#ref-9">[9]</a> The consequence is that infection rates in communities most affected by malaria are simultaneously the hardest to measure accurately.</p>
+<div class="callout">
+<div class="callout-title">The core bottleneck</div>
+<div style="display:grid; grid-template-columns:1fr auto 1fr auto 1fr; gap:0; align-items:center; margin-top:12px;">
+<div class="flow-box-coral">
+<div class="flow-stat" style="color:var(--coral);">100s</div>
+<div class="flow-lbl">cells per slide</div>
+<div class="flow-desc">Examined manually, one by one, for every patient</div>
+</div>
+<div class="flow-arrow">→</div>
+<div class="flow-box-amber">
+<div class="flow-stat" style="color:#b07a10;">Not enough</div>
+<div class="flow-lbl">trained microscopists</div>
+<div class="flow-desc">Expertise is scarce and unevenly distributed in high-burden regions</div>
+</div>
+<div class="flow-arrow">→</div>
+<div class="flow-box-coral">
+<div class="flow-stat" style="color:var(--coral);">Delayed</div>
+<div class="flow-lbl">or missed diagnosis</div>
+<div class="flow-desc">Communities with the highest burden are the hardest to serve</div>
+</div>
+</div>
+<div style="margin-top:12px; font-size:12px; color:var(--teal); font-weight:600; text-align:center;">
+      An automated screening tool that routes only ambiguous cases to human review directly breaks this chain.
+    </div>
+</div>
+<div class="subsection-title" data-nav-label="Solution Design" id="s2-2">2.2 Solution Design and Rationale</div>
+<p>The proposed solution is a CNN binary classifier trained to distinguish Parasitized from Uninfected cells in single-cell microscopy crops. Four design principles governed the approach:</p>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin:20px 0;">
+<ol style="margin:0; padding-left:18px; display:flex; flex-direction:column; gap:12px;">
+<li><strong>Recall as the governing objective.</strong> Missed infections are the highest-cost error. The loss function and evaluation framework minimize false negatives, not aggregate accuracy.</li>
+<li><strong>Controlled experimental progression.</strong> Each model changes one variable: CNN1→CNN2 adds augmentation and architecture; CNN2→CNN3 changes only the training objective; CNN3→CNN3-32px changes only input resolution.</li>
+<li><strong>Deployability as a hard constraint.</strong> The model must run on a standard laptop with no GPU. CNN3-32px is ~2.1 MB and requires no cloud infrastructure.</li>
+<li><strong>Human-AI collaboration, not replacement.</strong> High-confidence predictions are auto-classified. Only borderline cases go to a microscopist.</li>
+</ol>
+<div style="display:flex; flex-direction:column; gap:10px; justify-content:center;">
+<div class="step-row">
+<div class="step-badge" style="background:var(--coral);">1</div>
+<div>
+<div class="step-label" style="color:var(--coral);">Recall first</div>
+<div class="step-desc">Minimize false negatives. A missed infection is a higher-cost error than a false alarm.</div>
+</div>
+</div>
+<div class="step-connector"></div>
+<div class="step-row">
+<div class="step-badge" style="background:var(--teal);">2</div>
+<div>
+<div class="step-label" style="color:var(--teal);">One variable at a time</div>
+<div class="step-desc">Each model isolates one change, making results interpretable and findings reproducible.</div>
+</div>
+</div>
+<div class="step-connector"></div>
+<div class="step-row">
+<div class="step-badge" style="background:var(--sage);">3</div>
+<div>
+<div class="step-label" style="color:var(--sage);">Deployment-ready by design</div>
+<div class="step-desc">Laptop CPU, no internet, ~2.1 MB. Field-deployable without cloud infrastructure.</div>
+</div>
+</div>
+<div class="step-connector"></div>
+<div class="step-row">
+<div class="step-badge" style="background:var(--amber);">4</div>
+<div>
+<div class="step-label" style="color:#b07a10;">Triage, not replacement</div>
+<div class="step-desc">The model auto-classifies confident cases and routes borderline calls to a human reviewer.</div>
+</div>
+</div>
+</div>
+</div>
+<div style="margin:20px 0;">
+<div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.09em; color:var(--muted); margin-bottom:10px;">Why the custom model beat the industry standard</div>
+<div style="display:grid; grid-template-columns:1fr auto 1fr; gap:0; align-items:stretch;">
+<!-- MobileNetV2 -->
+<div class="vs-col-coral">
+<div class="vs-header" style="color:var(--coral);">MobileNetV2 (pre-trained)</div>
+<div class="vs-body">Trained on 1.28 million everyday photographs: objects, animals, scenes. Knowledge from those images does not transfer to microscope blood cell images at this scale.</div>
+<div class="vs-metrics">
+<div class="vs-metric">
+<div class="vs-metric-val" style="color:var(--coral);">~85%</div>
+<div class="vs-metric-lbl">recall @ 64px</div>
+</div>
+<div class="vs-metric">
+<div class="vs-metric-val" style="color:var(--coral);">~72%</div>
+<div class="vs-metric-lbl">recall @ 128px</div>
+</div>
+</div>
+<div style="margin-top:8px; font-size:11px; color:var(--muted); font-style:italic;">Higher resolution made it worse. Pre-training appears to be a liability for this task.</div>
+</div>
+<!-- vs divider -->
+<div style="display:flex; align-items:center; justify-content:center; width:36px; background:var(--bg); z-index:1;">
+<div style="font-size:10px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; writing-mode:vertical-rl; transform:rotate(180deg);">vs</div>
+</div>
+<!-- CNN3-32px -->
+<div class="vs-col-teal">
+<div class="vs-header" style="color:var(--teal);">CNN3-32px (trained from scratch)</div>
+<div class="vs-body">Built and trained entirely on this task: Giemsa-stained blood cell microscopy. No prior knowledge to unlearn; every parameter learned from the target distribution.</div>
+<div class="vs-metrics">
+<div class="vs-metric">
+<div class="vs-metric-val" style="color:var(--teal);"><span id="dyn-cnn3-32-recall-why">-</span></div>
+<div class="vs-metric-lbl">recall @ 32px</div>
+</div>
+<div class="vs-metric">
+<div class="vs-metric-val" style="color:var(--teal);"><span id="dyn-cnn3-32-fn-why">-</span> FN</div>
+<div class="vs-metric-lbl">out of 1,300</div>
+</div>
+</div>
+<div style="margin-top:8px; font-size:11px; color:var(--muted); font-style:italic;">Smaller images improved performance. Domain-specific training outweighed general pre-training.</div>
+</div>
+</div>
+</div>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:4px;">
+<div class="fig-block" data-component="fig-block" data-component-category="content" data-component-instance="confusion-roc-mobilenetv2" data-component-version="1.0" data-cta-action="figure-engage" data-cta-label="Confusion Roc MobileNetV2 Figure" style="margin:0;">
+<img alt="MobileNetV2 confusion matrix and ROC curve" src="../figures/fig_mobilenetv2_finetuned_evaluation.png" style="width:100%;"/>
+<div class="fig-caption"><strong>Figure 1.</strong> MobileNetV2 Fine-tuned (64px): confusion matrix and ROC curve (2,600 test images). Despite an AUC-ROC of <span id="dyn-mv2-auc-cap">-</span>, recall at the default threshold was <span id="dyn-mv2-recall-cap">-</span>. The high AUC reflects discrimination ability the model does not act on at threshold 0.5.</div>
+</div>
+<div class="fig-block" data-component="fig-block" data-component-category="content" data-component-instance="confusion-roc-cnn3-32" data-component-version="1.0" data-cta-action="figure-engage" data-cta-label="Confusion Roc Cnn3 32 Figure" style="margin:0;">
+<img alt="CNN3-32px confusion matrix and ROC curve" src="../figures/fig_cnn3_32_evaluation.png" style="width:100%;"/>
+<div class="fig-caption"><strong>Figure 2.</strong> CNN3 - 32px Downscale: identical architecture and training; only input resolution differs. AUC-ROC: <span id="dyn-cnn3-32-auc-f5b">-</span>.</div>
+</div>
+</div>
+<p style="margin:20px 0 6px;"><strong>From classification to triage.</strong> A model that only classifies cells as infected or not is not yet a clinical tool. The deployment design adds a second layer: rather than treating every prediction as final, the model's output score is used to route cells into three lanes. Cells the model is confident about (high score: auto-parasitized; low score: auto-uninfected) are classified without human review. Only cells in the confidence borderline band are referred to a microscopist. Figure 3 shows how that threshold is set and the resulting referral volume across the score distribution.</p>
+<div class="tsw" id="rpt-triage-slider-widget">
+<div class="tsw-header">Triage counts at current thresholds</div>
+<div class="tsw-subhead">Updates live as you drag the threshold handles on the histogram below.</div>
+<div class="tsw-zones">
+<div class="tsw-zone-block uninf">
+<div class="tsw-zone-count" id="rpt-tsw-count-uninf">-</div>
+<div class="tsw-zone-lbl">Auto: Uninfected</div>
+</div>
+<div class="tsw-zone-block border">
+<div class="tsw-zone-count" id="rpt-tsw-count-referred">-</div>
+<div class="tsw-zone-lbl">Referred</div>
+<div class="tsw-zone-pct">(<span id="rpt-tsw-pct-referred">-</span>)</div>
+</div>
+<div class="tsw-zone-block para">
+<div class="tsw-zone-count" id="rpt-tsw-count-para">-</div>
+<div class="tsw-zone-lbl">Auto: Parasitized</div>
+</div>
+</div>
+<div class="tsw-risk">
+<div class="tsw-risk-item fn">
+<span class="tsw-risk-count" id="rpt-tsw-fn">-</span>
+<span class="tsw-risk-lbl">False Negatives<br/><small>Parasitized cells scored below lower threshold, auto-classified as Uninfected</small></span>
+</div>
+<div class="tsw-risk-item fp">
+<span class="tsw-risk-count" id="rpt-tsw-fp">-</span>
+<span class="tsw-risk-lbl">False Positives<br/><small>Uninfected cells scored above upper threshold, auto-classified as Parasitized</small></span>
+</div>
+</div>
+</div>
+<div class="fig-block" data-component="fig-block" data-component-category="content" data-component-instance="score-dist-32" data-component-version="1.0" data-cta-action="figure-engage" data-cta-label="Score Distribution 32px Figure">
+<canvas id="rpt-hist" style="width:100%; aspect-ratio:5/2; display:block; cursor:default;"></canvas>
+<div style="display:flex; align-items:flex-start; gap:12px; padding:6px 16px 8px;">
+<div style="flex:1;">
+<div class="fig-caption" style="margin:0 0 8px; padding:0; border:none; background:none;"><strong>Figure 3.</strong> CNN3 - 32px Downscale. The concentration of false negatives at very low scores indicates structurally atypical cells unlikely to be recoverable through threshold adjustment alone. At the default operating point, <span id="dyn-cnn3-32-triage-pct-referred-fig">-</span> of cells are referred for human review; model recall on the auto-classified remainder is <span id="dyn-cnn3-32-triage-recall-fig">-</span>.</div>
+<div style="display:flex; gap:18px; font-size:12px; color:var(--mid);">
+<span style="display:flex; align-items:center; gap:5px;"><span style="display:inline-block; width:13px; height:13px; border-radius:2px; background:#CC0000;"></span>False Negatives</span>
+</div>
+</div>
+<button class="hist-reset-btn" id="rpt-hist-reset">Reset</button>
+<button class="hist-reset-btn" id="rpt-hist-expand">Expand</button>
+</div>
+</div>
+<div class="subsection-title" data-nav-label="Business Impact" id="s2-3">2.3 How This Affects the Business</div>
+<p>For a diagnostic lab operating in a malaria-endemic region, the deployment of CNN3 in triage mode would affect operations in three ways:</p>
+<p><strong>Speed.</strong> A trained microscopist examining a standard blood smear slide manually, at the WHO-recommended thoroughness level, requires 5 to 15 minutes per slide. A software pipeline running CNN3 (cell segmentation + per-cell classification) processes a comparable slide in under 30 seconds. For a lab handling 100 slides per day, this difference represents a shift from 8+ hours of continuous microscopy to automated pre-screening with microscopist review of the borderline <span id="dyn-triage-pct-referred-s23">-</span>.</p>
+<p><strong>Consistency.</strong> A microscopist reviewing slide 80 of a 100-slide day performs differently than on slide 5. This model does not. It makes the same call at midnight that it makes at 8am, on the first slide of the day or the last. The miss rate of <span id="dyn-cnn3-fnr-s23">-</span> does not drift with caseload, staffing levels, or how long someone has been on shift.</p>
+<p><strong>Access.</strong> The model is compact (~2.1 MB), runs on CPU, and requires no internet connection after deployment. This makes it viable as a component of a mobile diagnostic kit in settings where reliable power and connectivity are intermittent. The Claros implementation is designed with this deployment profile in mind.</p>
+<div style="margin-top:20px;">
+<div style="font-size:12px; font-weight:700; color:var(--dark); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.05em;">System performance: ML-only vs. ML + human triage</div>
+<p style="font-size:12px; color:var(--mid); margin:0 0 8px 0;">On this clean, in-distribution test set, triage recovers only <span id="dyn-sys-para-in-border">-</span> additional missed infections: a marginal gain. That is not the primary argument for triage. The model is already well-calibrated, so the borderline band is narrow - only <span id="dyn-sys-borderline">-</span> cells of 2,600 fall there. In real deployment, the value of referring that <span id="dyn-triage-pct-referred-s23b">-</span> is threefold.</p>
+<ul style="font-size:12px; color:var(--mid); margin:0 0 12px 18px; line-height:1.7;">
+<li><strong>Uncertainty filter.</strong> Every cell the model is unsure about reaches a human before it reaches a patient record. This is the safety net for distribution shift: different staining, lighting, and morphology in the field will push more cells into the uncertain zone than appeared in this controlled test set.</li>
+<li><strong>Quality control.</strong> Referring <span id="dyn-triage-ref-qc">-</span> costs negligible microscopist time per slide while providing continuous ground-truth feedback. Disagreements between the model and the reviewer are a real-time signal of performance degradation.</li>
+<li><strong>Clinical trust.</strong> A human remains in the loop for every uncertain case. For regulatory acceptance and clinician adoption, that matters more than a 0.15% recall improvement on a benchmark.</li>
+</ul>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+<div class="sys-card plain">
+<div class="sys-card-title" style="color:var(--mid);">CNN3-32px · ML only</div>
+<div class="sys-card-body">
+<div class="sys-card-row sep">
+<span class="sys-card-lbl">Recall</span>
+<span class="sys-card-val" id="dyn-mlonly-recall" style="color:var(--dark);">-</span>
+</div>
+<div class="sys-card-row sep">
+<span class="sys-card-lbl">Missed infections / 1,300</span>
+<span class="sys-card-val" id="dyn-mlonly-fn" style="color:var(--coral);">-</span>
+</div>
+<div class="sys-card-row sep">
+<span class="sys-card-lbl">Human reviews / 2,600</span>
+<span class="sys-card-val" style="color:var(--dark);">0</span>
+</div>
+<div class="sys-card-row">
+<span class="sys-card-lbl">Throughput bottleneck</span>
+<span style="font-size:11px; color:var(--dark);">none</span>
+</div>
+</div>
+</div>
+<div class="sys-card teal-c">
+<div class="sys-card-title" style="color:var(--teal);">CNN3-32px + human triage</div>
+<div class="sys-card-body">
+<div class="sys-card-row tl-sep">
+<span class="sys-card-lbl">System recall*</span>
+<span class="sys-card-val" id="dyn-sys-recall" style="color:var(--teal);">-</span>
+</div>
+<div class="sys-card-row tl-sep">
+<span class="sys-card-lbl">Missed infections / 1,300</span>
+<span class="sys-card-val" id="dyn-sys-fn" style="color:var(--sage);">-</span>
+</div>
+<div class="sys-card-row tl-sep">
+<span class="sys-card-lbl">Human reviews / 2,600</span>
+<span class="sys-card-val" id="dyn-sys-borderline-b" style="color:var(--teal);">-</span>
+</div>
+<div class="sys-card-row">
+<span class="sys-card-lbl">Throughput bottleneck</span>
+<span style="font-size:11px; color:var(--dark);"><span id="dyn-triage-pct-referred-card">-</span> of volume</span>
+</div>
+</div>
+</div>
+</div>
+<p style="font-size:10px; color:var(--mid); margin:8px 0 0 0;">* Assumes 100% microscopist recall on referred cells. The <span id="dyn-sys-fn-note">-</span> FN remaining after triage are cells outside the borderline band: the model classified them as Uninfected with enough confidence that they never reach the reviewer. These represent the hard floor of this architecture at this threshold.</p>
+</div>
+</section>
+<hr class="section-divider"/>
+<!-- ══════════════════════════════════ -->
+<!-- SECTION 3 | RECOMMENDATIONS        -->
+<!-- ══════════════════════════════════ -->
+<section class="doc-section" data-component="doc-section" data-component-category="content" data-component-instance="s3" data-component-version="1.0" data-cta-action="section-engage" data-cta-label="3. Recommendations" data-nav-label="3. Recommendations" id="s3">
+<div class="section-number">Section 3</div>
+<div class="section-title">Recommendations for Implementation</div>
+<div class="subsection-title" data-nav-label="Deployment Roadmap" id="s3-1">3.1 Proposed Deployment Roadmap</div>
+<!-- GANTT CHART -->
+<div style="margin:20px 0; font-size:12px; overflow-x:auto;">
+<div style="min-width:440px;">
+<!-- Month ruler -->
+<div style="display:flex; margin-bottom:2px; padding-left:142px; padding-right:2px; gap:0;">
+<div style="flex:1; position:relative; height:16px;">
+<!-- tick labels at key months -->
+<span style="position:absolute; left:0%;       transform:translateX(-50%); font-size:9px; color:var(--muted); font-weight:600;">M1</span>
+<span style="position:absolute; left:16.67%;   transform:translateX(-50%); font-size:9px; color:var(--muted); font-weight:600;">M4</span>
+<span style="position:absolute; left:33.33%;   transform:translateX(-50%); font-size:9px; color:var(--muted); font-weight:600;">M7</span>
+<span style="position:absolute; left:50%;      transform:translateX(-50%); font-size:9px; color:var(--muted); font-weight:600;">M10</span>
+<span style="position:absolute; left:66.67%;   transform:translateX(-50%); font-size:9px; color:var(--muted); font-weight:600;">M13</span>
+<span style="position:absolute; left:83.33%;   transform:translateX(-50%); font-size:9px; color:var(--muted); font-weight:600;">M16</span>
+<span style="position:absolute; left:100%;     transform:translateX(-50%); font-size:9px; color:var(--muted); font-weight:600;">M18</span>
+</div>
+</div>
+<!-- Phase rows -->
+<!-- Phase 1: M1-M3 = 0% to 16.67% -->
+<div class="gantt-row" data-phase="1">
+<div class="gantt-label">
+<div class="gantt-label-title">1. Pilot Validation</div>
+</div>
+<div class="gantt-track-col">
+<div class="gantt-track">
+<div class="gantt-gridline" style="left:16.67%;"></div>
+<div class="gantt-gridline" style="left:33.33%;"></div>
+<div class="gantt-gridline" style="left:50%;"></div>
+<div class="gantt-gridline" style="left:66.67%;"></div>
+<div class="gantt-gridline" style="left:83.33%;"></div>
+<div style="position:absolute; top:3px; bottom:3px; left:0%; width:16.67%; background:var(--coral); border-radius:3px; display:flex; align-items:center; padding:0 8px; color:#fff; font-size:10px; font-weight:700; white-space:nowrap; overflow:hidden;">Months 1-3</div>
+</div>
+<div class="gantt-desc">Run the model alongside manual review at one partner lab on 2,000+ slides. Establish a site-specific baseline before changing any workflow.</div>
+</div>
+</div>
+<!-- Phase 2: M4-M6 = 16.67% to 33.33% -->
+<div class="gantt-row" data-phase="2">
+<div class="gantt-label">
+<div class="gantt-label-title">2. Triage Integration</div>
+</div>
+<div class="gantt-track-col">
+<div class="gantt-track">
+<div class="gantt-gridline" style="left:16.67%;"></div>
+<div class="gantt-gridline" style="left:33.33%;"></div>
+<div class="gantt-gridline" style="left:50%;"></div>
+<div class="gantt-gridline" style="left:66.67%;"></div>
+<div class="gantt-gridline" style="left:83.33%;"></div>
+<div style="position:absolute; top:3px; bottom:3px; left:16.67%; width:16.67%; background:var(--teal); border-radius:3px; display:flex; align-items:center; padding:0 8px; color:#fff; font-size:10px; font-weight:700; white-space:nowrap; overflow:hidden;">Months 3-6</div>
+</div>
+<div class="gantt-desc">Connect the model to the lab's system. Confident cases go to the diagnosis queue automatically. The uncertain <span id="dyn-triage-pct-referred-s32">-</span> are flagged for a microscopist to review.</div>
+</div>
+</div>
+<!-- Phase 3: M7-M12 = 33.33% to 66.67% -->
+<div class="gantt-row" data-phase="3">
+<div class="gantt-label">
+<div class="gantt-label-title">3. Full Slide Pipeline</div>
+</div>
+<div class="gantt-track-col">
+<div class="gantt-track">
+<div class="gantt-gridline" style="left:16.67%;"></div>
+<div class="gantt-gridline" style="left:33.33%;"></div>
+<div class="gantt-gridline" style="left:50%;"></div>
+<div class="gantt-gridline" style="left:66.67%;"></div>
+<div class="gantt-gridline" style="left:83.33%;"></div>
+<div style="position:absolute; top:3px; bottom:3px; left:33.33%; width:33.33%; background:var(--sage); border-radius:3px; display:flex; align-items:center; padding:0 8px; color:#fff; font-size:10px; font-weight:700; white-space:nowrap; overflow:hidden;">Months 6-12</div>
+</div>
+<div class="gantt-desc">Add automated cell extraction from full slide images, closing the last manual step. Enables fully automated processing from image capture to result.</div>
+</div>
+</div>
+<!-- Phase 4: M13-M18 = 66.67% to 100% -->
+<div class="gantt-row" data-phase="4">
+<div class="gantt-label">
+<div class="gantt-label-title">4. Multi-Site &amp; Scale</div>
+</div>
+<div class="gantt-track-col">
+<div class="gantt-track">
+<div class="gantt-gridline" style="left:16.67%;"></div>
+<div class="gantt-gridline" style="left:33.33%;"></div>
+<div class="gantt-gridline" style="left:50%;"></div>
+<div class="gantt-gridline" style="left:66.67%;"></div>
+<div class="gantt-gridline" style="left:83.33%;"></div>
+<div style="position:absolute; top:3px; bottom:3px; left:66.67%; width:33.33%; background:var(--amber); border-radius:3px; display:flex; align-items:center; padding:0 8px; color:var(--dark); font-size:10px; font-weight:700; white-space:nowrap; overflow:hidden;">Months 12-18</div>
+</div>
+<div class="gantt-desc">Expand to 3-5 additional labs with different equipment and patient populations. Performance at one site only proves it works there. Multi-site testing is required before any broad rollout.</div>
+</div>
+</div>
+</div>
+</div>
+<!-- END GANTT -->
+<!-- ── Phase-exit criteria ──────────────────────────────────── -->
+<div style="margin:20px 0;">
+<div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.09em; color:var(--muted); margin-bottom:8px;">Phase-Exit Criteria (Go / No-Go)</div>
+<table style="width:100%; border-collapse:collapse; font-size:11px;">
+<thead>
+<tr style="background:rgba(42,127,127,0.08);">
+<th class="pec-th" style="width:18%;">Phase</th>
+<th class="pec-th" style="width:52%;">Go criteria</th>
+<th class="pec-th" style="width:30%;">No-go signal</th>
+</tr>
+</thead>
+<tbody>
+<tr class="raci-row pec-row" data-phase="1">
+<td class="pec-phase" style="color:var(--coral);">1. Pilot</td>
+<td class="pec-go">Recall on site-specific slides ≥ 97% over 500+ cases; referral rate ≤ 5%; zero high-confidence false negatives on confirmed-positive slides; lab staff sign-off on workflow</td>
+<td class="pec-nogo">Recall &lt; 95%, high-confidence FNs observed, or staining-protocol mismatch requires retraining</td>
+</tr>
+<tr class="raci-row pec-row" data-phase="2">
+<td class="pec-phase" style="color:var(--teal);">2. Triage Integration</td>
+<td class="pec-go">Triage recall matches or exceeds manual baseline; referral queue processed within shift; microscopist acceptance rate ≥ 80% in parallel run; LIS integration validated end-to-end</td>
+<td class="pec-nogo">Referral queue backlog grows, microscopist override rate exceeds 20%, or system latency &gt; 5 min per batch</td>
+</tr>
+<tr class="raci-row pec-row" data-phase="3">
+<td class="pec-phase" style="color:var(--sage);">3. Full Slide Pipeline</td>
+<td class="pec-go">Automated cell segmentation adds ≤ 2 min to total processing time; segmentation recall ≥ 95% on slide-level; end-to-end pipeline validated against ground truth</td>
+<td class="pec-nogo">Segmentation errors propagate to classifier; pipeline latency exceeds clinical turnaround requirement</td>
+</tr>
+<tr class="pec-row" data-phase="4">
+<td class="pec-phase" style="color:var(--amber);">4. Multi-Site &amp; Scale</td>
+<td class="pec-go">Recall ≥ 95% without retraining at 2+ new sites; drift detection active; retraining pipeline demonstrated; ethics/regulatory clearance obtained in at least one target jurisdiction</td>
+<td class="pec-nogo">Site-specific recall degradation &gt; 3pp, unresolved regulatory blocker, or compute infrastructure insufficient for retraining cadence</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- ── end phase-exit criteria ───────────────────────────────── -->
+<div class="subsection-title" data-nav-label="Stakeholder Actionables" id="s3-2">3.2 Stakeholder Actionables</div>
+<div style="overflow-x:auto; margin-top:8px;">
+<table style="width:100%; border-collapse:collapse; font-size:11px; min-width:640px;">
+<thead>
+<tr>
+<th class="raci-th task">Task</th>
+<th class="raci-th"><span class="tip-hdr" data-tip="Lab Directors">Lab Dir.</span></th>
+<th class="raci-th"><span class="tip-hdr" data-tip="Clinical Staff">Clinical</span></th>
+<th class="raci-th"><span class="tip-hdr" data-tip="IT / Procurement">IT</span></th>
+<th class="raci-th"><span class="tip-hdr" data-tip="Program / Donor Partners">Donor</span></th>
+<th class="raci-th"><span class="tip-hdr" data-tip="Regulatory / Ethics">Reg.</span></th>
+<th class="raci-th tline">Timeline → M18</th>
+</tr>
+</thead>
+<tbody>
+<!-- Phase 1 -->
+<tr><td class="raci-phase" colspan="7" style="color:var(--coral); background:rgba(217,95,75,0.04); border-top:1px solid rgba(217,95,75,0.15);">Phase 1 · Pilot Validation</td></tr>
+<tr class="raci-row">
+<td class="raci-task">Select pilot site</td>
+<td class="raci-dot" style="color:var(--coral);">●</td>
+<td></td><td></td>
+<td class="raci-dot" style="color:var(--muted);">○</td>
+<td></td>
+<td class="raci-bar-cell"><div class="raci-bar"><div style="position:absolute; top:2px; bottom:2px; left:0%; width:5.6%; background:var(--coral); border-radius:2px;"></div></div></td>
+</tr>
+<tr class="raci-row">
+<td class="raci-task">Hardware &amp; software setup</td>
+<td class="raci-dot" style="color:var(--muted);">○</td>
+<td></td>
+<td class="raci-dot" style="color:var(--sage);">●</td>
+<td class="raci-dot" style="color:var(--muted);">○</td>
+<td></td>
+<td class="raci-bar-cell"><div class="raci-bar"><div style="position:absolute; top:2px; bottom:2px; left:0%; width:11.1%; background:var(--sage); border-radius:2px;"></div></div></td>
+</tr>
+<tr class="raci-row">
+<td class="raci-task">Ethics / IRB review</td>
+<td class="raci-dot" style="color:var(--muted);">○</td>
+<td></td><td></td><td></td>
+<td class="raci-dot" style="color:var(--mid);">●</td>
+<td class="raci-bar-cell"><div class="raci-bar"><div style="position:absolute; top:2px; bottom:2px; left:0%; width:11.1%; background:var(--mid); border-radius:2px;"></div></div></td>
+</tr>
+<tr class="raci-row">
+<td class="raci-task">Staff training</td>
+<td class="raci-dot" style="color:var(--muted);">○</td>
+<td class="raci-dot" style="color:var(--teal);">●</td>
+<td></td><td></td><td></td>
+<td class="raci-bar-cell"><div class="raci-bar"><div style="position:absolute; top:2px; bottom:2px; left:5.6%; width:11.1%; background:var(--teal); border-radius:2px;"></div></div></td>
+</tr>
+<tr class="raci-row">
+<td class="raci-task">Parallel run (model vs. manual)</td>
+<td class="raci-dot" style="color:var(--coral);">●</td>
+<td class="raci-dot" style="color:var(--muted);">○</td>
+<td></td><td></td><td></td>
+<td class="raci-bar-cell"><div class="raci-bar"><div style="position:absolute; top:2px; bottom:2px; left:0%; width:16.7%; background:var(--coral); border-radius:2px;"></div></div></td>
+</tr>
+<tr class="raci-row">
+<td class="raci-task">Baseline performance review</td>
+<td class="raci-dot" style="color:var(--coral);">●</td>
+<td class="raci-dot" style="color:var(--muted);">○</td>
+<td></td><td></td><td></td>
+<td class="raci-bar-cell"><div class="raci-bar"><div style="position:absolute; top:2px; bottom:2px; left:11.1%; width:5.6%; background:var(--coral); border-radius:2px;"></div></div></td>
+</tr>
+<!-- Phase 2 -->
+<tr><td class="raci-phase" colspan="7" style="color:var(--teal); background:rgba(26,107,124,0.04); border-top:1px solid rgba(26,107,124,0.15);">Phase 2 · Triage Integration</td></tr>
+<tr class="raci-row">
+<td class="raci-task">Triage system go-live</td>
+<td class="raci-dot" style="color:var(--muted);">○</td>
+<td></td>
+<td class="raci-dot" style="color:var(--teal);">●</td>
+<td></td><td></td>
+<td class="raci-bar-cell"><div class="raci-bar"><div style="position:absolute; top:2px; bottom:2px; left:16.7%; width:5.6%; background:var(--teal); border-radius:2px;"></div></div></td>
+</tr>
+<tr class="raci-row">
+<td class="raci-task">Monitor &amp; refine sensitivity threshold</td>
+<td class="raci-dot" style="color:var(--coral);">●</td>
+<td class="raci-dot" style="color:var(--teal);">●</td>
+<td></td><td></td><td></td>
+<td class="raci-bar-cell"><div class="raci-bar"><div style="position:absolute; top:2px; bottom:2px; left:16.7%; width:16.7%; background:var(--teal); border-radius:2px; opacity:0.7;"></div></div></td>
+</tr>
+<!-- Phase 3 -->
+<tr><td class="raci-phase" colspan="7" style="color:var(--sage); background:rgba(78,158,120,0.04); border-top:1px solid rgba(78,158,120,0.2);">Phase 3 · Full Slide Pipeline</td></tr>
+<tr class="raci-row">
+<td class="raci-task">Build cell extraction module</td>
+<td></td><td></td>
+<td class="raci-dot" style="color:var(--sage);">●</td>
+<td></td><td></td>
+<td class="raci-bar-cell"><div class="raci-bar"><div style="position:absolute; top:2px; bottom:2px; left:33.3%; width:33.3%; background:var(--sage); border-radius:2px;"></div></div></td>
+</tr>
+<tr class="raci-row">
+<td class="raci-task">Full pipeline testing &amp; sign-off</td>
+<td class="raci-dot" style="color:var(--coral);">●</td>
+<td class="raci-dot" style="color:var(--muted);">○</td>
+<td class="raci-dot" style="color:var(--muted);">○</td>
+<td></td><td></td>
+<td class="raci-bar-cell"><div class="raci-bar"><div style="position:absolute; top:2px; bottom:2px; left:50%; width:16.7%; background:var(--sage); border-radius:2px; opacity:0.7;"></div></div></td>
+</tr>
+<!-- Phase 4 -->
+<tr><td class="raci-phase" colspan="7" style="color:#b07a10; background:rgba(232,168,56,0.05); border-top:1px solid rgba(232,168,56,0.25);">Phase 4 · Multi-Site &amp; Scale</td></tr>
+<tr class="raci-row">
+<td class="raci-task">Multi-site rollout (3-5 labs)</td>
+<td class="raci-dot" style="color:var(--coral);">●</td>
+<td></td>
+<td class="raci-dot" style="color:var(--muted);">○</td>
+<td class="raci-dot" style="color:var(--amber);">●</td>
+<td></td>
+<td class="raci-bar-cell"><div class="raci-bar"><div style="position:absolute; top:2px; bottom:2px; left:66.7%; width:33.3%; background:var(--amber); border-radius:2px;"></div></div></td>
+</tr>
+<tr class="raci-row">
+<td class="raci-task">Regulatory submission</td>
+<td class="raci-dot" style="color:var(--muted);">○</td>
+<td></td><td></td>
+<td class="raci-dot" style="color:var(--muted);">○</td>
+<td class="raci-dot" style="color:var(--mid);">●</td>
+<td class="raci-bar-cell"><div class="raci-bar"><div style="position:absolute; top:2px; bottom:2px; left:66.7%; width:16.7%; background:var(--mid); border-radius:2px;"></div></div></td>
+</tr>
+<tr>
+<td class="raci-task">Cross-site performance review</td>
+<td class="raci-dot" style="color:var(--coral);">●</td>
+<td class="raci-dot" style="color:var(--muted);">○</td>
+<td></td><td></td><td></td>
+<td class="raci-bar-cell"><div class="raci-bar"><div style="position:absolute; top:2px; bottom:2px; left:77.8%; width:22.2%; background:var(--amber); border-radius:2px; opacity:0.7;"></div></div></td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td colspan="7" style="padding:8px 10px 2px; font-size:10px; color:var(--muted);">
+<strong style="color:var(--dark);">●</strong> leads    <strong style="color:var(--dark);">○</strong> supports
+        </td>
+</tr>
+</tfoot>
+</table>
+</div>
+<div class="subsection-title" data-nav-label="Benefits and Costs" id="s3-3">3.3 Expected Benefits and Cost Assumptions</div>
+<div class="callout sage">
+<div class="callout-title">Important note on these estimates</div>
+<p>Time benchmarks for manual microscopy are drawn from WHO guidelines.<a class="ref-sup" href="#ref-8">[8]</a><a class="ref-sup" href="#ref-9">[9]</a> Hardware costs reflect publicly available retail pricing. Workload reduction figures are derived directly from this model's triage performance (<span id="dyn-triage-ref-s33-note">-</span> referral rate). Pilot budget estimates are author projections based on comparable field deployments in low-resource settings, primarily sub-Saharan Africa; they are planning assumptions, not audited figures. Site-specific validation is required before scaling.</p>
+</div>
+<p style="margin-bottom:10px;"><strong>Estimated time per day (100 slides, 200 cells per slide):</strong></p>
+<!-- Time comparison visual -->
+<div style="font-size:12px; margin-bottom:18px;">
+<!-- Manual row -->
+<div class="time-row">
+<div class="time-label">Manual review<a class="ref-sup" href="#ref-8">[8]</a></div>
+<div class="time-bar-wrap">
+<div style="width:100%; background:var(--coral); border-radius:4px; height:100%; opacity:0.75;"></div>
+<span style="position:absolute; left:8px; top:50%; transform:translateY(-50%); color:#fff; font-weight:700; white-space:nowrap;">8-25 person-hours / day</span>
+</div>
+<div class="time-bar-side">5-15 min per slide</div>
+</div>
+<!-- AI row -->
+<div class="time-row">
+<div class="time-label">AI pre-screening</div>
+<div class="time-bar-wrap">
+<div style="width:3%; background:var(--teal); border-radius:4px 0 0 4px; height:100%; opacity:0.85; min-width:6px;"></div>
+<span style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--mid); font-weight:700; white-space:nowrap;">~50 min compute</span>
+</div>
+<div class="time-bar-side">&lt;30 sec per slide</div>
+</div>
+<!-- Human review of borderline row -->
+<div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+<div class="time-label">Borderline review</div>
+<div class="time-bar-wrap">
+<div style="width:2%; background:var(--sage); border-radius:4px 0 0 4px; height:100%; opacity:0.85; min-width:6px;"></div>
+<span style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--mid); font-weight:700; white-space:nowrap;">~8 min microscopist time</span>
+</div>
+<div class="time-bar-side"><span id="dyn-triage-pct-referred-s33">-</span> of slides referred</div>
+</div>
+<!-- Net reduction callout -->
+<div style="display:flex; align-items:center; gap:12px; padding:10px 14px; background:var(--teal-light); border-left:3px solid var(--teal); border-radius:0 6px 6px 0;">
+<div style="font-size:28px; font-weight:800; color:var(--teal); line-height:1;">~98%</div>
+<div style="color:var(--dark); font-weight:600; line-height:1.4;">of daily microscopist screening time freed for other work<br/><span style="font-weight:400; color:var(--muted); font-size:11px;">derived from model triage rate, not a literature benchmark</span></div>
+</div>
+</div>
+<p><strong>The value is in capability reallocation, not cost reduction.</strong> Trained diagnostic staff are scarce and serve large catchment populations. Hours spent on routine cell screening are hours unavailable for complex case review, patient consultation, and outbreak response. Automated pre-screening returns that time to work only a human can do.</p>
+<p>High recall does not come at the cost of specificity. At <span id="dyn-cnn3-32-specificity">-</span> specificity, CNN3-32px generates only <span id="dyn-cnn3-32-fp">-</span> false positives per 1,300 uninfected cells tested. Clinicians receive a flagged case only when the model has meaningful signal, not a flood of false alarms that erode trust and consume time.</p>
+<div style="display:flex; align-items:center; gap:0; margin:12px 0 20px 0; font-size:11px;">
+<div style="background:var(--coral-light); border:1px solid var(--coral); border-radius:6px; padding:6px 10px; text-align:center; min-width:90px;">
+<div style="font-weight:700; color:var(--coral);">Before</div>
+<div style="color:var(--dark); margin-top:2px;">Routine screening<br/><span style="color:var(--mid);">repetitive, low-judgment</span></div>
+</div>
+<div style="font-size:16px; color:var(--mid); padding:0 8px;">→</div>
+<div style="background:var(--teal-light); border:1px solid var(--teal); border-radius:6px; padding:6px 10px; text-align:center; min-width:90px;">
+<div style="font-weight:700; color:var(--teal);">ML handles</div>
+<div style="color:var(--dark); margin-top:2px;">~98% of slides<br/><span style="color:var(--mid);">auto-classified</span></div>
+</div>
+<div style="font-size:16px; color:var(--mid); padding:0 8px;">→</div>
+<div style="background:var(--sage-light); border:1px solid var(--sage); border-radius:6px; padding:6px 10px; text-align:center; min-width:90px;">
+<div style="font-weight:700; color:var(--sage);">Microscopist</div>
+<div style="color:var(--dark); margin-top:2px;">Patient care<br/>complex cases</div>
+</div>
+</div>
+<p style="margin-bottom:10px;"><strong>Phase 1 Pilot Budget Estimate: 6 months, 2 sites,</strong> incremental to baseline staffing, calibrated to sub-Saharan Africa field conditions (author estimates; no published benchmark):</p>
+<table style="width:100%; border-collapse:collapse; font-size:12px; margin-bottom:14px;">
+<thead>
+<tr style="border-bottom:2px solid rgba(42,127,127,0.2); background:rgba(42,127,127,0.05);">
+<th class="bud-th">Category</th>
+<th class="bud-th">Item</th>
+<th class="bud-th num">Low</th>
+<th class="bud-th num">High</th>
+</tr>
+</thead>
+<tbody>
+<tr class="bud-row-sep">
+<td class="bud-td cat" rowspan="2" style="color:var(--teal);">Hardware</td>
+<td class="pec-go">Laptop per site (2), if not already owned<br/><span style="font-size:11px; color:var(--muted);">$300-$500 each; most partner labs may already have suitable hardware</span></td>
+<td class="bud-td num">$0</td>
+<td class="bud-td num">$1,000</td>
+</tr>
+<tr class="bud-row-sep">
+<td class="pec-go">Camera mount / USB microscope adapter per site (2)</td>
+<td class="bud-td num">$600</td>
+<td class="bud-td num">$2,000</td>
+</tr>
+<tr class="bud-row-alt">
+<td class="bud-td cat" rowspan="3" style="color:var(--amber);">Personnel</td>
+<td class="pec-go">Pilot coordinator (0.5 FTE, 6 months)<br/><span style="font-size:11px; color:var(--muted);">Manages logistics, data collection, and lab liaison. The single largest cost.</span></td>
+<td class="bud-td num">$9,000</td>
+<td class="bud-td num">$15,000</td>
+</tr>
+<tr class="bud-row-alt">
+<td class="pec-go">Lab technician training per site (2-day onboarding, 2 technicians each)<br/><span style="font-size:11px; color:var(--muted);">4 technicians total across 2 sites</span></td>
+<td class="bud-td num">$1,600</td>
+<td class="bud-td num">$3,200</td>
+</tr>
+<tr class="bud-row-alt">
+<td class="pec-go">Technical support / data review (partial, remote)<br/><span style="font-size:11px; color:var(--muted);">Monthly check-ins, model monitoring, anomaly review</span></td>
+<td class="bud-td num">$3,000</td>
+<td class="bud-td num">$5,000</td>
+</tr>
+<tr class="bud-row-sep">
+<td class="bud-td cat" rowspan="2" style="color:var(--coral);">Travel</td>
+<td class="pec-go">Site visits for setup and mid-pilot review (2 trips)<br/><span style="font-size:11px; color:var(--muted);">Flights, accommodation, per diem for coordinator</span></td>
+<td class="bud-td num">$6,000</td>
+<td class="bud-td num">$10,000</td>
+</tr>
+<tr class="bud-row-sep">
+<td class="pec-go">Lab supplies (consumables for parallel-run slides)</td>
+<td class="bud-td num">$800</td>
+<td class="bud-td num">$1,500</td>
+</tr>
+<tr class="bud-row-alt">
+<td class="bud-td cat" style="color:var(--mid);">Ethics / Regulatory</td>
+<td class="pec-go">IRB / ethics submission and local regulatory filing<br/><span style="font-size:11px; color:var(--muted);">Highly variable by jurisdiction; zero if existing ethics framework already covers AI-assist studies</span></td>
+<td class="bud-td num">$0</td>
+<td class="bud-td num">$5,000</td>
+</tr>
+<tr style="border-top:2px solid rgba(42,127,127,0.2); background:rgba(42,127,127,0.06);">
+<td class="bud-td cat" colspan="2" style="padding:8px 10px;">Total (incremental estimate)</td>
+<td class="bud-td num" style="padding:8px 10px; font-weight:800; font-size:14px; color:var(--teal);">$21K</td>
+<td class="bud-td num" style="padding:8px 10px; font-weight:800; font-size:14px; color:var(--teal);">$43K</td>
+</tr>
+</tbody>
+</table>
+<div class="callout coral">
+<strong>Not included in this estimate:</strong> baseline lab operating costs, existing microscopist salary, cell segmentation tooling development, or model retraining costs triggered after the pilot. Those are ongoing program costs, not pilot-specific expenditures. Ongoing inference costs after deployment are effectively zero: no cloud subscription is required, and the model runs on existing hardware.
+  </div>
+<p><strong>Estimated health impact (illustrative):</strong></p>
+<ul>
+<li>At <span id="dyn-cnn3-32-recall-s33">-</span> recall (CNN3-32px), 1 in approximately <span id="dyn-cnn3-32-fn-denom">-</span> infected cells is missed. For a lab processing 5,000 Parasitized cells per day, this implies approximately <span id="dyn-cnn3-32-fn-per5k">-</span> undetected infections per day rather than 5,000 (if no automated screening were in place and slides went unreviewed due to staffing constraints).</li>
+<li>The relevant baseline is not perfect human microscopy but delayed or absent screening. Against that baseline, automated pre-screening with <span id="dyn-triage-pct-referred-s33b">-</span> human review is a clear improvement in access to timely diagnosis.</li>
+</ul>
+<div class="subsection-title" data-nav-label="Risks and Challenges" id="s3-4">3.4 Key Risks and Challenges</div>
+<p>Six risks require active management before and during the pilot. None are blockers to starting; all have defined mitigations.</p>
+<div class="risk-grid">
+<div class="risk-card">
+<div class="risk-title">Single-source training data</div>
+<div class="risk-body">All training images come from one institution with one staining method and one imaging setup. The performance numbers reflect how well the model handles images like the ones it trained on. Testing at different labs, with different equipment and protocols, has not been done and is required before any clinical deployment beyond the pilot site.</div>
+</div>
+<div class="risk-card">
+<div class="risk-title">Species generalization</div>
+<div class="risk-body">The training data contains predominantly <em>P. falciparum</em>, the most common and deadly malaria species. Other species (<em>P. vivax</em>, <em>P. ovale</em>, <em>P. malariae</em>) look different under the microscope. The model has not been tested on them and may miss infections without warning in regions where these species are prevalent.</div>
+</div>
+<div class="risk-card">
+<div class="risk-title">Whole-slide pipeline gap</div>
+<div class="risk-body">The model classifies individual cell images, but extracting those cells from a full microscope slide photograph is a separate step that hasn't been built yet. Until it is, someone must manually crop cells before the software can analyze them. That manual step limits the throughput gains the model can deliver and introduces its own errors.</div>
+</div>
+<div class="risk-card">
+<div class="risk-title">Interpretability and clinician trust</div>
+<div class="risk-body">The model returns a classification with no explanation of what drove it. Clinicians who cannot inspect the reasoning have legitimate grounds to distrust the output, which creates an adoption barrier independent of the model's accuracy. This project scoped for classification performance; visual explanation tooling (heatmaps highlighting which part of a cell drove the prediction) was not implemented but is compatible with this architecture and does not require retraining. It is a defined Phase 2 deliverable.</div>
+</div>
+<div class="risk-card">
+<div class="risk-title">Staining and imaging variability</div>
+<div class="risk-body">Real-world blood smears vary by staining concentration, preparation method, microscope model, and camera. The model was trained on standardized images. Labs with different equipment or protocols may see degraded accuracy and will likely need to retrain the model on a small set of their own verified slides before deployment.</div>
+</div>
+<div class="risk-card">
+<div class="risk-title">Regulatory and liability pathway</div>
+<div class="risk-body">Clinical diagnostic software requires regulatory clearance in most jurisdictions (FDA, CE-IVD, and local equivalents). This prototype has not been submitted for review. The two deployment paths carry different burdens: Path B, where the model is advisory and a microscopist confirms borderline results, follows a lighter decision-support pathway. Path A, where the model autonomously classifies the majority of cases, requires a stronger evidence package. Beginning under Path B is not merely a conservative operational choice; it generates the documented clinical performance data that any Path A submission will require.</div>
+</div>
+</div>
+<div class="subsection-title" data-nav-label="Further Analysis" id="s3-5">3.5 Further Analysis Required</div>
+<p>Five workstreams represent the clearest path from proof-of-concept to production-ready tool, ordered roughly by effort and dependency:</p>
+<ol>
+<li>
+<strong>Model optimization experiments.</strong> Three controlled experiments are queued, all requiring no architectural changes and minimal additional compute:
+      <ul style="margin-top:8px;">
+<li><strong>Resolution + class-weight stack.</strong> Test the custom CNN at 48px (between the 32px winner and 64px underperformer), and combine it with a higher class-weight ratio to test whether the two recall levers compound.</li>
+<li><strong>MobileNetV2 controlled rerun.</strong> Retrain MobileNetV2 with the same recipe used for CNN3 (class weighting + early stopping on validation loss) to establish whether its recall gap is architectural or a configuration artifact.</li>
+<li><strong>Class-weight sensitivity sweep.</strong> Test ratios from 1:3 to 1:10 across both architectures to identify the point of diminishing returns or training instability.</li>
+</ul>
+</li>
+<li>
+<strong>Cross-site validation.</strong> Test-set performance only shows how the model handles images from the same source it was trained on. Running it against 500-1,000 verified slides from two different labs, with no retraining, would show how much accuracy degrades across different equipment and staining conditions. Beyond initial validation, the longer-term question is drift: new labs, new staining batches, technician variation over time. The triage loop provides a natural answer. Borderline cases routed to human review become labeled data; nightly retraining on that feedback allows the model to adapt continuously. CNN3's small parameter count and 32px input make this operationally practical on modest hardware, without requiring cloud compute or specialist infrastructure.
+    </li>
+<li>
+<strong>End-to-end slide pipeline.</strong> The current system requires pre-cropped individual cell images as input. A production-ready system needs a first stage that takes a full microscope photograph, locates the individual cells, and crops them automatically before passing them to the classifier. Hung et al. (2017) showed that a two-stage approach on malaria slides achieved 98% accuracy, matching expert human performance.<a class="ref-sup" href="#ref-5">[5]</a>
+</li>
+<li>
+<strong>Image capture integration.</strong> Removing the manual cell-cropping step requires integrating with a digitally-enabled microscope that can export images directly into the pipeline. Two deployment patterns are viable and serve different program needs. In a point-of-care setting, where a patient is present and treatment decisions are immediate, synchronous classification at the moment of capture returns a result before the patient leaves. In a surveillance or population-screening setting, where throughput matters more than individual turnaround time, an asynchronous queue processes images as they accumulate, with results available for batch clinical review. Cell segmentation is a prerequisite for both. The choice between them is a program-level decision that depends on the clinical context, staffing model, and infrastructure at each site.
+    </li>
+<li>
+<strong>Prediction confidence and uncertainty estimation.</strong> The current model outputs a sigmoid score that is used to route cells into three buckets. A more principled alternative is Monte Carlo Dropout, which runs inference multiple times with dropout active and uses the variance across runs as an explicit uncertainty estimate. Cells where the model is internally inconsistent across passes are flagged as uncertain regardless of where they fall relative to the fixed thresholds. This would reduce the threshold-setting burden and give microscopists a more interpretable signal: not just "borderline score" but "the model is uncertain on this cell." The computational overhead is modest (multiple forward passes on existing hardware) and the implementation requires no architectural change. For a submission intended to meet regulatory scrutiny, quantified uncertainty per cell provides a more principled basis for referral decisions than a fixed threshold alone.
+    </li>
+<li>
+<strong>Parasite specificity testing.</strong> Giemsa stain is not exclusive to <span class="term" data-term="Plasmodium">Plasmodium</span>. It is the standard stain for a range of blood parasites, including <em>Trypanosoma</em> (Chagas disease), <em>Leishmania</em>, and <em>Histoplasma</em>, as well as for general white blood cell and platelet morphology. The model was trained on slides labeled "Parasitized" or "Uninfected" where the parasitic signal is exclusively Plasmodium, but it has never been tested on slides containing other organisms. The open question for clinical deployment is whether the model has learned morphological features specific to Plasmodium, or whether it responds to any nuclear inclusion pattern that Giemsa renders visible. A false positive triggered by a non-malarial parasite is not a missed malaria case, but it changes how the tool should be represented to clinicians, how referral rates should be interpreted in co-endemic regions, and whether the output label should read "malaria detected" or the more defensible "parasite detected, confirm species." This should be tested before deployment in regions where co-infection or differential diagnosis is clinically relevant.
+    </li>
+</ol>
+<!-- ── MLOps and production monitoring ──────────────────────── -->
+<div style="background:rgba(42,127,127,0.04); border-left:3px solid var(--teal); border-radius:0 6px 6px 0; padding:14px 18px; margin:20px 0;">
+<div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.09em; color:var(--teal); margin-bottom:8px;">Production Monitoring and Model Governance</div>
+<p style="margin:0 0 8px 0;">A model that performs well in testing can still fail in production if image quality shifts, sites use different equipment, or no one is watching for degradation. The following workstreams address each of those failure modes and should be scoped into the Phase 2 implementation plan:</p>
+<ul style="margin:0; padding-left:20px; font-size:13px; color:var(--dark); line-height:1.6;">
+<li><strong>Model registry and versioning.</strong> Every deployed version is stored with its performance record, enabling rollback if a retrained model underperforms and providing the audit trail required for regulatory submissions.</li>
+<li><strong>Distribution drift monitoring.</strong> The referral rate (the share of cells routed to the microscopist) rises before accuracy degrades when image quality changes (new equipment, different staining batch, technician variation). A simple daily dashboard against the pilot baseline is sufficient for early detection at small-volume sites.</li>
+<li><strong>Operating-point adjustment (no retraining required).</strong> Sensitivity and referral volume can be dialed up or down at any time without rebuilding the model. A site that wants more conservative behavior routes more cases to the microscopist; one that wants lower workload routes fewer. This is the first lever to pull when a site raises concerns. Retraining is the escalation, not the default.</li>
+<li><strong>Retraining pipeline.</strong> Every borderline cell the microscopist reviews generates a new labeled example. A nightly retraining cycle on that accumulated data keeps the model calibrated to local conditions, and the model is compact enough to retrain fully on a standard laptop in under 30 minutes without cloud infrastructure. Retraining is triggered when estimated field recall falls below 97% or referral volume rises more than 3 percentage points above the pilot baseline.</li>
+<li><strong>Reproducibility and code freeze.</strong> Before clinical deployment, the software pipeline is locked to a documented version with a full record of the training data used, a requirement for regulatory submissions and meaningful cross-site performance comparison.</li>
+</ul>
+</div>
+<!-- ── end MLOps ──────────────────────────────────────────────── -->
+<!-- Deployment path visual -->
+<div style="margin:20px 0 8px; font-size:12px;">
+<!-- shared upstream step -->
+<div style="display:flex; justify-content:center; margin-bottom:0;">
+<div style="background:var(--dark); color:#fff; border-radius:6px; padding:7px 18px; font-weight:600; font-size:11px; text-align:center;">Specimen collection &amp; preparation</div>
+</div>
+<!-- fork connector -->
+<div style="position:relative; height:28px;">
+<div style="position:absolute; left:50%; top:0; transform:translateX(-50%); width:2px; height:14px; background:var(--border);"></div>
+<div style="position:absolute; top:14px; left:25%; right:25%; height:2px; background:var(--border);"></div>
+<div style="position:absolute; top:14px; left:25%; transform:translateX(-50%); width:2px; height:14px; background:var(--teal);"></div>
+<div style="position:absolute; top:14px; right:25%; transform:translateX(50%); width:2px; height:14px; background:var(--mid);"></div>
+</div>
+<!-- two paths -->
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:0; align-items:start;">
+<!-- PATH A: AI Triage Mode -->
+<div style="border:2px solid var(--teal); border-radius:8px; overflow:hidden;">
+<div style="background:var(--teal); color:#fff; padding:7px 12px; font-weight:700; font-size:11px; text-align:center; letter-spacing:0.03em;">PATH A · AI Triage Mode <span style="background:rgba(255,255,255,0.25); border-radius:3px; padding:1px 6px; font-size:9px; margin-left:4px;">Recommended</span></div>
+<div class="path-inner">
+<div style="display:grid; grid-template-columns:50px 8px 1fr; align-items:stretch; row-gap:0;">
+<div class="path-lbl" style="color:var(--teal);">smear</div>
+<div class="flex-col-center"><div class="path-pipe" style="background:var(--teal); min-height:36px;"></div></div>
+<div class="path-step teal"><div><div class="path-step-title">Specimen collection &amp; preparation</div><div class="path-step-desc">Blood smear stained (Giemsa); segmented into cell images</div></div></div>
+<div class="path-lbl" style="color:var(--teal);">classify</div>
+<div class="flex-col-center"><div class="path-pipe" style="background:var(--teal); min-height:36px;"></div></div>
+<div class="path-step teal"><div><div class="path-step-title">CNN3-32px classifies all cells</div><div class="path-step-desc">Sigmoid scores assigned to each cell. ~3 min compute.</div></div></div>
+<div class="path-lbl" style="color:var(--teal);">split</div>
+<div class="flex-col-center"><div class="path-pipe" style="background:var(--teal); min-height:52px;"></div></div>
+<div class="split-grid">
+<div class="split-cell teal"><div class="split-lbl" style="font-weight:700; color:var(--teal);">Auto Uninfected</div><div class="vs-metric-val" style="color:var(--teal);">~49%</div><div class="split-lbl">direct</div></div>
+<div class="split-cell amber"><div class="split-lbl" style="font-weight:700; color:#8a6200;">Referred</div><div class="vs-metric-val" style="color:#8a6200;"><span id="dyn-triage-ref-path-a">-</span></div><div class="split-lbl">reviewed</div></div>
+<div class="split-cell coral"><div class="split-lbl" style="font-weight:700; color:#c04040;">Auto Para.</div><div class="vs-metric-val" style="color:#c04040;">~49%</div><div class="split-lbl">direct</div></div>
+</div>
+<div class="path-lbl" style="color:var(--teal);">treated</div>
+<div class="flex-col-center"><div class="path-pipe" style="background:var(--teal); min-height:36px; opacity:1;"></div></div>
+<div style="background:var(--teal); border-radius:5px; padding:6px 10px; color:#fff; font-weight:600; margin-bottom:12px; min-height:36px; display:flex; align-items:center;">Patient notified; treatment initiated — <span style="font-weight:400; font-size:10px; margin-left:4px;">~25-30 min total</span></div>
+</div>
+<div class="path-footer">
+<div style="color:var(--muted); font-size:10px; margin-bottom:3px; text-transform:uppercase; letter-spacing:0.04em;">Best suited for</div>
+<div style="color:var(--dark); font-size:11px;">Point-of-care settings; patient present; treatment decision is immediate</div>
+</div>
+</div>
+</div>
+<!-- PATH B: AI-Assisted Batch Screening -->
+<div style="border:2px solid var(--mid); border-radius:8px; overflow:hidden;">
+<div style="background:var(--mid); color:#fff; padding:7px 12px; font-weight:700; font-size:11px; text-align:center; letter-spacing:0.03em;">PATH B · AI-Assisted Batch Screening</div>
+<div class="path-inner">
+<div style="display:grid; grid-template-columns:50px 8px 1fr; align-items:stretch; row-gap:0;">
+<div class="path-lbl" style="color:var(--mid);">smear</div>
+<div class="flex-col-center"><div class="path-pipe" style="background:var(--mid); min-height:36px;"></div></div>
+<div class="path-step grey"><div><div class="path-step-title">Specimen collection &amp; preparation</div><div class="path-step-desc">Blood smear stained (Giemsa)</div></div></div>
+<div class="path-lbl" style="color:var(--mid);">transport</div>
+<div class="flex-col-center"><div class="path-pipe" style="background:var(--mid); min-height:36px;"></div></div>
+<div class="path-step grey"><div><div class="path-step-title">Slide transported to lab</div><div class="path-step-desc">Batches collected from one or more clinics</div></div></div>
+<div style="font-size:10px; color:#8a6200; font-weight:600; padding-top:5px; align-self:start; line-height:1.2; font-style:italic;">queue</div>
+<div class="flex-col-center"><div style="width:2px; flex:1; min-height:44px; background:repeating-linear-gradient(to bottom, #c8940a 0, #c8940a 5px, transparent 5px, transparent 10px); opacity:0.5;"></div></div>
+<div style="background:#fdf6e3; border:1px dashed rgba(212,160,23,0.5); border-radius:5px; padding:6px 10px; margin-bottom:3px; min-height:44px; display:flex; align-items:center;"><div><div style="font-weight:600; color:#8a6200;">Slides queued for processing</div><div class="path-step-desc">Image capture and cell segmentation on batch arrival</div></div></div>
+<div class="path-lbl" style="color:var(--mid);">classify</div>
+<div class="flex-col-center"><div class="path-pipe" style="background:var(--mid); min-height:36px;"></div></div>
+<div class="path-step grey"><div><div class="path-step-title">CNN3-32px classifies all cells</div><div class="path-step-desc">Sigmoid scores assigned to each cell. ~3 min compute.</div></div></div>
+<div class="path-lbl" style="color:var(--mid);">split</div>
+<div class="flex-col-center"><div class="path-pipe" style="background:var(--mid); min-height:52px;"></div></div>
+<div class="split-grid">
+<div class="split-cell teal"><div class="split-lbl" style="font-weight:700; color:var(--teal);">Auto Uninfected</div><div class="vs-metric-val" style="color:var(--teal);">~49%</div><div class="split-lbl">direct</div></div>
+<div class="split-cell amber"><div class="split-lbl" style="font-weight:700; color:#8a6200;">Referred</div><div class="vs-metric-val" style="color:#8a6200;"><span id="dyn-triage-ref-path-b">-</span></div><div class="split-lbl">reviewed</div></div>
+<div class="split-cell coral"><div class="split-lbl" style="font-weight:700; color:#c04040;">Auto Para.</div><div class="vs-metric-val" style="color:#c04040;">~49%</div><div class="split-lbl">direct</div></div>
+</div>
+<div class="path-lbl" style="color:var(--mid);">report</div>
+<div class="flex-col-center"><div class="path-pipe" style="background:var(--mid); min-height:36px;"></div></div>
+<div class="path-step grey"><div><div class="path-step-title">AI classification report generated</div><div class="path-step-desc">Cells in the referral zone routed to microscopist queue</div></div></div>
+<div style="font-size:10px; color:#8a6200; font-weight:600; padding-top:5px; align-self:start; line-height:1.2; font-style:italic;">queue</div>
+<div class="flex-col-center"><div style="width:2px; flex:1; min-height:88px; background:repeating-linear-gradient(to bottom, #c8940a 0, #c8940a 5px, transparent 5px, transparent 10px); opacity:0.5;"></div></div>
+<div style="background:#fdf6e3; border:1px dashed rgba(212,160,23,0.5); border-radius:5px; padding:6px 10px; margin-bottom:3px; min-height:88px; display:flex; align-items:center;"><div><div style="font-weight:600; color:#8a6200;">Microscopist reviews referred cells</div><div class="path-step-desc">Confirms or overrides borderline AI calls. Bottleneck scales with batch volume and number of contributing clinics.</div></div></div>
+<div class="path-lbl" style="color:var(--mid);">treated</div>
+<div class="flex-col-center"><div class="path-pipe" style="background:var(--mid); min-height:36px; opacity:1;"></div></div>
+<div style="background:var(--mid); border-radius:5px; padding:6px 10px; color:#fff; font-weight:600; margin-bottom:12px; min-height:36px; display:flex; align-items:center;">Patient notified; treatment initiated — <span style="font-weight:400; font-size:10px; margin-left:4px;">hours to days total</span></div>
+</div>
+<div class="path-footer">
+<div style="color:var(--muted); font-size:10px; margin-bottom:3px; text-transform:uppercase; letter-spacing:0.04em;">Best suited for</div>
+<div style="color:var(--dark); font-size:11px;">High-volume surveillance; results feed population-level reporting; infrastructure is intermittent or shared</div>
+</div>
+</div>
+</div>
+</div>
+<!-- business decision callout -->
+<div style="margin-top:16px; border:1px solid var(--amber); border-radius:8px; overflow:hidden;">
+<div style="background:var(--amber); color:#fff; padding:7px 14px; font-weight:700; font-size:11px; letter-spacing:0.03em;">Program-level decision required</div>
+<div style="padding:12px 14px; display:grid; grid-template-columns:1fr 1fr; gap:12px; background:#fffdf5;">
+<div>
+<div class="path-choice-title">Choose Path A if:</div>
+<ul class="path-choice-list">
+<li>Patients present at point of care</li>
+<li>Treatment decisions cannot wait</li>
+<li>Stable power and connectivity at site</li>
+</ul>
+</div>
+<div>
+<div class="path-choice-title">Choose Path B if:</div>
+<ul class="path-choice-list">
+<li>High slide volume; throughput is the constraint</li>
+<li>Results feed population-level reporting</li>
+<li>Infrastructure is intermittent or shared</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="callout amber">
+<div class="callout-title">Bottom line for decision-makers</div>
+<p><span id="dyn-best-name-pilot">-</span> is ready for a structured pilot. The model is compact, high-recall, and deployable on standard hardware. The next required step is not more model development, but rather a controlled pilot study at a partner lab to confirm that the <span id="dyn-cnn3-recall-s35">-</span> recall holds under real-world staining and imaging conditions, and to establish the operational workflow for borderline-case referral. A 6-month pilot with 2 sites and a $21,000-$43,000 incremental budget would provide the evidence base to support a scale decision. (Budget figures are author estimates based on comparable field deployments in low-resource settings; no published benchmark.)</p>
+</div>
+</section>
+<hr class="section-divider"/>
+<!-- ══════════════════════════════════ -->
+<!-- REFERENCES                         -->
+<!-- ══════════════════════════════════ -->
+<section class="doc-section" data-component="doc-section" data-component-category="content" data-component-instance="references" data-component-version="1.0" data-cta-action="section-engage" data-cta-label="References" data-nav-label="References" id="references">
+<div class="section-number">Appendix</div>
+<div class="section-title">References</div>
+<ul style="font-size:14px; color: var(--mid); line-height:1.8;">
+<li id="ref-1"><strong>[1]</strong> World Health Organization. <em>World Malaria Report 2020.</em> Geneva: WHO, 2020. <a href="https://www.who.int/publications/i/item/9789240015791" rel="noopener" target="_blank">who.int</a></li>
+<li id="ref-2"><strong>[2]</strong> NIH Malaria Cell Images Dataset. U.S. National Library of Medicine. <a href="https://lhncbc.nlm.nih.gov/LHC-research/LHC-projects/image-processing/malaria-datasheet.html" rel="noopener" target="_blank">lhncbc.nlm.nih.gov</a></li>
+<li id="ref-3"><strong>[3]</strong> Rajaraman, S. et al. (2018). Pre-trained convolutional neural networks as feature extractors toward improved malaria parasite detection in thin blood smear images. <em>PeerJ</em>, 6, e4568. <a href="https://doi.org/10.7717/peerj.4568" rel="noopener" target="_blank">doi.org/10.7717/peerj.4568</a></li>
+<li id="ref-4"><strong>[4]</strong> Sandler, M. et al. (2018). MobileNetV2: Inverted Residuals and Linear Bottlenecks. <em>CVPR 2018.</em> <a href="https://arxiv.org/abs/1801.04381" rel="noopener" target="_blank">arXiv:1801.04381</a></li>
+<li id="ref-5"><strong>[5]</strong> Hung, J. et al. (2017). Applying Faster R-CNN for Object Detection on Malaria Images. <em>CVPR Workshops.</em> <a href="https://arxiv.org/abs/1704.07559" rel="noopener" target="_blank">arXiv:1704.07559</a></li>
+<li id="ref-6"><strong>[6]</strong> Baum, J. et al. (2021). Automated detection and staging of malaria parasites from cytological smears using convolutional neural networks. <em>Biological Imaging</em>, 1, e2. <a href="https://doi.org/10.1017/S2633903X21000015" rel="noopener" target="_blank">doi.org/10.1017/S2633903X21000015</a></li>
+<li id="ref-7"><strong>[7]</strong> Selvaraju, R. R. et al. (2017). Grad-CAM: Visual Explanations from Deep Networks via Gradient-based Localization. <em>ICCV 2017.</em> <a href="https://arxiv.org/abs/1610.02391" rel="noopener" target="_blank">arXiv:1610.02391</a></li>
+<li id="ref-8"><strong>[8]</strong> World Health Organization. <em>Basic Malaria Microscopy, Part I: Learner's Guide.</em> 2nd ed. Geneva: WHO, 2010. <a href="https://iris.who.int/handle/10665/44208" rel="noopener" target="_blank">iris.who.int</a></li>
+<li id="ref-9"><strong>[9]</strong> Wongsrichanalai, C. et al. (2007). A review of malaria diagnostic tools: microscopy and rapid diagnostic test (RDT). <em>American Journal of Tropical Medicine and Hygiene</em>, 77(6 Suppl), 119-127. <a href="https://doi.org/10.4269/ajtmh.2007.77.119" rel="noopener" target="_blank">doi.org/10.4269/ajtmh.2007.77.119</a></li>
+</ul>
+</section>
+<div class="data-notice" id="data-notice">Loading results.json…</div>
+</div><!-- /page -->
+<script>
+// ─── FORMAT HELPERS ───
+const fmt = {
+  pct:    v => (v * 100).toFixed(2) + '%',
+  pct1:   v => (v * 100).toFixed(1) + '%',
+  dec4:   v => parseFloat(v).toFixed(4),
+  int:    v => parseInt(v).toLocaleString(),
+  thresh: v => parseFloat(v).toFixed(2),
+};
+
+function set(id, val) {
+  const el = document.getElementById(id);
+  if (el && val !== undefined && val !== null) el.textContent = val;
+}
+
+// ─── POPULATE ALL DYNAMIC ELEMENTS ───
+function populateAll(d) {
+  const m = d.models;
+
+  // Header chip + intro — driven by best_model
+  const best     = d.best_model ? m[d.best_model.slug] : m.cnn3;
+  const bestSlug = d.best_model ? d.best_model.slug : 'cnn3';
+  const bestName = d.best_model ? d.best_model.name : 'CNN3 - Recall-Optimized';
+  set('dyn-best-name-chip',   bestName);
+  set('dyn-best-name-intro',  bestName);
+  set('dyn-best-name-spec',   bestName);
+  set('dyn-best-name-pilot',  bestName);
+  set('dyn-best-name-gl',     bestName);
+
+  // Milestone glance box
+  set('dyn-cnn1-recall-gl',      fmt.pct(m.cnn1.test.recall));
+  set('dyn-cnn2-recall-gl',      fmt.pct(m.cnn2.test.recall));
+  set('dyn-cnn2-auc-gl',         fmt.dec4(m.cnn2.test.auc_roc));
+  if (m.cnn2_tuned) set('dyn-cnn2t-recall-gl', fmt.pct(m.cnn2_tuned.test.recall));
+  set('dyn-cnn3-recall-gl',      fmt.pct(m.cnn3.test.recall));
+  set('dyn-cnn3-fn-gl',          fmt.int(m.cnn3.test.confusion_matrix[1][0]));
+  set('dyn-mv2-recall-gl',       fmt.pct(m.mobilenetv2.test.recall));
+  if (m.cnn3_32) {
+    set('dyn-cnn3-32-recall-gl',  fmt.pct(m.cnn3_32.test.recall));
+    set('dyn-cnn3-32-fn-gl',      fmt.int(m.cnn3_32.test.confusion_matrix[1][0]));
+    set('dyn-cnn3-32-recall-rec', fmt.pct(m.cnn3_32.test.recall));
+    set('dyn-cnn3-32-fn-rec',     fmt.int(m.cnn3_32.test.confusion_matrix[1][0]));
+    set('dyn-cnn3-32-auc-rec',    fmt.dec4(m.cnn3_32.test.auc_roc));
+  }
+  set('dyn-recall-pct',         fmt.pct(best.test.recall));
+  set('dyn-best-recall-intro',  fmt.pct(best.test.recall));
+  set('dyn-best-acc-intro',     fmt.pct(best.test.accuracy));
+  set('dyn-best-fnr-intro',     fmt.pct1(best.test.false_negative_rate != null ? best.test.false_negative_rate : (1 - best.test.recall)));
+  set('dyn-cnn3-recall',      fmt.pct(m.cnn3.test.recall));
+  set('dyn-cnn3-acc-intro',   fmt.pct(m.cnn3.test.accuracy));
+  set('dyn-cnn3-fnr',         fmt.pct1(m.cnn3.test.false_negative_rate));
+
+  // Stat strip — driven by best_model
+  set('dyn-stat-recall',      fmt.pct(best.test.recall));
+  set('dyn-stat-fn',          fmt.int(best.test.confusion_matrix[1][0]));
+  set('dyn-stat-acc',         fmt.pct(best.test.accuracy));
+  set('dyn-stat-auc',         fmt.dec4(best.test.auc_roc));
+
+  // Finding 1
+  set('dyn-cnn1-recall',      fmt.pct(m.cnn1.test.recall));
+  set('dyn-cnn1-acc',         fmt.pct(m.cnn1.test.accuracy));
+  set('dyn-cnn1-auc',         fmt.dec4(m.cnn1.test.auc_roc));
+
+  // Finding 2
+  set('dyn-cnn2-recall-default',  fmt.pct(m.cnn2.test.recall));
+  set('dyn-cnn2-auc',             fmt.dec4(m.cnn2.test.auc_roc));
+  if (m.cnn2_tuned) {
+    set('dyn-cnn2-tuned-threshold', fmt.thresh(m.cnn2_tuned.threshold_used));
+    set('dyn-cnn2-tuned-recall',    fmt.pct(m.cnn2_tuned.test.recall));
+  }
+
+  // Finding 3
+  set('dyn-cnn3-recall-2',    fmt.pct(m.cnn3.test.recall));
+  set('dyn-cnn3-fn',          fmt.int(m.cnn3.test.confusion_matrix[1][0]));
+  set('dyn-cnn3-auc',         fmt.dec4(m.cnn3.test.auc_roc));
+  set('dyn-cnn3-acc-f3',      fmt.pct(m.cnn3.test.accuracy));
+
+  // Finding 4
+  set('dyn-mv2-recall',       fmt.pct(m.mobilenetv2.test.recall));
+  set('dyn-mv2-recall-cap',   fmt.pct(m.mobilenetv2.test.recall));
+  set('dyn-mv2-auc-cap',      fmt.dec4(m.mobilenetv2.test.auc_roc));
+  set('dyn-mv2-fn',           fmt.int(m.mobilenetv2.test.confusion_matrix[1][0]));
+  set('dyn-mv2-auc',          fmt.dec4(m.mobilenetv2.test.auc_roc));
+
+  // Figure 1/2 captions (CNN3 64px + CNN3-32px paired in §2.2)
+  set('dyn-cnn3-tp',          fmt.int(m.cnn3.test.confusion_matrix[1][1]));
+  set('dyn-cnn3-fn-cap',      fmt.int(m.cnn3.test.confusion_matrix[1][0]));
+  set('dyn-cnn3-auc-cap',     fmt.dec4(m.cnn3.test.auc_roc));
+
+  // Finding 5 — CNN3-32px
+  if (m.cnn3_32) {
+    set('dyn-cnn3-32-recall-f5',  fmt.pct(m.cnn3_32.test.recall));
+    set('dyn-cnn3-32-fn-f5',      fmt.int(m.cnn3_32.test.confusion_matrix[1][0]));
+    set('dyn-cnn3-32-auc-f5',     fmt.dec4(m.cnn3_32.test.auc_roc));
+    set('dyn-cnn3-32-auc-f5b',    fmt.dec4(m.cnn3_32.test.auc_roc));
+    set('dyn-cnn3-32-recall-why', fmt.pct(m.cnn3_32.test.recall));
+    set('dyn-cnn3-32-fn-why',     fmt.int(m.cnn3_32.test.confusion_matrix[1][0]));
+  }
+
+  // Model specs table — driven by best_model
+  const inputSizeMap = { cnn3_32: '32x32', cnn3: '64x64', mobilenetv2: '64x64', mobilenetv2_128: '128x128' };
+  set('dyn-best-input-size',      inputSizeMap[bestSlug] || '64x64');
+  set('dyn-best-input-size-spec',  inputSizeMap[bestSlug] || '64x64');
+  set('dyn-best-input-size-spec2', inputSizeMap[bestSlug] || '64x64');
+  if (best.training) {
+    set('dyn-cnn3-epochs-spec',     fmt.int(best.training.epochs_trained));
+    set('dyn-cnn3-best-epoch-spec', fmt.int(best.training.best_epoch + 1));
+  }
+  set('dyn-cnn3-recall-spec',     fmt.pct(best.test.recall));
+  set('dyn-cnn3-fn-spec',         fmt.int(best.test.confusion_matrix[1][0]));
+  set('dyn-cnn3-auc-spec',        fmt.dec4(best.test.auc_roc));
+  set('dyn-cnn3-acc-spec',        fmt.pct(best.test.accuracy));
+
+  // Model-only spans (no triage data needed)
+  set('dyn-cnn3-fnr-s23',   fmt.pct1(m.cnn3.test.false_negative_rate));
+  set('dyn-cnn3-fn-s22',    fmt.int(m.cnn3.test.confusion_matrix[1][0]));
+
+  // Triage — Section 2.2 / 2.3 / 3.2 / 3.3
+  const _tr = d.triage || (m.cnn3 && m.cnn3.triage) || (m.cnn3_32 && m.cnn3_32.triage) || null;
+  if (_tr) {
+    const tr = _tr;
+    // pct_referred may be decimal (0.12) or legacy percentage (12.50) — normalise to decimal
+    const _pctRef  = tr.pct_referred > 1 ? tr.pct_referred / 100 : tr.pct_referred;
+    const _pctAuto = tr.pct_auto != null
+                       ? (tr.pct_auto > 1 ? tr.pct_auto / 100 : tr.pct_auto)
+                       : 1 - _pctRef;
+    const autoPct = (_pctAuto * 100).toFixed(1).replace(/\.0$/, '') + '%';
+    const refPct  = (_pctRef  * 100).toFixed(1).replace(/\.0$/, '') + '%';
+    set('dyn-triage-low',              fmt.thresh(tr.conf_low));
+    set('dyn-triage-low-2',            fmt.thresh(tr.conf_low));
+    set('dyn-triage-high',             fmt.thresh(tr.conf_high));
+    set('dyn-triage-high-2',           fmt.thresh(tr.conf_high));
+    set('dyn-triage-auto-pct',         autoPct);
+    set('dyn-triage-pct-referred',     refPct);
+    set('dyn-triage-n-borderline',     fmt.int(tr.n_borderline));
+    set('dyn-triage-pct-referred-fig', refPct);
+    set('dyn-cnn3-recall-triage',      tr.auto_recall != null ? fmt.pct(tr.auto_recall) : fmt.pct(m.cnn3.test.recall));
+    set('dyn-triage-pct-referred-s23', refPct);
+    set('dyn-triage-low-s32',          fmt.thresh(tr.conf_low));
+    set('dyn-triage-high-s32',         fmt.thresh(tr.conf_high));
+    set('dyn-triage-pct-referred-s32', refPct);
+    set('dyn-triage-pct-referred-s33', refPct);
+    set('dyn-triage-pct-referred-s33b',refPct);
+    set('dyn-triage-pct-referred-s23b',refPct);
+    set('dyn-triage-pct-referred-card', refPct);
+    set('dyn-triage-ref-qc',            refPct);
+    set('dyn-triage-ref-s33-note',      refPct);
+    set('dyn-triage-ref-path-a',        refPct);
+    set('dyn-triage-ref-path-b',        refPct);
+
+    // ML-only vs Triage comparison card (Section 2.3)
+    // Note: borderline/system stats come from cnn3_32 triage (the recommended model)
+    const _tr32card = (m.cnn3_32 && m.cnn3_32.triage) ? m.cnn3_32.triage : tr;
+    set('dyn-sys-borderline',   fmt.int(_tr32card.n_borderline));
+    set('dyn-sys-borderline-b', fmt.int(_tr32card.n_borderline));
+    if (_tr32card.parasitized_in_borderline != null) {
+      set('dyn-sys-para-in-border', fmt.int(_tr32card.parasitized_in_borderline) + ' Parasitized');
+    }
+    if (_tr32card.system_recall != null) {
+      set('dyn-sys-recall', fmt.pct(_tr32card.system_recall));
+    }
+    if (_tr32card.system_fn != null) {
+      set('dyn-sys-fn',      fmt.int(_tr32card.system_fn));
+      set('dyn-sys-fn-note', fmt.int(_tr32card.system_fn));
+    }
+  }
+
+  // ML-only stats for comparison card (no triage data needed)
+  if (m.cnn3_32 && m.cnn3_32.test) {
+    set('dyn-mlonly-recall', fmt.pct(m.cnn3_32.test.recall));
+    set('dyn-mlonly-fn',     fmt.int(m.cnn3_32.test.confusion_matrix[1][0]));
+    // Specificity and FP count (§3.3)
+    const _cm32 = m.cnn3_32.test.confusion_matrix;
+    const _tn32 = _cm32[0][0], _fp32 = _cm32[0][1];
+    set('dyn-cnn3-32-specificity', fmt.pct(_tn32 / (_tn32 + _fp32)));
+    set('dyn-cnn3-32-fp',          fmt.int(_fp32));
+  }
+
+  // Triage — CNN3-32px (Section 2.2 Figure 4)
+  const _tr32 = m.cnn3_32 && m.cnn3_32.triage ? m.cnn3_32.triage : null;
+  if (_tr32) {
+    const refPct32 = (_tr32.pct_referred > 1 ? _tr32.pct_referred : _tr32.pct_referred * 100).toFixed(1) + '%';
+    set('dyn-cnn3-32-triage-pct-referred-fig', refPct32);
+    set('dyn-cnn3-32-triage-recall-fig',
+        _tr32.auto_recall != null ? fmt.pct(_tr32.auto_recall) : fmt.pct(m.cnn3_32.test.recall));
+  }
+  set('dyn-cnn3-recall-s33',     fmt.pct(m.cnn3.test.recall));
+  // Section 3.3 — CNN3-32px miss-rate bullet (uses winning model)
+  const _32recall = m.cnn3_32.test.recall;
+  set('dyn-cnn3-32-recall-s33',  fmt.pct(_32recall));
+  set('dyn-cnn3-32-fn-denom',    Math.round(1 / (1 - _32recall)).toLocaleString());
+  set('dyn-cnn3-32-fn-per5k',    Math.round(5000 * (1 - _32recall)).toLocaleString());
+  set('dyn-cnn3-recall-s35',     fmt.pct(m.cnn3.test.recall));
+
+  // Comparison table — built dynamically
+  buildComparisonTable(d);
+
+  // Canvas histogram with draggable threshold lines — drags update the stat widget below
+  initTriageHistogram(d, 'rpt-hist', function(c) {
+    const setT = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+    setT('rpt-tsw-count-uninf',    c.autoUninf.toLocaleString());
+    setT('rpt-tsw-count-referred', c.referred.toLocaleString());
+    setT('rpt-tsw-count-para',     c.autoPara.toLocaleString());
+    setT('rpt-tsw-pct-referred',   (c.refPct*100).toFixed(1)+'%');
+    setT('rpt-tsw-fn', c.fn);
+    setT('rpt-tsw-fp', c.fp);
+  }, null, {
+    resetBtnId:      'rpt-hist-reset',
+    expandBtnId:     'rpt-hist-expand',
+    modalId:         'rpt-modal',
+    modalCanvasId:   'rpt-modal-hist',
+    modalResetBtnId: 'rpt-modal-reset',
+    modalCloseBtnId: 'rpt-modal-close',
+    modalOnUpdate: function(c) {
+      const sT = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+      sT('rpt-modal-fn', c.fn.toLocaleString());
+      sT('rpt-modal-fp', c.fp.toLocaleString());
+    }
+  });
+}
+
+// ─── TRIAGE HISTOGRAM ───
+// Canvas-based histogram with draggable threshold lines.
+// draw() always re-reads canvas.offsetWidth/Height so it fills its container
+// correctly at any zoom level, viewport size, or modal layout.
+function initTriageHistogram(d, canvasId, onUpdate, modelSlug, opts) {
+  opts = opts || {};
+  const slug = modelSlug
+    || (d.best_model && d.best_model.slug)
+    || Object.keys(d.models||{}).find(k => d.models[k] && d.models[k].score_histogram);
+  if (!slug) return;
+
+  const mdl = d.models[slug];
+  if (!mdl || !mdl.score_histogram) return;
+
+  const h = mdl.score_histogram;
+  const nBins = h.n_bins, bw = h.bin_width;
+  const U = h.uninfected_counts, P = h.parasitized_counts;
+  const N = U.reduce((a,b)=>a+b,0) + P.reduce((a,b)=>a+b,0);
+
+  const cu = [0], cp = [0];
+  for (let i = 0; i < nBins; i++) { cu.push(cu[i]+U[i]); cp.push(cp[i]+P[i]); }
+
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  const tr = mdl.triage;
+  const defaultLo = Math.round((tr ? tr.conf_low  : 0.35) / bw);
+  const defaultHi = Math.round((tr ? tr.conf_high : 0.65) / bw);
+  let lo = (opts.initialLo !== undefined) ? opts.initialLo : defaultLo;
+  let hi = (opts.initialHi !== undefined) ? opts.initialHi : defaultHi;
+
+  const maxC   = Math.max(...U.concat(P).filter(v=>v>0));
+  const logMax = Math.pow(10, Math.ceil(Math.log10(maxC+1)));
+  const logMin = 0.7;
+  const logRng = Math.log10(logMax) - Math.log10(logMin);
+
+  const ML=44, MR=12, MT=26, MB=34;
+
+  function yC(PH, v) {
+    if (v <= 0) return MT + PH;
+    return MT + PH - ((Math.log10(v) - Math.log10(logMin)) / logRng) * PH;
+  }
+  function xC(PW, bin) { return ML + (bin / nBins) * PW; }
+  function binAt(PW, cx) { return Math.round(((cx - ML) / PW) * nBins); }
+
+  function draw() {
+    const W = canvas.offsetWidth, H = canvas.offsetHeight;
+    if (!W || !H) return;
+    const dpr = window.devicePixelRatio || 1;
+    const PW = W - ML - MR, PH = H - MT - MB;
+
+    const pw = Math.round(W * dpr), ph = Math.round(H * dpr);
+    if (canvas.width !== pw || canvas.height !== ph) {
+      canvas.width  = pw;
+      canvas.height = ph;
+    }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+
+    const lox = xC(PW,lo), hix = xC(PW,hi), bpx = PW/nBins;
+
+    [[ML,    lox-ML,    'rgba(42,127,127,0.12)'],
+     [lox,   hix-lox,   'rgba(212,160,23,0.14)'],
+     [hix,   ML+PW-hix, 'rgba(224,96,96,0.12)']
+    ].forEach(([x,w,c]) => { ctx.fillStyle=c; ctx.fillRect(x,MT,w,PH); });
+
+    // Y-axis title (rotated)
+    ctx.save();
+    ctx.translate(14, MT + PH/2);
+    ctx.rotate(-Math.PI/2);
+    ctx.fillStyle='#5a6470'; ctx.font='8px sans-serif'; ctx.textAlign='center';
+    ctx.fillText('Sigmoid score distribution (log scale)', 0, 0);
+    ctx.restore();
+
+    ctx.setLineDash([2,2]); ctx.strokeStyle='rgba(0,0,0,0.07)'; ctx.lineWidth=1;
+    ctx.font='9px sans-serif'; ctx.textAlign='right'; ctx.fillStyle='#5a6470';
+    for (let p=0; Math.pow(10,p)<=logMax; p++) {
+      const yy = yC(PH, Math.pow(10,p));
+      if (yy < MT-2 || yy > MT+PH+2) continue;
+      ctx.beginPath(); ctx.moveTo(ML,yy); ctx.lineTo(ML+PW,yy); ctx.stroke();
+      ctx.fillText(['1','10','100','1k','10k'][p]||'', ML-3, yy+3);
+    }
+    ctx.setLineDash([]);
+
+    for (let i=0; i<nBins; i++) {
+      const x = ML+(i/nBins)*PW, bot = MT+PH;
+      if (U[i]>0){ ctx.fillStyle='rgba(42,127,127,0.55)'; const y=yC(PH,U[i]); ctx.fillRect(x,y,bpx-.5,bot-y); }
+      if (P[i]>0){ ctx.fillStyle='rgba(224,96,96,0.55)';  const y=yC(PH,P[i]); ctx.fillRect(x,y,bpx-.5,bot-y); }
+    }
+    for (let i=0; i<lo; i++) {
+      if (P[i]>0){ ctx.fillStyle='#CC0000'; const x=ML+(i/nBins)*PW, y=yC(PH,P[i]); ctx.fillRect(x,y,bpx-.5,MT+PH-y); }
+    }
+
+    ctx.strokeStyle='rgba(0,0,0,0.18)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(ML,MT+PH); ctx.lineTo(ML+PW,MT+PH); ctx.stroke();
+    ctx.textAlign='center'; ctx.font='9px sans-serif'; ctx.fillStyle='#5a6470';
+    for (let v=0; v<=1.001; v+=0.2) ctx.fillText(v.toFixed(1), ML+v*PW, MT+PH+13);
+
+    [[lo,lox,'#2A7F7F'],[hi,hix,'#E06060']].forEach(([bin,x,col]) => {
+      ctx.strokeStyle='rgba(26,43,43,0.7)'; ctx.lineWidth=1.5;
+      ctx.setLineDash([4,3]);
+      ctx.beginPath(); ctx.moveTo(x,MT); ctx.lineTo(x,MT+PH); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle=col; ctx.beginPath(); ctx.arc(x,MT+8,7,0,Math.PI*2); ctx.fill();
+      ctx.strokeStyle='white'; ctx.lineWidth=2; ctx.stroke();
+      ctx.fillStyle='#1A2B2B'; ctx.font='bold 9px sans-serif'; ctx.textAlign='center';
+      ctx.fillText((bin*bw).toFixed(2), x, MT+PH+27);
+    });
+
+    // Zone count + label drawn inside each zone, clipped so they never overflow
+    const fn=cp[lo], tnA=cu[lo], fp=cu[nBins]-cu[hi], tpA=cp[nBins]-cp[hi];
+    const ref = N-(fn+tnA)-(fp+tpA);
+    [
+      { x0: ML,   x1: lox,   color:'#2A7F7F', label:'Auto: Uninfected', count: fn+tnA },
+      { x0: lox,  x1: hix,   color:'#b07a10', label:'Referred',         count: ref    },
+      { x0: hix,  x1: ML+PW, color:'#c04040', label:'Auto: Parasitized',count: fp+tpA },
+    ].forEach(({ x0, x1, color, label, count }) => {
+      const zw = x1 - x0; if (zw < 8) return;
+      const cx = (x0 + x1) / 2;
+      ctx.save();
+      ctx.beginPath(); ctx.rect(x0+1, MT, zw-2, PH); ctx.clip();
+      ctx.fillStyle = color; ctx.textAlign = 'center';
+      ctx.font = 'bold 14px sans-serif';
+      ctx.fillText(count.toLocaleString(), cx, MT+30);
+      ctx.font = '9px sans-serif';
+      ctx.fillText(label, cx, MT+42);
+      ctx.restore();
+    });
+
+    if (onUpdate) {
+      onUpdate({ fn, fp, autoUninf:fn+tnA, autoPara:fp+tpA, referred:ref,
+                 total:N, autoPct:(fn+tnA+fp+tpA)/N, refPct:ref/N,
+                 loVal:(lo*bw).toFixed(2), hiVal:(hi*bw).toFixed(2) });
+    }
+  }
+
+  let drag = null;
+  function getCanvasX(e) {
+    const r = canvas.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    return (clientX - r.left) * (canvas.offsetWidth / r.width);
+  }
+  function hitTest(cx) {
+    const PW = canvas.offsetWidth - ML - MR;
+    const lox=xC(PW,lo), hix=xC(PW,hi);
+    if (Math.abs(cx-lox) < 14) return 'lo';
+    if (Math.abs(cx-hix) < 14) return 'hi';
+    return null;
+  }
+  function moveDrag(cx) {
+    const PW = canvas.offsetWidth - ML - MR;
+    const b = Math.max(0, Math.min(nBins, binAt(PW, cx)));
+    if (drag==='lo') lo = Math.min(b, hi-2);
+    else             hi = Math.max(b, lo+2);
+    draw();
+  }
+
+  canvas.addEventListener('mousemove', e => {
+    const cx = getCanvasX(e);
+    if (drag) { moveDrag(cx); canvas.style.cursor='ew-resize'; }
+    else canvas.style.cursor = hitTest(cx) ? 'ew-resize' : 'default';
+  });
+  canvas.addEventListener('mousedown', e => { drag=hitTest(getCanvasX(e)); if(drag) e.preventDefault(); });
+  document.addEventListener('mouseup', () => { drag=null; });
+  canvas.addEventListener('touchstart', e => { drag=hitTest(getCanvasX(e)); if(drag) e.preventDefault(); }, {passive:false});
+  canvas.addEventListener('touchmove',  e => { if(drag){e.preventDefault();moveDrag(getCanvasX(e));} }, {passive:false});
+  canvas.addEventListener('touchend',   () => { drag=null; });
+
+  if (opts.resetBtnId) {
+    const btn = document.getElementById(opts.resetBtnId);
+    if (btn) btn.addEventListener('click', () => { lo = defaultLo; hi = defaultHi; draw(); });
+  }
+
+  if (opts.expandBtnId && opts.modalId && opts.modalCanvasId) {
+    const expandBtn = document.getElementById(opts.expandBtnId);
+    const modal     = document.getElementById(opts.modalId);
+    if (expandBtn && modal) {
+      let modalInited = false;
+      const closeModal = () => { modal.style.display = 'none'; };
+
+      expandBtn.addEventListener('click', () => {
+        modal.style.display = 'flex';
+        if (!modalInited) {
+          requestAnimationFrame(() => {
+            initTriageHistogram(d, opts.modalCanvasId, opts.modalOnUpdate || null, slug, {
+              initialLo:  lo, initialHi: hi, resetBtnId: opts.modalResetBtnId || null,
+            });
+            modalInited = true;
+          });
+        }
+      });
+      modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+      if (opts.modalCloseBtnId) {
+        const cb = document.getElementById(opts.modalCloseBtnId);
+        if (cb) cb.addEventListener('click', closeModal);
+      }
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && modal.style.display !== 'none') closeModal();
+      });
+    }
+  }
+
+  draw();
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(draw).observe(canvas);
+  } else {
+    window.addEventListener('resize', draw);
+  }
+}
+
+// ─── COMPARISON TABLE ───
+let _cmpRows = [];
+let _cmpBest = 'cnn3_32';
+let _sortCol  = -1;
+let _sortDir  = 1;
+
+function rowSortVal(r, col) {
+  if (!r.key) return -Infinity;
+  const t = r.key.test, b = r.key.benchmark;
+  switch(col) {
+    case 0: return r.label.replace(/&ndash;/g,'').toLowerCase();
+    case 1: return t.recall ?? -Infinity;
+    case 2: return t.confusion_matrix ? t.confusion_matrix[1][0] : Infinity;
+    case 3: return t.accuracy ?? -Infinity;
+    case 4: return t.auc_roc ?? -Infinity;
+    case 5: return b ? b.pipeline_ms : Infinity;
+    case 6: return b ? b.ram_mb : Infinity;
+    case 7: return b ? b.params : -Infinity;
+    default: return 0;
+  }
+}
+
+function renderComparisonRows() {
+  const bestRecall = Math.max(..._cmpRows.filter(r => r.key).map(r => r.key.test.recall));
+  const tbody = document.getElementById('final-comparison-tbody');
+  if (!tbody) return;
+  const sorted = [..._cmpRows];
+  if (_sortCol >= 0) {
+    sorted.sort((a, b) => {
+      const av = rowSortVal(a, _sortCol), bv = rowSortVal(b, _sortCol);
+      if (av < bv) return -1 * _sortDir;
+      if (av > bv) return  1 * _sortDir;
+      return 0;
+    });
+  }
+  tbody.innerHTML = sorted.map(r => {
+    if (!r.key) return '';
+    const t = r.key.test;
+    const fn = t.confusion_matrix[1][0];
+    const isBest = r.slug === _cmpBest;
+    const b = r.key.benchmark;
+    const ms  = b ? `${b.pipeline_ms.toFixed(1)} <span style="font-size:10px;color:var(--muted)" title="Inference only: ${b.infer_only_ms.toFixed(1)} ms">(${b.infer_only_ms.toFixed(1)} infer)</span>` : '<span style="color:var(--muted)">—</span>';
+    const mb  = b ? b.ram_mb.toFixed(1) : '<span style="color:var(--muted)">—</span>';
+    const par = b ? (b.params >= 1e6 ? (b.params/1e6).toFixed(2)+'M' : (b.params/1e3).toFixed(0)+'K') : '<span style="color:var(--muted)">—</span>';
+    return `<tr${isBest ? ' class="highlight"' : ''}>
+      <td>${isBest ? `<strong>${r.label}</strong> <span class="badge-best">Recommended</span>` : r.label}</td>
+      <td${t.recall === bestRecall ? ' style="font-weight:700;color:var(--sage)"' : ''}>${fmt.pct(t.recall)}</td>
+      <td>${fmt.int(fn)}</td>
+      <td>${fmt.pct(t.accuracy)}</td>
+      <td>${fmt.dec4(t.auc_roc)}</td>
+      <td>${ms}</td>
+      <td>${mb}</td>
+      <td>${par}</td>
+    </tr>`;
+  }).join('');
+  // update header indicators
+  const ths = document.querySelectorAll('#final-comparison-thead th');
+  ths.forEach((th, i) => {
+    th.classList.remove('sort-asc','sort-desc');
+    if (i === _sortCol) th.classList.add(_sortDir === 1 ? 'sort-asc' : 'sort-desc');
+  });
+}
+
+function sortComparisonTable(col) {
+  if (_sortCol === col) { _sortDir *= -1; }
+  else { _sortCol = col; _sortDir = 1; }
+  renderComparisonRows();
+}
+
+function buildComparisonTable(d) {
+  const m = d.models;
+  const rows = [
+    { slug: 'cnn1',           label: 'CNN1 &ndash; Baseline',                     thresh: 'default (0.5)', key: m.cnn1 },
+    { slug: 'cnn2',           label: 'CNN2 &ndash; Augmented (default threshold)', thresh: 'default (0.5)', key: m.cnn2 },
+    { slug: 'cnn2_tuned',     label: 'CNN2 &ndash; Augmented (threshold = ' + (m.cnn2_tuned ? fmt.thresh(m.cnn2_tuned.threshold_used) : '0.02') + ')',
+                                                                                    thresh: 'tuned',         key: m.cnn2_tuned },
+    { slug: 'cnn3',           label: 'CNN3 &ndash; Recall-Optimized',             thresh: 'default (0.5)', key: m.cnn3 },
+    { slug: 'cnn3_32',        label: 'CNN3 &ndash; 32px Downscale',               thresh: 'default (0.5)', key: m.cnn3_32 },
+    { slug: 'mobilenetv2',    label: 'MobileNetV2 &ndash; Fine-tuned (64px)',     thresh: 'default (0.5)', key: m.mobilenetv2 },
+    { slug: 'mobilenetv2_128',label: 'MobileNetV2 &ndash; Fine-tuned (128px)',    thresh: 'default (0.5)', key: m.mobilenetv2_128 },
+  ];
+  _cmpBest = d.best_model ? d.best_model.slug : 'cnn3_32';
+  _cmpRows = rows;
+  renderComparisonRows();
+}
+
+// ─── LOAD DATA ───
+const notice = document.getElementById('data-notice');
+
+function loadResults() {
+  const doFetch = typeof fetch !== 'undefined'
+    ? fetch('../results.json').then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    : Promise.reject(new Error('fetch unavailable'));
+
+  doFetch.catch(() => new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', '../results.json', false);
+    try { xhr.send(); resolve(JSON.parse(xhr.responseText)); }
+    catch(e) { reject(e); }
+  })).then(data => {
+    populateAll(data);
+    const ts = data.generated_at ? ` · generated ${data.generated_at}` : '';
+    notice.textContent = 'results.json loaded' + ts;
+    notice.classList.add('loaded');
+    setTimeout(() => { notice.style.opacity = '0'; }, 6000);
+  }).catch(err => {
+    notice.textContent = 'results.json not found — serve via: python3 -m http.server 8765';
+    notice.classList.add('error');
+    console.warn('Could not load results.json:', err);
+  });
+}
+
+// ─── SIDE NAV ───
+function buildNav() {
+  const nav = document.getElementById('side-nav');
+  const all = [...document.querySelectorAll('[data-nav-label]')].filter(el => el.id);
+  const byId = Object.fromEntries(all.map(el => [el.id, el]));
+  const childrenOf = {};
+  const childSet = new Set();
+  all.forEach(el => {
+    const parts = el.id.split('-');
+    const parentId = parts.length > 1 ? parts.slice(0, -1).join('-') : null;
+    if (parentId && byId[parentId]) {
+      childSet.add(el.id);
+      (childrenOf[parentId] = childrenOf[parentId] || []).push(el);
+    }
+  });
+  let html = '';
+  all.filter(el => !childSet.has(el.id)).forEach(el => {
+    const { id } = el;
+    const label = el.dataset.navLabel;
+    const kids = childrenOf[id] || [];
+    if (kids.length) {
+      html += `<a href="#${id}" data-section="${id}" id="nav-${id}" class="nav-parent" data-cta-action="nav-section" data-cta-label="${label}">` +
+              `<span class="dot"></span><span class="nav-label">${label}</span></a>` +
+              `<div class="nav-sub" id="nav-sub-${id}">`;
+      kids.forEach(k => {
+        html += `<a href="#${k.id}" data-section="${k.id}" class="sub-link" data-cta-action="nav-section" data-cta-label="${k.dataset.navLabel}">` +
+                `<span class="subdot"></span><span class="nav-label">${k.dataset.navLabel}</span></a>`;
+      });
+      html += `</div>`;
+    } else {
+      html += `<a href="#${id}" data-section="${id}" data-cta-action="nav-section" data-cta-label="${label}">` +
+              `<span class="dot"></span><span class="nav-label">${label}</span></a>`;
+    }
+  });
+  nav.innerHTML = html;
+}
+
+function initNav() {
+  buildNav();
+  const all = [...document.querySelectorAll('[data-nav-label]')].filter(el => el.id);
+  const byId = Object.fromEntries(all.map(el => [el.id, el]));
+  const childSet = new Set();
+  all.forEach(el => {
+    const parts = el.id.split('-');
+    const pid = parts.length > 1 ? parts.slice(0, -1).join('-') : null;
+    if (pid && byId[pid]) childSet.add(el.id);
+  });
+  const groups = all.filter(el => !childSet.has(el.id)).map(el => {
+    const kids = all.filter(c => {
+      const parts = c.id.split('-');
+      return parts.length > 1 && parts.slice(0, -1).join('-') === el.id;
+    });
+    return kids.length ? {
+      parentEl: document.getElementById(`nav-${el.id}`),
+      subEl:    document.getElementById(`nav-sub-${el.id}`),
+      ids:      [el.id, ...kids.map(k => k.id)],
+    } : null;
+  }).filter(Boolean);
+  const navLinks = document.querySelectorAll('.side-nav a[data-section], .side-nav .sub-link[data-section]');
+
+  function activate(id) {
+    navLinks.forEach(a => {
+      const isThis = a.dataset.section === id;
+      a.classList.toggle('active', isThis);
+    });
+    groups.forEach(g => {
+      const active = g.ids.includes(id);
+      g.subEl  ?.classList.toggle('open',   active);
+      g.parentEl?.classList.toggle('active', active);
+      // also mark sub-link active when its id matches
+      if (active) {
+        g.subEl?.querySelectorAll('.sub-link[data-section]').forEach(a => {
+          a.classList.toggle('active', a.dataset.section === id);
+        });
+      }
+    });
+  }
+
+  function onScroll() {
+    const threshold = window.scrollY + window.innerHeight * 0.25;
+    let current = all[0]?.id;
+    all.forEach(el => {
+      if (el.getBoundingClientRect().top + window.scrollY <= threshold) current = el.id;
+    });
+    if (current) activate(current);
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadResults();
+  initNav();
+  initGanttPecHover();
+});
+
+function initGanttPecHover() {
+  const ganttRows = document.querySelectorAll('.gantt-row[data-phase]');
+  const pecRows   = document.querySelectorAll('.pec-row[data-phase]');
+
+  function highlight(phase, on) {
+    ganttRows.forEach(r => { if (r.dataset.phase === phase) r.classList.toggle('phase-hover', on); });
+    pecRows.forEach(r   => { if (r.dataset.phase === phase) r.classList.toggle('phase-hover', on); });
+  }
+
+  [...ganttRows, ...pecRows].forEach(el => {
+    el.addEventListener('mouseenter', () => highlight(el.dataset.phase, true));
+    el.addEventListener('mouseleave', () => highlight(el.dataset.phase, false));
+  });
+}
+</script>
+<!-- ── Triage Histogram Modal ── -->
+<div id="rpt-modal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(10,20,20,0.82); align-items:center; justify-content:center; padding:16px;">
+<div style="background:var(--ivory); border-radius:12px; width:min(99vw,1600px); max-height:96vh; display:flex; flex-direction:column; box-shadow:0 24px 80px rgba(0,0,0,0.55); overflow:hidden;">
+<div style="display:flex; align-items:center; justify-content:space-between; padding:16px 22px; border-bottom:1px solid rgba(90,100,117,0.15);">
+<span style="font-size:14px; font-weight:700; color:var(--dark); text-transform:uppercase; letter-spacing:0.06em;">Triage Threshold Explorer: CNN3-32px</span>
+<button id="rpt-modal-close" style="background:none; border:none; font-size:22px; color:var(--mid); cursor:pointer; padding:0 4px; line-height:1;">✕</button>
+</div>
+<div style="padding:18px 22px 0;">
+<canvas id="rpt-modal-hist" style="width:100%; aspect-ratio:7/2; max-height:62vh; display:block; cursor:default;"></canvas>
+</div>
+<div style="display:flex; align-items:center; padding:12px 22px 0;">
+<button class="hist-reset-btn" id="rpt-modal-reset" style="margin-left:auto;">Reset</button>
+</div>
+<div style="display:flex; justify-content:center; gap:12px; padding:10px 22px 20px;">
+<div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+<span style="display:flex; align-items:center; gap:5px; font-size:12px; color:var(--mid);"><span style="display:inline-block; width:12px; height:12px; border-radius:2px; background:#CC0000;"></span>False Negatives</span>
+<div style="background:#fde8e8; border-radius:8px; padding:13px 10px; text-align:center; width:180px;">
+<div id="rpt-modal-fn" style="font-size:24px; font-weight:700; color:#CC0000;">-</div>
+<div style="font-size:11px; color:var(--mid);">False Negatives</div>
+</div>
+</div>
+<div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+<span style="display:block; height:20px;"></span>
+<div style="background:#fef9ec; border-radius:8px; padding:13px 10px; text-align:center; width:180px;">
+<div id="rpt-modal-fp" style="font-size:24px; font-weight:700; color:#b07a10;">-</div>
+<div style="font-size:11px; color:var(--mid);">False Positives</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
