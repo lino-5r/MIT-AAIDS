@@ -121,32 +121,31 @@ body {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 32px;
-  padding-bottom: 36px;
-  border-bottom: 2px solid var(--border);
-  margin-bottom: 48px;
+  gap: 24px;
+  padding-bottom: 32px;
+  border-bottom: 2px solid var(--teal);
+  margin-bottom: 56px;
 }
+.header-left { display: flex; flex-direction: column; gap: 10px; flex: 1; }
 .header-eyebrow {
-  font-size: 11px; font-weight: 500;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--teal); margin-bottom: 10px;
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--teal);
 }
 .header-title {
-  font-size: 32px; font-weight: 700; line-height: 1.18;
+  font-size: clamp(26px, 3.5vw, 38px); font-weight: 700; line-height: 1.15;
   color: var(--dark); letter-spacing: -0.02em;
-  margin-bottom: 8px;
 }
 .header-subtitle {
   font-size: 15px; font-weight: 400; color: var(--mid);
-  line-height: 1.5; margin-bottom: 16px;
+  margin-top: 4px;
 }
 .header-byline {
   font-size: 13px; color: var(--muted); display: flex; gap: 8px; align-items: center;
-  margin-bottom: 12px;
 }
-.byline-author { font-weight: 600; color: var(--dark); }
-.byline-sep { color: var(--border); }
-.header-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.byline-author { font-weight: 500; color: var(--dark); }
+.byline-sep { color: var(--border-mid); }
+.header-meta { display: flex; flex-wrap: wrap; gap: 8px; }
 .meta-chip {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 3px 10px; border-radius: 20px;
@@ -155,8 +154,22 @@ body {
 .meta-chip.prog  { background: var(--teal-light); color: var(--teal); border: 1px solid var(--border); }
 .meta-chip.year  { background: var(--ivory); color: var(--mid); border: 1px solid var(--border-mid); }
 .meta-chip.best  { background: var(--sage-light); color: var(--sage); border: 1px solid rgba(78,158,120,0.2); }
+.header-live-link {
+  margin-top: 14px;
+  padding: 8px 14px;
+  background: var(--teal);
+  border-radius: 6px;
+  display: inline-block;
+}
 .header-live-link a {
-  font-size: 12px; color: var(--teal); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
 .header-live-link a:hover { text-decoration: underline; }
 .header-logo { display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; }
@@ -603,6 +616,11 @@ tbody tr.highlight:hover { background: rgba(78,158,120,0.12); }
       <span class="meta-chip prog">Final Submission</span>
       <span class="meta-chip year">2026</span>
       <span class="meta-chip best">Recommended model: <span id="dyn-best-name-chip">-</span> &middot; <span id="dyn-recall-pct">-</span> recall</span>
+    </div>
+    <div class="header-live-link">
+      <a href="https://lino-5r.github.io/MIT-AAIDS/malaria-detection/presentation/Final_Report.html" target="_blank" rel="noopener">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>View interactive report at lino-5r.github.io/MIT-AAIDS
+      </a>
     </div>
   </div>
   <div class="header-logo">
@@ -1274,7 +1292,7 @@ tbody tr.highlight:hover { background: rgba(78,158,120,0.12); }
 
   <div class="callout sage">
     <div class="callout-title">Important note on these estimates</div>
-    <p>Time benchmarks for manual microscopy are drawn from WHO guidelines.<a href="#ref-8" class="ref-sup">[8]</a><a href="#ref-9" class="ref-sup">[9]</a> Hardware costs reflect publicly available retail pricing. Workload reduction figures are derived directly from this model's triage performance (<span id="dyn-triage-ref-s33-note">-</span> referral rate). Pilot budget estimates are author projections based on comparable field deployments in low-resource settings; they are planning assumptions, not audited figures. Site-specific validation is required before scaling.</p>
+    <p>Time benchmarks for manual microscopy are drawn from WHO guidelines.<a href="#ref-8" class="ref-sup">[8]</a><a href="#ref-9" class="ref-sup">[9]</a> Hardware costs reflect publicly available retail pricing. Workload reduction figures are derived directly from this model's triage performance (<span id="dyn-triage-ref-s33-note">-</span> referral rate). Pilot budget estimates are author projections based on comparable field deployments in low-resource settings, primarily sub-Saharan Africa; they are planning assumptions, not audited figures. Site-specific validation is required before scaling.</p>
   </div>
 
   <p style="margin-bottom:10px;"><strong>Estimated time per day (100 slides, 200 cells per slide):</strong></p>
@@ -1322,7 +1340,7 @@ tbody tr.highlight:hover { background: rgba(78,158,120,0.12); }
 
   <p><strong>The value is in capability reallocation, not cost reduction.</strong> Trained diagnostic staff are scarce and serve large catchment populations. Hours spent on routine cell screening are hours unavailable for complex case review, patient consultation, and outbreak response. Automated pre-screening returns that time to work only a human can do.</p>
 
-  <p>High recall does not come at the cost of specificity. At <span id="dyn-cnn3-32-specificity">-</span> specificity, CNN3-32px generates only <span id="dyn-cnn3-32-fp">-</span> false positives per 1,300 uninfected cells tested. Clinicians receive a flagged case only when the model has meaningful signal — not as a flood of false alarms that erode trust and consume time.</p>
+  <p>High recall does not come at the cost of specificity. At <span id="dyn-cnn3-32-specificity">-</span> specificity, CNN3-32px generates only <span id="dyn-cnn3-32-fp">-</span> false positives per 1,300 uninfected cells tested. Clinicians receive a flagged case only when the model has meaningful signal, not a flood of false alarms that erode trust and consume time.</p>
 
   <div style="display:flex; align-items:center; gap:0; margin:12px 0 20px 0; font-size:11px;">
     <div style="background:var(--coral-light); border:1px solid var(--coral); border-radius:6px; padding:6px 10px; text-align:center; min-width:90px;">
@@ -1341,7 +1359,7 @@ tbody tr.highlight:hover { background: rgba(78,158,120,0.12); }
     </div>
   </div>
 
-  <p style="margin-bottom:10px;"><strong>Phase 1 Pilot Budget Estimate</strong> — 6 months, 2 sites, incremental to baseline staffing (author estimates; no published benchmark):</p>
+  <p style="margin-bottom:10px;"><strong>Phase 1 Pilot Budget Estimate: 6 months, 2 sites,</strong> incremental to baseline staffing, calibrated to sub-Saharan Africa field conditions (author estimates; no published benchmark):</p>
 
   <table style="width:100%; border-collapse:collapse; font-size:12px; margin-bottom:14px;">
     <thead>
@@ -1417,6 +1435,8 @@ tbody tr.highlight:hover { background: rgba(78,158,120,0.12); }
 
   <div id="s3-4" class="subsection-title" data-nav-label="Risks and Challenges">3.4 Key Risks and Challenges</div>
 
+  <p>Six risks require active management before and during the pilot. None are blockers to starting; all have defined mitigations.</p>
+
   <div class="risk-grid">
     <div class="risk-card">
       <div class="risk-title">Single-source training data</div>
@@ -1432,7 +1452,7 @@ tbody tr.highlight:hover { background: rgba(78,158,120,0.12); }
     </div>
     <div class="risk-card">
       <div class="risk-title">Interpretability and clinician trust</div>
-      <div class="risk-body">The model returns "infected" or "not infected" with no explanation of why. Clinicians who cannot inspect the reasoning have legitimate grounds to distrust it. A planned extension would generate a heatmap overlay on each image showing which part of the cell drove the prediction, giving staff something concrete to verify.</div>
+      <div class="risk-body">The model returns a classification with no explanation of what drove it. Clinicians who cannot inspect the reasoning have legitimate grounds to distrust the output, which creates an adoption barrier independent of the model's accuracy. This project scoped for classification performance; visual explanation tooling (heatmaps highlighting which part of a cell drove the prediction) was not implemented but is compatible with this architecture and does not require retraining. It is a defined Phase 2 deliverable.</div>
     </div>
     <div class="risk-card">
       <div class="risk-title">Staining and imaging variability</div>
@@ -1440,31 +1460,22 @@ tbody tr.highlight:hover { background: rgba(78,158,120,0.12); }
     </div>
     <div class="risk-card">
       <div class="risk-title">Regulatory and liability pathway</div>
-      <div class="risk-body">Any software used to support clinical diagnosis requires regulatory approval in most countries (FDA in the US, CE-IVD in Europe, and local equivalents elsewhere). This prototype has not been submitted for review. Positioning it as a decision-support tool rather than an autonomous diagnostic system reduces the regulatory burden but does not eliminate it.</div>
+      <div class="risk-body">Clinical diagnostic software requires regulatory clearance in most jurisdictions (FDA, CE-IVD, and local equivalents). This prototype has not been submitted for review. The two deployment paths carry different burdens: Path B, where the model is advisory and a microscopist confirms borderline results, follows a lighter decision-support pathway. Path A, where the model autonomously classifies the majority of cases, requires a stronger evidence package. Beginning under Path B is not merely a conservative operational choice; it generates the documented clinical performance data that any Path A submission will require.</div>
     </div>
   </div>
 
   <div id="s3-5" class="subsection-title" data-nav-label="Further Analysis">3.5 Further Analysis Required</div>
 
-  <p>Six analytical extensions have the highest expected return relative to effort:</p>
+  <p>Five workstreams represent the clearest path from proof-of-concept to production-ready tool, ordered roughly by effort and dependency:</p>
 
   <ol>
     <li>
-      <strong>Higher image resolution.</strong> The winning model (CNN3) used 32-pixel images and outperformed its 64-pixel counterpart, which suggests smaller images reduce background noise in addition to speeding up training. MobileNetV2 was tested at 64px and 128px; recall fell at the higher resolution. Testing the custom CNN at 128px and 224px would clarify whether more detail helps or hurts for this architecture and task.
-      <br><br>
-      <span style="display:inline-block; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--teal); border:1px solid var(--teal); border-radius:3px; padding:1px 6px; margin-bottom:6px; vertical-align:middle;">Caveat</span><br>
-      As any model classifies a single image in milliseconds on commodity hardware, the relevant constraint for higher resolutions is training cost rather than inference speed. If the model is updated regularly as it encounters new labs and staining conditions, training time becomes a recurring operational burden. A model that demands significant compute to retrain is poorly matched to field settings where infrastructure is limited.
-    </li>
-    <li>
-      <strong>MobileNetV2 training controls.</strong> The recall figures for both MobileNetV2 variants reflect the default decision threshold (0.5) and no class weighting, the same conditions that produced CNN2's near-zero recall before threshold tuning. Because MobileNetV2 was never trained with the CNN3 recipe, the comparison is not fully controlled. Applying those same training adjustments would determine whether MobileNetV2's performance gap is architectural (a consequence of pre-training on unrelated ImageNet photographs rather than microscope images) or a training configuration artifact that could be partially closed. In order of effort:
-      <ul style="margin-top:10px;">
-        <li><strong>Threshold tuning</strong> — MobileNetV2's AUC of 0.9833 indicates the model can discriminate between parasitized and uninfected cells; it is not learning noise. The 85% recall at the default threshold (0.5) suggests the decision boundary is poorly calibrated, not that the model lacks signal. Lowering the threshold on existing outputs requires no retraining and would quickly establish how much recall is recoverable through calibration alone. For the custom CNNs, which already exceed 99% recall, this tradeoff has diminishing returns.<br><span style="display:inline-block; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--teal); border:1px solid var(--teal); border-radius:3px; padding:1px 6px; margin-top:6px; vertical-align:middle;">Caveat</span> Lowering the threshold increases recall by accepting more false positives, not by improving the model's underlying discrimination. It is a post-hoc patch, not a structural fix.</li>
-        <li><strong>Early stopping on val_loss</strong> — retrain with the same stopping criterion used for CNN3, preventing over-optimization on accuracy at the expense of recall.</li>
-        <li><strong>Higher resolution (224px)</strong> — retrain at the resolution MobileNetV2 was originally designed for, if hardware permits. This is the highest-effort option and carries the compute concerns described in item 1.</li>
+      <strong>Model optimization experiments.</strong> Three controlled experiments are queued, all requiring no architectural changes and minimal additional compute:
+      <ul style="margin-top:8px;">
+        <li><strong>Resolution + class-weight stack.</strong> Test the custom CNN at 48px (between the 32px winner and 64px underperformer), and combine it with a higher class-weight ratio to test whether the two recall levers compound.</li>
+        <li><strong>MobileNetV2 controlled rerun.</strong> Retrain MobileNetV2 with the same recipe used for CNN3 (class weighting + early stopping on validation loss) to establish whether its recall gap is architectural or a configuration artifact.</li>
+        <li><strong>Class-weight sensitivity sweep.</strong> Test ratios from 1:3 to 1:10 across both architectures to identify the point of diminishing returns or training instability.</li>
       </ul>
-    </li>
-    <li>
-      <strong>Class weighting sensitivity.</strong> The 1:2 ratio applied in CNN3 was chosen as a reasonable starting point, not as a tuned value. Testing a range of ratios (1:3, 1:5, 1:10) across all models would identify whether higher weighting pushes recall further or introduces training instability. This applies to the custom CNNs and MobileNetV2 equally.
     </li>
     <li>
       <strong>Cross-site validation.</strong> Test-set performance only shows how the model handles images from the same source it was trained on. Running it against 500-1,000 verified slides from two different labs, with no retraining, would show how much accuracy degrades across different equipment and staining conditions. Beyond initial validation, the longer-term question is drift: new labs, new staining batches, technician variation over time. The triage loop provides a natural answer. Borderline cases routed to human review become labeled data; nightly retraining on that feedback allows the model to adapt continuously. CNN3's small parameter count and 32px input make this operationally practical on modest hardware, without requiring cloud compute or specialist infrastructure.
@@ -1473,19 +1484,23 @@ tbody tr.highlight:hover { background: rgba(78,158,120,0.12); }
       <strong>End-to-end slide pipeline.</strong> The current system requires pre-cropped individual cell images as input. A production-ready system needs a first stage that takes a full microscope photograph, locates the individual cells, and crops them automatically before passing them to the classifier. Hung et al. (2017) showed that a two-stage approach on malaria slides achieved 98% accuracy, matching expert human performance.<a href="#ref-5" class="ref-sup">[5]</a>
     </li>
     <li>
-      <strong>Image capture integration.</strong> Removing the manual cell-cropping step requires integrating with a digitally-enabled microscope that can export images directly into the pipeline. Two deployment patterns are viable and serve different program needs. In a point-of-care setting, where a patient is present and treatment decisions are immediate, synchronous classification at the moment of capture returns a result before the patient leaves. In a surveillance or population-screening setting, where throughput matters more than individual turnaround time, an asynchronous queue processes images as they accumulate, with results available for batch clinical review.       Cell segmentation is a prerequisite for both. The choice between them is a program-level decision that depends on the clinical context, staffing model, and infrastructure at each site.
+      <strong>Image capture integration.</strong> Removing the manual cell-cropping step requires integrating with a digitally-enabled microscope that can export images directly into the pipeline. Two deployment patterns are viable and serve different program needs. In a point-of-care setting, where a patient is present and treatment decisions are immediate, synchronous classification at the moment of capture returns a result before the patient leaves. In a surveillance or population-screening setting, where throughput matters more than individual turnaround time, an asynchronous queue processes images as they accumulate, with results available for batch clinical review. Cell segmentation is a prerequisite for both. The choice between them is a program-level decision that depends on the clinical context, staffing model, and infrastructure at each site.
+    </li>
+    <li>
+      <strong>Prediction confidence and uncertainty estimation.</strong> The current model outputs a sigmoid score that is used to route cells into three buckets. A more principled alternative is Monte Carlo Dropout, which runs inference multiple times with dropout active and uses the variance across runs as an explicit uncertainty estimate. Cells where the model is internally inconsistent across passes are flagged as uncertain regardless of where they fall relative to the fixed thresholds. This would reduce the threshold-setting burden and give microscopists a more interpretable signal: not just "borderline score" but "the model is uncertain on this cell." The computational overhead is modest (multiple forward passes on existing hardware) and the implementation requires no architectural change. For a submission intended to meet regulatory scrutiny, quantified uncertainty per cell provides a more principled basis for referral decisions than a fixed threshold alone.
     </li>
   </ol>
 
   <!-- ── MLOps and production monitoring ──────────────────────── -->
   <div style="background:rgba(42,127,127,0.04); border-left:3px solid var(--teal); border-radius:0 6px 6px 0; padding:14px 18px; margin:20px 0;">
     <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.09em; color:var(--teal); margin-bottom:8px;">Production Monitoring and Model Governance</div>
-    <p style="margin:0 0 8px 0;">Moving from a trained model to a reliable clinical tool requires infrastructure beyond the model itself. The following workstreams should be scoped into the Phase 2 implementation plan:</p>
+    <p style="margin:0 0 8px 0;">A model that performs well in testing can still fail in production if image quality shifts, sites use different equipment, or no one is watching for degradation. The following workstreams address each of those failure modes and should be scoped into the Phase 2 implementation plan:</p>
     <ul style="margin:0; padding-left:20px; font-size:13px; color:var(--dark); line-height:1.6;">
-      <li><strong>Model registry and versioning.</strong> Each released model version should be stored with its training dataset hash, hyperparameters, and test-set metrics. This enables rollback if a retrained model degrades on a site-specific distribution, and creates an auditable change record for regulatory review.</li>
-      <li><strong>Distribution drift monitoring.</strong> The triage referral rate is a sensitive leading indicator of distribution shift: if a new staining batch, microscope, or technician changes the image distribution, the referral rate will rise before recall degrades. A simple dashboard tracking referral rate per day against a rolling baseline is sufficient for early detection at small-volume sites.</li>
-      <li><strong>Retraining pipeline.</strong> Borderline cases reviewed by the microscopist generate labeled data continuously. A lightweight nightly retraining loop on the accumulated pilot data keeps the model adapted to site-specific conditions. CNN3-32px's small parameter count (~173,000) and 32px input make full retraining feasible in under 30 minutes on a standard laptop, without cloud compute.</li>
-      <li><strong>Reproducibility and code freeze.</strong> Before clinical deployment, the training pipeline should be locked to a specific code version, fixed random seeds, and a manifest of the training dataset. This is a prerequisite for any regulatory submission and for meaningful cross-site performance comparison.</li>
+      <li><strong>Model registry and versioning.</strong> Every deployed version is stored with its performance record, enabling rollback if a retrained model underperforms and providing the audit trail required for regulatory submissions.</li>
+      <li><strong>Distribution drift monitoring.</strong> The referral rate (the share of cells routed to the microscopist) rises before accuracy degrades when image quality changes (new equipment, different staining batch, technician variation). A simple daily dashboard against the pilot baseline is sufficient for early detection at small-volume sites.</li>
+      <li><strong>Operating-point adjustment (no retraining required).</strong> Sensitivity and referral volume can be dialed up or down at any time without rebuilding the model. A site that wants more conservative behavior routes more cases to the microscopist; one that wants lower workload routes fewer. This is the first lever to pull when a site raises concerns. Retraining is the escalation, not the default.</li>
+      <li><strong>Retraining pipeline.</strong> Every borderline cell the microscopist reviews generates a new labeled example. A nightly retraining cycle on that accumulated data keeps the model calibrated to local conditions, and the model is compact enough to retrain fully on a standard laptop in under 30 minutes without cloud infrastructure. Retraining is triggered when estimated field recall falls below 97% or referral volume rises more than 3 percentage points above the pilot baseline.</li>
+      <li><strong>Reproducibility and code freeze.</strong> Before clinical deployment, the software pipeline is locked to a documented version with a full record of the training data used, a requirement for regulatory submissions and meaningful cross-site performance comparison.</li>
     </ul>
   </div>
   <!-- ── end MLOps ──────────────────────────────────────────────── -->
@@ -1613,7 +1628,7 @@ tbody tr.highlight:hover { background: rgba(78,158,120,0.12); }
 
   <div class="callout amber">
     <div class="callout-title">Bottom line for decision-makers</div>
-    <p><span id="dyn-best-name-pilot">-</span> is ready for a structured pilot. The model is compact, high-recall, and deployable on standard hardware. The next required step is not more model development, it is a controlled pilot study at a partner lab to confirm that the <span id="dyn-cnn3-recall-s35">-</span> recall holds under real-world staining and imaging conditions, and to establish the operational workflow for borderline-case referral. A 6-month pilot with 2 sites and a $21,000–$43,000 incremental budget would provide the evidence base to support a scale decision. (Budget figures are author estimates based on comparable field deployments in low-resource settings; no published benchmark.)</p>
+    <p><span id="dyn-best-name-pilot">-</span> is ready for a structured pilot. The model is compact, high-recall, and deployable on standard hardware. The next required step is not more model development, it is a controlled pilot study at a partner lab to confirm that the <span id="dyn-cnn3-recall-s35">-</span> recall holds under real-world staining and imaging conditions, and to establish the operational workflow for borderline-case referral. A 6-month pilot with 2 sites and a $21,000-$43,000 incremental budget would provide the evidence base to support a scale decision. (Budget figures are author estimates based on comparable field deployments in low-resource settings; no published benchmark.)</p>
   </div>
 
 </section>
@@ -2281,7 +2296,7 @@ document.addEventListener('DOMContentLoaded', () => {
 <div id="rpt-modal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(10,20,20,0.82); align-items:center; justify-content:center; padding:16px;">
   <div style="background:var(--ivory); border-radius:12px; width:min(99vw,1600px); max-height:96vh; display:flex; flex-direction:column; box-shadow:0 24px 80px rgba(0,0,0,0.55); overflow:hidden;">
     <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 22px; border-bottom:1px solid rgba(90,100,117,0.15);">
-      <span style="font-size:14px; font-weight:700; color:var(--dark); text-transform:uppercase; letter-spacing:0.06em;">Triage Threshold Explorer — CNN3-32px</span>
+      <span style="font-size:14px; font-weight:700; color:var(--dark); text-transform:uppercase; letter-spacing:0.06em;">Triage Threshold Explorer: CNN3-32px</span>
       <button id="rpt-modal-close" style="background:none; border:none; font-size:22px; color:var(--mid); cursor:pointer; padding:0 4px; line-height:1;">✕</button>
     </div>
     <div style="padding:18px 22px 0;">
