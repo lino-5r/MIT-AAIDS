@@ -49,3 +49,6 @@ Thumbs.db
 
 # Allow malaria-detection figures for GitHub Pages
 !malaria-detection/*.png
+!malaria-detection/figures/*.png
+!malaria-detection/figures/*.svg
+!malaria-detection/figures/*.jpg

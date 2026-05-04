@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-04-26T13:43:53",
+  "generated_at": "2026-05-03T21:45:08",
   "dataset": {
     "train_size": 19966,
     "val_size": 4992,
     "test_size": 2600,
     "image_size": [
-      64,
-      64,
+      128,
+      128,
       3
     ],
     "classes": [
@@ -20,32 +20,41 @@
       "slug": "cnn1",
       "threshold_used": 0.5,
       "test": {
-        "accuracy": 0.9846,
-        "precision": 0.9869,
-        "recall": 0.9823,
-        "f1": 0.9846,
-        "auc_roc": 0.999,
+        "accuracy": 0.9869,
+        "precision": 0.9839,
+        "recall": 0.99,
+        "f1": 0.987,
+        "auc_roc": 0.9993,
         "confusion_matrix": [
           [
-            1283,
-            17
+            1279,
+            21
           ],
           [
-            23,
-            1277
+            13,
+            1287
           ]
         ],
-        "false_negative_rate": 0.0177,
-        "false_positive_rate": 0.0131
+        "false_negative_rate": 0.01,
+        "false_positive_rate": 0.0162
       },
       "training": {
-        "epochs_trained": 8,
-        "final_train_accuracy": 0.987,
-        "final_val_accuracy": 0.9774,
-        "final_train_loss": 0.0382,
-        "final_val_loss": 0.0685,
-        "best_val_loss": 0.0633,
-        "best_epoch": 3
+        "epochs_trained": 10,
+        "final_train_accuracy": 0.9899,
+        "final_val_accuracy": 0.978,
+        "final_train_loss": 0.0301,
+        "final_val_loss": 0.0741,
+        "best_val_loss": 0.0591,
+        "best_epoch": 5
+      },
+      "benchmark": {
+        "infer_only_ms": 19.2,
+        "pipeline_ms": 19.69,
+        "batch_100_ms": 70.76,
+        "imgs_per_sec": 1413,
+        "ram_mb": 74.7,
+        "params": 2190913,
+        "input_px": 64
       }
     },
     "cnn2": {
@@ -53,56 +62,65 @@
       "slug": "cnn2",
       "threshold_used": 0.5,
       "test": {
-        "accuracy": 0.5073,
+        "accuracy": 0.5046,
         "precision": 1.0,
-        "recall": 0.0146,
-        "f1": 0.0288,
-        "auc_roc": 0.9799,
+        "recall": 0.0092,
+        "f1": 0.0183,
+        "auc_roc": 0.9754,
         "confusion_matrix": [
           [
             1300,
             0
           ],
           [
-            1281,
-            19
+            1288,
+            12
           ]
         ],
-        "false_negative_rate": 0.9854,
+        "false_negative_rate": 0.9908,
         "false_positive_rate": 0.0
       },
       "training": {
         "epochs_trained": 5,
-        "final_train_accuracy": 0.9751,
-        "final_val_accuracy": 0.9704,
-        "final_train_loss": 0.0753,
-        "final_val_loss": 0.0846,
-        "best_val_loss": 0.0846,
+        "final_train_accuracy": 0.9734,
+        "final_val_accuracy": 0.9726,
+        "final_train_loss": 0.0794,
+        "final_val_loss": 0.087,
+        "best_val_loss": 0.087,
         "best_epoch": 5
+      },
+      "benchmark": {
+        "infer_only_ms": 18.28,
+        "pipeline_ms": 18.21,
+        "batch_100_ms": 102.86,
+        "imgs_per_sec": 972,
+        "ram_mb": 6.1,
+        "params": 173601,
+        "input_px": 64
       }
     },
     "cnn2_tuned": {
       "name": "CNN2 - Augmented (tuned threshold)",
       "slug": "cnn2_tuned",
-      "threshold_used": 0.02,
+      "threshold_used": 0.03,
       "test": {
-        "accuracy": 0.9423,
-        "precision": 0.9974,
-        "recall": 0.8869,
-        "f1": 0.9389,
-        "auc_roc": 0.9799,
+        "accuracy": 0.9488,
+        "precision": 0.9983,
+        "recall": 0.8992,
+        "f1": 0.9462,
+        "auc_roc": 0.9754,
         "confusion_matrix": [
           [
-            1297,
-            3
+            1298,
+            2
           ],
           [
-            147,
-            1153
+            131,
+            1169
           ]
         ],
-        "false_negative_rate": 0.1131,
-        "false_positive_rate": 0.0023
+        "false_negative_rate": 0.1008,
+        "false_positive_rate": 0.0015
       }
     },
     "cnn3": {
@@ -110,56 +128,43 @@
       "slug": "cnn3",
       "threshold_used": 0.5,
       "test": {
-        "accuracy": 0.9823,
-        "precision": 0.9736,
-        "recall": 0.9915,
-        "f1": 0.9825,
-        "auc_roc": 0.9993,
+        "accuracy": 0.9858,
+        "precision": 0.9817,
+        "recall": 0.99,
+        "f1": 0.9858,
+        "auc_roc": 0.9989,
         "confusion_matrix": [
           [
-            1265,
-            35
+            1276,
+            24
           ],
           [
-            11,
-            1289
+            13,
+            1287
           ]
         ],
-        "false_negative_rate": 0.0085,
-        "false_positive_rate": 0.0269
+        "false_negative_rate": 0.01,
+        "false_positive_rate": 0.0185
       },
       "training": {
-        "epochs_trained": 26,
-        "final_train_accuracy": 1.0,
-        "final_val_accuracy": 0.9806,
-        "final_train_loss": 0.0267,
-        "final_val_loss": 0.0502,
-        "best_val_loss": 0.05,
-        "best_epoch": 21,
-        "final_train_recall": 1.0,
-        "final_val_recall": 0.9845
+        "epochs_trained": 16,
+        "final_train_accuracy": 0.9688,
+        "final_val_accuracy": 0.9786,
+        "final_train_loss": 0.1773,
+        "final_val_loss": 0.0574,
+        "best_val_loss": 0.0511,
+        "best_epoch": 11,
+        "final_train_recall": 0.9737,
+        "final_val_recall": 0.9686
       },
-      "triage": {
-        "conf_low": 0.35,
-        "conf_high": 0.65,
-        "n_total": 2600,
-        "n_automated_uninf": 1254,
-        "n_automated_para": 1302,
-        "n_borderline": 44,
-        "pct_referred": 1.69,
-        "fn_in_auto_bucket": 5,
-        "parasitized_in_borderline": 13
-      },
-      "triage_full_cm": {
-        "conf_low": 0.35,
-        "conf_high": 0.65,
-        "tn_auto": 1249,
-        "fp_confident": 20,
-        "fn_confident": 5,
-        "tp_auto": 1282,
-        "referred_uninfected": 31,
-        "referred_parasitized": 13,
-        "n_total": 2600
+      "benchmark": {
+        "infer_only_ms": 19.13,
+        "pipeline_ms": 18.26,
+        "batch_100_ms": 101.2,
+        "imgs_per_sec": 988,
+        "ram_mb": 2.3,
+        "params": 173601,
+        "input_px": 64
       }
     },
     "mobilenetv2": {
@@ -167,41 +172,357 @@
       "slug": "mobilenetv2",
       "threshold_used": 0.5,
       "test": {
-        "accuracy": 0.9104,
-        "precision": 0.9709,
-        "recall": 0.8462,
-        "f1": 0.9042,
-        "auc_roc": 0.9827,
+        "accuracy": 0.93,
+        "precision": 0.9682,
+        "recall": 0.8892,
+        "f1": 0.927,
+        "auc_roc": 0.9826,
         "confusion_matrix": [
           [
-            1267,
-            33
+            1262,
+            38
           ],
           [
-            200,
-            1100
+            144,
+            1156
           ]
         ],
-        "false_negative_rate": 0.1538,
-        "false_positive_rate": 0.0254
+        "false_negative_rate": 0.1108,
+        "false_positive_rate": 0.0292
       },
       "training": {
         "epochs_trained": 5,
-        "final_train_accuracy": 0.9036,
-        "final_val_accuracy": 0.9349,
-        "final_train_loss": 0.2581,
-        "final_val_loss": 0.1734,
-        "best_val_loss": 0.1734,
+        "final_train_accuracy": 0.905,
+        "final_val_accuracy": 0.9413,
+        "final_train_loss": 0.2529,
+        "final_val_loss": 0.1585,
+        "best_val_loss": 0.1585,
         "best_epoch": 5
+      },
+      "benchmark": {
+        "infer_only_ms": 20.69,
+        "pipeline_ms": 19.67,
+        "batch_100_ms": 710.78,
+        "imgs_per_sec": 141,
+        "ram_mb": 58.4,
+        "params": 2422081,
+        "input_px": 64
+      }
+    },
+    "mobilenetv2_128": {
+      "name": "MobileNetV2 128px - Transfer Learning",
+      "slug": "mobilenetv2_128",
+      "threshold_used": 0.5,
+      "test": {
+        "accuracy": 0.8442,
+        "precision": 0.9967,
+        "recall": 0.6908,
+        "f1": 0.816,
+        "auc_roc": 0.9807,
+        "confusion_matrix": [
+          [
+            1297,
+            3
+          ],
+          [
+            402,
+            898
+          ]
+        ],
+        "false_negative_rate": 0.3092,
+        "false_positive_rate": 0.0023
+      },
+      "training": {
+        "epochs_trained": 5,
+        "final_train_accuracy": 0.9494,
+        "final_val_accuracy": 0.9327,
+        "final_train_loss": 0.1404,
+        "final_val_loss": 0.1931,
+        "best_val_loss": 0.1931,
+        "best_epoch": 5
+      },
+      "benchmark": {
+        "infer_only_ms": 22.16,
+        "pipeline_ms": 22.35,
+        "batch_100_ms": 520.81,
+        "imgs_per_sec": 192,
+        "ram_mb": 11.2,
+        "params": 2422081,
+        "input_px": 128
+      }
+    },
+    "cnn3_32": {
+      "name": "CNN3 - 32px Downscale",
+      "slug": "cnn3_32",
+      "threshold_used": 0.5,
+      "test": {
+        "accuracy": 0.9854,
+        "precision": 0.9773,
+        "recall": 0.9938,
+        "f1": 0.9855,
+        "auc_roc": 0.999,
+        "confusion_matrix": [
+          [
+            1270,
+            30
+          ],
+          [
+            8,
+            1292
+          ]
+        ],
+        "false_negative_rate": 0.0062,
+        "false_positive_rate": 0.0231
+      },
+      "training": {
+        "epochs_trained": 20,
+        "final_train_accuracy": 0.9844,
+        "final_val_accuracy": 0.981,
+        "final_train_loss": 0.0428,
+        "final_val_loss": 0.0541,
+        "best_val_loss": 0.0537,
+        "best_epoch": 15,
+        "final_train_recall": 1.0,
+        "final_val_recall": 0.9869
+      },
+      "triage": {
+        "conf_low": 0.35,
+        "conf_high": 0.65,
+        "n_total": 2600,
+        "n_automated_uninf": 1257,
+        "n_automated_para": 1304,
+        "n_borderline": 39,
+        "pct_referred": 1.5,
+        "fn_in_auto_bucket": 5,
+        "parasitized_in_borderline": 8,
+        "system_fn": 5,
+        "system_recall": 0.9962
+      },
+      "score_histogram": {
+        "bin_width": 0.01,
+        "n_bins": 100,
+        "uninfected_counts": [
+          1134,
+          25,
+          21,
+          9,
+          10,
+          6,
+          2,
+          6,
+          7,
+          3,
+          2,
+          3,
+          4,
+          1,
+          5,
+          3,
+          1,
+          0,
+          1,
+          0,
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          1,
+          2,
+          0,
+          0,
+          0,
+          1,
+          3,
+          0,
+          1,
+          0,
+          1,
+          2,
+          1,
+          1,
+          1,
+          0,
+          2,
+          2,
+          1,
+          2,
+          2,
+          1,
+          0,
+          0,
+          1,
+          1,
+          3,
+          0,
+          0,
+          1,
+          2,
+          0,
+          1,
+          0,
+          1,
+          0,
+          0,
+          1,
+          2,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          1,
+          1,
+          2
+        ],
+        "parasitized_counts": [
+          1,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          1,
+          0,
+          0,
+          2,
+          2,
+          0,
+          2,
+          3,
+          1,
+          1,
+          3,
+          1,
+          0,
+          1,
+          0,
+          5,
+          1,
+          0,
+          0,
+          0,
+          1,
+          2,
+          3,
+          3,
+          0,
+          1,
+          3,
+          2,
+          1,
+          1,
+          3,
+          0,
+          4,
+          6,
+          8,
+          11,
+          16,
+          30,
+          1172
+        ]
+      },
+      "benchmark": {
+        "infer_only_ms": 17.47,
+        "pipeline_ms": 17.86,
+        "batch_100_ms": 74.97,
+        "imgs_per_sec": 1334,
+        "ram_mb": 2.1,
+        "params": 173601,
+        "input_px": 32
       }
     }
   },
   "best_model": {
-    "slug": "cnn3",
-    "name": "CNN3 - Recall-Optimized",
-    "file": "malaria_detection_cnn3.keras",
+    "slug": "cnn3_32",
+    "name": "CNN3 - 32px Downscale",
+    "file": "malaria_detection_cnn3_32.keras",
     "selection_metric": "recall",
-    "recall": 0.9915,
-    "auc_roc": 0.9993
+    "recall": 0.9938,
+    "auc_roc": 0.999
   }
 }
