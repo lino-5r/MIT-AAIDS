@@ -1550,6 +1550,9 @@ a.ref-sup:hover { color: var(--sage); }
   <div class="main-title">Malaria Detection<br>Using Deep Learning</div>
   <div class="subtitle">Automated cell-level screening to reduce missed diagnoses in high-burden, low-resource settings</div>
   <div class="byline">Lindsay Ogden-Herrera &middot; Claros &middot; Pathology Intelligence</div>
+  <div style="margin-top:10px; font-size:12px; opacity:0.65;">
+    <a href="https://lino-5r.github.io/MIT-AAIDS/malaria-detection/presentation/Presentation_Slides.html?user=slides-pdf-link" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.85); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.35); padding-bottom:1px;">lino-5r.github.io/MIT-AAIDS &nearr;</a>
+  </div>
   <div class="headline-stat">
     <span class="big" id="dyn-s-recall">-</span>
     <span class="label">recall &amp; <span id="dyn-s-acc">-</span> overall accuracy · <span id="dyn-s-fn">-</span> missed infections out of 1,300</span>
@@ -2469,7 +2472,7 @@ function populateAll(d) {
   if (m.cnn2_tuned) set('mc-recall-cnn2t',   fmt.pct(m.cnn2_tuned.test.recall));
   if (m.cnn3)       set('mc-recall-cnn3',    fmt.pct(m.cnn3.test.recall));
   if (m.cnn3_32)    set('mc-recall-cnn3-32', fmt.pct(m.cnn3_32.test.recall));
-  const mv2best = [m.mobilenetv2, m.mobilenetv2_128].filter(Boolean)
+  const mv2best = [m.mobilenetv2, m.mobilenetv2_weighted].filter(Boolean)
     .reduce((b, x) => (!b || x.test.recall > b.test.recall) ? x : b, null);
   if (mv2best) set('mc-recall-mv2', fmt.pct(mv2best.test.recall));
 
@@ -2480,6 +2483,7 @@ function populateAll(d) {
   if (m.cnn3)       { const t=m.cnn3.test;       set('mm-cnn3-recall',    fmt.pct(t.recall)); set('mm-cnn3-fn',    fmt.int(t.confusion_matrix[1][0])); set('mm-cnn3-acc',    fmt.pct(t.accuracy)); set('mm-cnn3-auc',    fmt.dec4(t.auc_roc)); }
   if (m.cnn3_32)    { const t=m.cnn3_32.test;    set('mm-cnn3-32-recall', fmt.pct(t.recall)); set('mm-cnn3-32-fn', fmt.int(t.confusion_matrix[1][0])); set('mm-cnn3-32-acc', fmt.pct(t.accuracy)); set('mm-cnn3-32-auc', fmt.dec4(t.auc_roc)); }
   if (m.mobilenetv2){ const t=m.mobilenetv2.test; set('mm-mv2-recall',     fmt.pct(t.recall)); set('mm-mv2-fn',     fmt.int(t.confusion_matrix[1][0])); set('mm-mv2-acc',     fmt.pct(t.accuracy)); set('mm-mv2-auc',     fmt.dec4(t.auc_roc)); }
+  if (m.mobilenetv2_weighted){ const t=m.mobilenetv2_weighted.test; set('mm-mv2w-recall', fmt.pct(t.recall)); set('mm-mv2w-fn', fmt.int(t.confusion_matrix[1][0])); set('mm-mv2w-auc', fmt.dec4(t.auc_roc)); }
 
   // Slide 5 — headline stats + comparison table
   set('dyn-best-name-s5',    bestName);
@@ -2901,22 +2905,30 @@ function buildSlidesTable(d) {
     { slug: 'cnn2_tuned',      label: 'CNN2 &ndash; Augmented (threshold fixed)',        key: m.cnn2_tuned },
     { slug: 'cnn3',            label: 'CNN3 &ndash; Recall-Optimized',                  key: m.cnn3 },
     { slug: 'cnn3_32',         label: 'CNN3 &ndash; 32px Downscale',                    key: m.cnn3_32 },
-    { slug: 'mobilenetv2',     label: 'MobileNetV2 &ndash; Transfer Learning (64px)',   key: m.mobilenetv2 },
-    { slug: 'mobilenetv2_128', label: 'MobileNetV2 &ndash; Transfer Learning (128px)',  key: m.mobilenetv2_128 },
+    { slug: 'mobilenetv2',          label: 'MobileNetV2 &ndash; Transfer Learning (64px)',   key: m.mobilenetv2 },
+    { slug: 'mobilenetv2_weighted', label: 'MobileNetV2 &ndash; Class Weighted (64px)',      key: m.mobilenetv2_weighted },
   ];
   renderSlidesTable();
 }
 
 function loadResults() {
+  // Try same-directory first (works when opened directly via file://),
+  // then fall back to ../results.json (works when served from project root).
+  const tryFetch = url => fetch(url).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
   const doFetch = typeof fetch !== 'undefined'
-    ? fetch('../results.json').then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    ? tryFetch('results.json').catch(() => tryFetch('../results.json'))
     : Promise.reject(new Error('fetch unavailable'));
 
   doFetch.catch(() => new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', '../results.json', false);
-    try { xhr.send(); resolve(JSON.parse(xhr.responseText)); }
-    catch(e) { reject(e); }
+    for (const url of ['results.json', '../results.json']) {
+      try {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', url, false);
+        xhr.send();
+        if (xhr.status === 0 || xhr.status === 200) { resolve(JSON.parse(xhr.responseText)); return; }
+      } catch(e) { /* try next */ }
+    }
+    reject(new Error('results.json not found'));
   })).then(data => {
     populateAll(data);
     // populateRecommendation is called inside populateAll via _triageData assignment
@@ -3729,7 +3741,7 @@ document.addEventListener('keydown', e => {
           <div class="mm-section-label">Approach vs. custom CNNs</div>
           <div class="mm-changes">
             <div class="mm-change"><span class="mm-change-icon neutral">&#9679;</span><span>MobileNetV2 backbone frozen, then fine-tuned with top layers unfrozen</span></div>
-            <div class="mm-change"><span class="mm-change-icon neutral">&#9679;</span><span>Tested at 64px and 128px input sizes</span></div>
+            <div class="mm-change"><span class="mm-change-icon neutral">&#9679;</span><span>Tested at 64px; class-weighted variant (2&times; Parasitized penalty) also evaluated</span></div>
             <div class="mm-change"><span class="mm-change-icon sub">&minus;</span><span>ImageNet features (edges, textures, objects) do not map to Giemsa staining patterns</span></div>
             <div class="mm-change"><span class="mm-change-icon sub">&minus;</span><span>Domain gap too large for fine-tuning to fully compensate</span></div>
           </div>
@@ -3778,6 +3790,16 @@ document.addEventListener('keydown', e => {
             <span class="mm-arch-pill">Accuracy 84.4%</span>
             <span class="mm-arch-pill">AUC 0.981</span>
             <span class="mm-arch-pill" style="color:var(--coral);">Worse than 64px</span>
+          </div>
+        </div>
+        <div>
+          <div class="mm-section-label">Class Weighted variant — also tested</div>
+          <div class="mm-arch-strip">
+            <span class="mm-arch-pill key" style="background:rgba(42,127,127,0.12); color:var(--teal);">Recall <span id="mm-mv2w-recall">-</span></span>
+            <span class="mm-arch-pill key" style="background:rgba(42,127,127,0.12); color:var(--teal);"><span id="mm-mv2w-fn">-</span> missed / 1,300</span>
+            <span class="mm-arch-pill">AUC <span id="mm-mv2w-auc">-</span></span>
+            <span class="mm-arch-pill">2&times; Parasitized penalty</span>
+            <span class="mm-arch-pill" style="color:var(--coral);">Still far short of CNN3</span>
           </div>
         </div>
       </div>
@@ -3842,14 +3864,14 @@ document.addEventListener('keydown', e => {
             <div class="item"><span class="item-icon icon-good">&#10003;</span><span>Maximum workload reduction: microscopist reviews only the borderline <span id="dp-ref-inline">~1.6%</span></span></div>
             <div class="item"><span class="item-icon icon-good">&#10003;</span><span>Substantially shorter time from specimen to treatment initiation for high-confidence cases</span></div>
             <div class="item"><span class="item-icon icon-good">&#10003;</span><span>Transparent uncertainty: the model flags borderline cases rather than forcing a binary output</span></div>
-            <div class="item"><span class="item-icon icon-bad">&#10005;</span><span>Requires demonstrated calibration trust; Phase 1 pilot agreement data is a prerequisite</span></div>
+            <div class="item"><span class="item-icon icon-bad">&#10005;</span><span>Requires a microscopist present at the point of care to review borderline cases in real time</span></div>
             <div class="item"><span class="item-icon icon-bad">&#10005;</span><span>Regulatory pathway is more complex; autonomous classification needs a stronger evidence package</span></div>
           </div>
         </div>
 
         <!-- Best for — anchored to bottom -->
         <div class="path-best-for">
-          <div class="path-best-for-inner"><strong>Best for:</strong> Post-pilot deployment in resource-constrained labs where Phase 1 data confirms model reliability and clinical leadership supports autonomous classification.</div>
+          <div class="path-best-for-inner"><strong>Best for:</strong> Phase 1 pilot deployments where a microscopist is present and can immediately review borderline cases, provide feedback, and build the agreement record needed for scale.</div>
         </div>
       </div>
 
@@ -3890,7 +3912,7 @@ document.addEventListener('keydown', e => {
           <!-- Bottleneck: tall connector (dashed amber) + tall box -->
           <div class="flow-step-label amber">queue</div>
           <div class="flow-spine"><div class="flow-spine-bar dashed-amber" style="min-height:110px;"></div></div>
-          <div class="flow-box amber-soft" style="min-height:110px;"><div><div class="flow-box-title amber">Microscopist reviews all flagged cells</div><div class="flow-box-sub">Confirms or overrides every AI-positive. Bottleneck: 30-90 minutes depending on slide volume.</div></div></div>
+          <div class="flow-box amber-soft" style="min-height:110px;"><div><div class="flow-box-title amber">Microscopist reviews borderline cells only</div><div class="flow-box-sub">Only cells in the confidence borderline band (~1.6% of volume) are referred. Auto-classified cells are not re-reviewed. ~8 min per 100 slides.</div></div></div>
 
           <div class="flow-step-label teal">report</div>
           <div class="flow-spine"><div class="flow-spine-bar teal"></div></div>
@@ -3905,24 +3927,24 @@ document.addEventListener('keydown', e => {
         <div class="tradeoff-section">
           <div class="section-heading muted">Tradeoffs</div>
           <div class="tradeoff-list">
-            <div class="item"><span class="item-icon icon-good">&#10003;</span><span>Full human oversight on every positive call</span></div>
+            <div class="item"><span class="item-icon icon-good">&#10003;</span><span>Human review limited to borderline cells only (~1.6% of volume)</span></div>
             <div class="item"><span class="item-icon icon-good">&#10003;</span><span>Simpler regulatory and ethics pathway; AI is advisory only</span></div>
             <div class="item"><span class="item-icon icon-good">&#10003;</span><span>Builds institutional trust before autonomous operation</span></div>
-            <div class="item"><span class="item-icon icon-bad">&#10005;</span><span>Workload reduction is partial; all AI positives still require human confirmation</span></div>
-            <div class="item"><span class="item-icon icon-bad">&#10005;</span><span>Speed advantage constrained by the review bottleneck; no reduction in time-to-treatment for most cases</span></div>
+            <div class="item"><span class="item-icon icon-bad">&#10005;</span><span>Microscopist still required for borderline cases; full automation not yet achieved</span></div>
+            <div class="item"><span class="item-icon icon-bad">&#10005;</span><span>Speed advantage constrained by referral queue; no time-to-treatment reduction for borderline cases</span></div>
           </div>
         </div>
 
         <!-- Best for — anchored to bottom -->
         <div class="path-best-for">
-          <div class="path-best-for-inner teal"><strong>Best for:</strong> Phase 1 pilot, conservative clinical environments, regulatory submissions, and any site where trust in the model is still being established.</div>
+          <div class="path-best-for-inner teal"><strong>Best for:</strong> Phase 2 scale-up in higher-volume labs where Phase 1 agreement data confirms model reliability and the batch workflow fits the site's specimen transport logistics.</div>
         </div>
       </div>
     </div>
 
     <div class="mmodal-popup-footer">
       <span class="mmodal-popup-footer-tag">Recommendation</span>
-      <span class="mmodal-popup-footer-text">Begin with <strong>AI-Assisted Screening</strong> during the Phase 1 pilot to build the evidence base and institutional trust. Layer on <strong>AI Triage Mode</strong> at the Phase 2 gate once agreement rates meet both threshold criteria.</span>
+      <span class="mmodal-popup-footer-text">Begin with <strong>AI Triage Mode</strong> during the Phase 1 pilot — the immediate human review loop generates labeled data and builds clinical trust. Evaluate <strong>AI-Assisted Batch Screening</strong> at the Phase 2 gate for higher-volume deployment once model reliability is confirmed.</span>
     </div>
   </div>
 </div>

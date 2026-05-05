@@ -695,7 +695,7 @@ tbody tr.highlight:hover { background: rgba(78,158,120,0.12); }
       <span class="meta-chip best">Recommended model: <span id="dyn-best-name-chip">-</span> &middot; <span id="dyn-recall-pct">-</span> recall</span>
     </div>
     <div class="header-live-link">
-      <a href="https://lino-5r.github.io/MIT-AAIDS/malaria-detection/presentation/Final_Report.html" target="_blank" rel="noopener">
+      <a href="https://lino-5r.github.io/MIT-AAIDS/malaria-detection/presentation/Final_Report.html?user=report-pdf-link" target="_blank" rel="noopener">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>View interactive report at lino-5r.github.io/MIT-AAIDS
       </a>
     </div>
@@ -801,7 +801,7 @@ tbody tr.highlight:hover { background: rgba(78,158,120,0.12); }
 
   <p><strong>Finding 3: Retraining with a corrected cost structure eliminated the need for a threshold patch.</strong> CNN3 keeps CNN2's design identical and changes only one thing in training: a missed infection is penalized twice as heavily as a false alarm. Where CNN2 required a post-hoc threshold adjustment to recover recall, CNN3 achieves <span id="dyn-cnn3-recall-2">-</span> detection at the default threshold, with only <span id="dyn-cnn3-fn">-</span> missed infections out of 1,300 infected test cells and overall accuracy (<span id="dyn-cnn3-acc-f3">-</span>) comparable to the baseline. The class weighting trained the model to commit to its own signal, so no calibration patch was needed. Because everything else is identical to CNN2, this result isolates the cause: re-weighting the cost of errors during training fixed what a threshold adjustment could only compensate for.</p>
 
-  <p><strong>Finding 4: A pre-trained industry model underperformed the custom approach.</strong> MobileNetV2, a well-regarded AI model pre-trained on 1.28 million everyday photographs, achieved only <span id="dyn-mv2-recall">-</span> detection (<span id="dyn-mv2-fn">-</span> missed infections) despite a competitive overall score of <span id="dyn-mv2-auc">-</span>. The likely explanation: what it learned from photographs of cats, cars, and landscapes doesn't translate well to microscope images of stained blood cells at this scale. A model trained from scratch on the specific task outperformed one that arrived pre-loaded with unrelated knowledge. MobileNetV2 was also tested at 128px; recall fell further to approximately 72%. Higher resolution did not help.</p>
+  <p><strong>Finding 4: A pre-trained industry model underperformed the custom approach.</strong> MobileNetV2, a well-regarded AI model pre-trained on 1.28 million everyday photographs, achieved only <span id="dyn-mv2-recall">-</span> detection (<span id="dyn-mv2-fn">-</span> missed infections) despite a competitive overall score of <span id="dyn-mv2-auc">-</span>. The likely explanation: what it learned from photographs of cats, cars, and landscapes doesn't translate well to microscope images of stained blood cells at this scale. A model trained from scratch on the specific task outperformed one that arrived pre-loaded with unrelated knowledge. Applying class weighting to MobileNetV2 (the same technique that elevated CNN3 to 99% recall) raised detection to <span id="dyn-mv2w-recall">-</span> — a meaningful gain, but still far short of the custom model. The gap is architectural, not a training configuration artifact.</p>
 
   <p><strong>Finding 5: Using smaller images produced the best result in the study.</strong> CNN3-32px keeps everything from CNN3 identical and changes only the input image size, from 64 to 32 pixels. The result is the best-performing model: <span id="dyn-cnn3-32-recall-f5">-</span> detection with only <span id="dyn-cnn3-32-fn-f5">-</span> missed infections, a discrimination score of <span id="dyn-cnn3-32-auc-f5">-</span>, and a smaller, faster model. The mechanism is not fully understood, but smaller images appear to reduce background noise and focus the model on the parasite itself rather than surrounding cell detail.</p>
 
@@ -846,7 +846,17 @@ tbody tr.highlight:hover { background: rgba(78,158,120,0.12); }
 
   <p>The complete model performance comparison across all evaluated architectures is shown below.</p>
 
-  <table>
+  <table style="table-layout:fixed; width:100%;">
+    <colgroup>
+      <col style="width:28%;">
+      <col style="width:9%;">
+      <col style="width:11%;">
+      <col style="width:9%;">
+      <col style="width:9%;">
+      <col style="width:14%;">
+      <col style="width:10%;">
+      <col style="width:10%;">
+    </colgroup>
     <thead id="final-comparison-thead">
       <tr>
         <th onclick="sortComparisonTable(0)">Model<span class="sort-arrow"></span></th>
@@ -856,7 +866,7 @@ tbody tr.highlight:hover { background: rgba(78,158,120,0.12); }
         <th onclick="sortComparisonTable(4)">AUC-ROC<span class="sort-arrow"></span></th>
         <th onclick="sortComparisonTable(5)">ms / image (pipeline)<span class="sort-arrow"></span></th>
         <th onclick="sortComparisonTable(6)">RAM (MB)<span class="sort-arrow"></span></th>
-        <th onclick="sortComparisonTable(7)">Parameters<span class="sort-arrow"></span></th>
+        <th onclick="sortComparisonTable(7)">Params<span class="sort-arrow"></span></th>
       </tr>
     </thead>
     <tbody id="final-comparison-tbody"><tr><td colspan="8" style="color:var(--muted);font-style:italic;padding:16px">Loading…</td></tr></tbody>
@@ -1594,7 +1604,7 @@ tbody tr.highlight:hover { background: rgba(78,158,120,0.12); }
     </div>
     <div class="risk-card">
       <div class="risk-title">Regulatory and liability pathway</div>
-      <div class="risk-body">Clinical diagnostic software requires regulatory clearance in most jurisdictions (FDA, CE-IVD, and local equivalents). This prototype has not been submitted for review. The two deployment paths carry different burdens: Path B, where the model is advisory and a microscopist confirms borderline results, follows a lighter decision-support pathway. Path A, where the model autonomously classifies the majority of cases, requires a stronger evidence package. Beginning under Path B is not merely a conservative operational choice; it generates the documented clinical performance data that any Path A submission will require.</div>
+      <div class="risk-body">Clinical diagnostic software requires regulatory clearance in most jurisdictions (FDA, CE-IVD, and local equivalents). This prototype has not been submitted for review. The two deployment paths carry different burdens: Path A (AI Triage Mode), where a microscopist is present and reviews borderline cases in real time, follows a lighter decision-support pathway and is the correct starting point for the Phase 1 pilot. Path B (AI-Assisted Batch Screening), where the model processes slides autonomously in volume without a microscopist at point of care, requires a stronger evidence package. Beginning under Path A is not merely the conservative operational choice; it generates the documented clinical performance data that any Path B submission will require.</div>
     </div>
   </div>
 
@@ -1607,7 +1617,7 @@ tbody tr.highlight:hover { background: rgba(78,158,120,0.12); }
       <strong>Model optimization experiments.</strong> Three controlled experiments are queued, all requiring no architectural changes and minimal additional compute:
       <ul style="margin-top:8px;">
         <li><strong>Resolution + class-weight stack.</strong> Test the custom CNN at 48px (between the 32px winner and 64px underperformer), and combine it with a higher class-weight ratio to test whether the two recall levers compound.</li>
-        <li><strong>MobileNetV2 controlled rerun.</strong> Retrain MobileNetV2 with the same recipe used for CNN3 (class weighting + early stopping on validation loss) to establish whether its recall gap is architectural or a configuration artifact.</li>
+        <li><strong>MobileNetV2 class-weight sensitivity sweep.</strong> The controlled rerun with CNN3's class weighting recipe raised MobileNetV2 recall from <span id="dyn-mv2-recall-s35">-</span> to <span id="dyn-mv2w-recall-s35">-</span>, confirming the gap is primarily architectural. A sweep of higher weight ratios (1:3 to 1:10) would test whether further configuration changes can close it.</li>
         <li><strong>Class-weight sensitivity sweep.</strong> Test ratios from 1:3 to 1:10 across both architectures to identify the point of diminishing returns or training instability.</li>
       </ul>
     </li>
@@ -1879,6 +1889,11 @@ function populateAll(d) {
   set('dyn-mv2-auc-cap',      fmt.dec4(m.mobilenetv2.test.auc_roc));
   set('dyn-mv2-fn',           fmt.int(m.mobilenetv2.test.confusion_matrix[1][0]));
   set('dyn-mv2-auc',          fmt.dec4(m.mobilenetv2.test.auc_roc));
+  if (m.mobilenetv2_weighted) {
+    set('dyn-mv2w-recall',      fmt.pct(m.mobilenetv2_weighted.test.recall));
+    set('dyn-mv2w-recall-s35',  fmt.pct(m.mobilenetv2_weighted.test.recall));
+  }
+  set('dyn-mv2-recall-s35',   fmt.pct(m.mobilenetv2.test.recall));
 
   // Figure 1/2 captions (CNN3 64px + CNN3-32px paired in §2.2)
   set('dyn-cnn3-tp',          fmt.int(m.cnn3.test.confusion_matrix[1][1]));
@@ -1896,7 +1911,7 @@ function populateAll(d) {
   }
 
   // Model specs table — driven by best_model
-  const inputSizeMap = { cnn3_32: '32x32', cnn3: '64x64', mobilenetv2: '64x64', mobilenetv2_128: '128x128' };
+  const inputSizeMap = { cnn3_32: '32x32', cnn3: '64x64', mobilenetv2: '64x64', mobilenetv2_weighted: '64x64' };
   set('dyn-best-input-size',      inputSizeMap[bestSlug] || '64x64');
   set('dyn-best-input-size-spec',  inputSizeMap[bestSlug] || '64x64');
   set('dyn-best-input-size-spec2', inputSizeMap[bestSlug] || '64x64');
@@ -2273,7 +2288,7 @@ function renderComparisonRows() {
     const mb  = b ? b.ram_mb.toFixed(1) : '<span style="color:var(--muted)">—</span>';
     const par = b ? (b.params >= 1e6 ? (b.params/1e6).toFixed(2)+'M' : (b.params/1e3).toFixed(0)+'K') : '<span style="color:var(--muted)">—</span>';
     return `<tr${isBest ? ' class="highlight"' : ''}>
-      <td>${isBest ? `<strong>${r.label}</strong> <span class="badge-best">Recommended</span>` : r.label}</td>
+      <td>${isBest ? `<strong>${r.label.replace(' (','<br>(')}</strong> <span class="badge-best">Recommended</span>` : r.label.replace(' (','<br>(')}</td>
       <td${t.recall === bestRecall ? ' style="font-weight:700;color:var(--sage)"' : ''}>${fmt.pct(t.recall)}</td>
       <td>${fmt.int(fn)}</td>
       <td>${fmt.pct(t.accuracy)}</td>
@@ -2306,8 +2321,8 @@ function buildComparisonTable(d) {
                                                                                     thresh: 'tuned',         key: m.cnn2_tuned },
     { slug: 'cnn3',           label: 'CNN3 &ndash; Recall-Optimized',             thresh: 'default (0.5)', key: m.cnn3 },
     { slug: 'cnn3_32',        label: 'CNN3 &ndash; 32px Downscale',               thresh: 'default (0.5)', key: m.cnn3_32 },
-    { slug: 'mobilenetv2',    label: 'MobileNetV2 &ndash; Fine-tuned (64px)',     thresh: 'default (0.5)', key: m.mobilenetv2 },
-    { slug: 'mobilenetv2_128',label: 'MobileNetV2 &ndash; Fine-tuned (128px)',    thresh: 'default (0.5)', key: m.mobilenetv2_128 },
+    { slug: 'mobilenetv2',          label: 'MobileNetV2 &ndash; Fine-tuned (64px)',        thresh: 'default (0.5)', key: m.mobilenetv2 },
+    { slug: 'mobilenetv2_weighted', label: 'MobileNetV2 &ndash; Class Weighted (64px)',    thresh: 'default (0.5)', key: m.mobilenetv2_weighted },
   ];
   _cmpBest = d.best_model ? d.best_model.slug : 'cnn3_32';
   _cmpRows = rows;
