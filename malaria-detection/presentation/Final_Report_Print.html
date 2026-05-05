@@ -2219,12 +2219,12 @@ const notice = document.getElementById('data-notice');
 
 function loadResults() {
   const doFetch = typeof fetch !== 'undefined'
-    ? fetch('../results.json').then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    ? fetch('results.json').then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
     : Promise.reject(new Error('fetch unavailable'));
 
   doFetch.catch(() => new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', '../results.json', false);
+    xhr.open('GET', 'results.json', false);
     try { xhr.send(); resolve(JSON.parse(xhr.responseText)); }
     catch(e) { reject(e); }
   })).then(data => {
