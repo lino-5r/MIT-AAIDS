@@ -49,17 +49,27 @@ header {
   color: var(--white);
 }
 
-.claros-wordmark {
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.55);
-  margin-bottom: 14px;
+.header-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 20px;
 }
 
-.claros-wordmark span {
-  color: var(--amber);
+.logo-name {
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.9);
+}
+
+.logo-tagline {
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
 }
 
 header h1 {
@@ -240,7 +250,16 @@ footer {
 <body>
 
 <header>
-  <div class="claros-wordmark"><span>Claros</span> · MIT Applied AI &amp; Data Science Program</div>
+  <div class="header-logo">
+    <svg viewBox="0 0 72 72" width="72" height="72" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Claros logo">
+      <circle cx="36" cy="36" r="32" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="5"/>
+      <circle cx="36" cy="36" r="32" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <circle cx="36" cy="36" r="20" fill="none" stroke="#E8A838" stroke-width="4.5"/>
+      <circle cx="43" cy="29" r="4" fill="#D95F4B"/>
+    </svg>
+    <div class="logo-name">CLAROS</div>
+    <div class="logo-tagline">Pathology Intelligence</div>
+  </div>
   <h1>Malaria Cell Detection<br>with Deep Learning</h1>
   <p class="subtitle">A binary image classification pipeline for automated Parasitized / Uninfected cell diagnosis using convolutional neural networks.</p>
 </header>
