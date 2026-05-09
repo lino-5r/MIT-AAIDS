@@ -119,8 +119,9 @@ header p.subtitle {
 
 /* ── META BAR ── */
 .meta-bar {
-  background: rgba(0,0,0,0.30);
-  padding: 10px 24px;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 11px 24px;
   display: flex;
   justify-content: center;
   gap: 32px;
@@ -129,14 +130,15 @@ header p.subtitle {
 
 .meta-bar span {
   font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  color: rgba(255,255,255,0.75);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--mid);
 }
 
 .meta-bar span b {
-  color: rgba(255,255,255,0.97);
+  color: var(--dark);
   font-weight: 700;
+  margin-right: 3px;
 }
 
 /* ── MAIN ── */
