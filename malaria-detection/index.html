@@ -2,6 +2,34 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<script id="__page-ctx" type="application/json">
+{
+  "page_id": "malaria-index",
+  "page_type": "landing-page",
+  "primary_entity": "proj_malaria-detection",
+  "modules_rendered": ["index-card"],
+  "locale": "en-US",
+  "market": "claros",
+  "session": { "interactionCount": 0 },
+  "ddo": {
+    "enabled": true,
+    "endpointUrl": "https://lino-strategy-apps.vercel.app/api/analytics-event"
+  },
+  "registry": {
+    "components": [
+      {
+        "component_id": "index-card",
+        "component_category": "navigation",
+        "events": [
+          { "event_name": "component_view", "trigger": "impression" },
+          { "event_name": "cta_click",      "trigger": "open-document" }
+        ]
+      }
+    ]
+  }
+}
+</script>
+<script src="https://lino-strategy-apps.vercel.app/driven_global-strategy/analytics-core.js"></script>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="alternate icon" type="image/x-icon" href="favicon.ico">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -276,7 +304,13 @@ footer {
 
   <div class="cards">
 
-    <a class="card" href="milestone-report.html">
+    <a class="card" href="milestone-report.html"
+      data-component="index-card"
+      data-component-version="1.0"
+      data-component-category="navigation"
+      data-component-instance="milestone"
+      data-cta-action="open-document"
+      data-cta-label="Milestone Submission Report">
       <span class="card-badge badge-milestone">Milestone Report</span>
       <div class="card-icon">📋</div>
       <h2>Milestone Submission Report</h2>
@@ -287,7 +321,13 @@ footer {
       </span>
     </a>
 
-    <a class="card" href="presentation/Final_Report.html">
+    <a class="card" href="presentation/Final_Report.html"
+      data-component="index-card"
+      data-component-version="1.0"
+      data-component-category="navigation"
+      data-component-instance="final-report"
+      data-cta-action="open-document"
+      data-cta-label="Final Submission Report">
       <span class="card-badge badge-report">Final Report</span>
       <div class="card-icon">📄</div>
       <h2>Final Submission Report</h2>
@@ -298,7 +338,13 @@ footer {
       </span>
     </a>
 
-    <a class="card" href="presentation/Presentation_Slides.html">
+    <a class="card" href="presentation/Presentation_Slides.html"
+      data-component="index-card"
+      data-component-version="1.0"
+      data-component-category="navigation"
+      data-component-instance="presentation"
+      data-cta-action="open-document"
+      data-cta-label="Final Presentation Slides">
       <span class="card-badge badge-slides">Presentation</span>
       <div class="card-icon">🎞️</div>
       <h2>Final Presentation Slides</h2>
@@ -314,7 +360,8 @@ footer {
   <div class="about">
     <h3>About this project</h3>
     <p>This is the capstone project for the MIT Applied AI and Data Science Program (2026). The goal was to build and evaluate a deep learning pipeline for binary malaria cell classification — Parasitized vs. Uninfected — using the publicly available NIH cell image dataset of 27,558 Giemsa-stained blood smear images.</p>
-    <p>Six model variants were evaluated, including baseline CNNs, augmented and class-weighted variants, and a MobileNetV2 transfer learning experiment. The recommended model, CNN3 trained at 32×32px with class weighting, achieved 99.69% recall (4 false negatives in 1,300 test images) with an AUC of 0.999. All figures and metrics are generated programmatically from the <a href="https://github.com/lino-5r/MIT-AAIDS" target="_blank" rel="noopener">source notebook</a>.</p>
+    <p>Six model variants were evaluated, including baseline CNNs, augmented and class-weighted variants, and a MobileNetV2 transfer learning experiment. The recommended model, CNN3 trained at 32×32px with class weighting, achieved 99.69% recall (4 false negatives in 1,300 test images) with an AUC of 0.999. All figures and metrics are generated programmatically from the <a href="https://github.com/lino-5r/MIT-AAIDS" target="_blank" rel="noopener"
+      data-cta-action="external-link" data-cta-label="GitHub source notebook">source notebook</a>.</p>
     <p>Fictitious NGO branding: <strong>Claros</strong> — focused on improved pathology outcomes in developing countries.</p>
   </div>
 </main>
