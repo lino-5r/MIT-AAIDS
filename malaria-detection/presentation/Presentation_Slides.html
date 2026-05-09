@@ -3459,39 +3459,32 @@ document.addEventListener('keydown', e => {
     <div class="mmodal-body">
       <div class="mmodal-left">
         <div class="mm-summary">Added regularization and augmentation to reduce overfitting. AUC improved, but recall collapsed. The model can distinguish classes; the default threshold cannot.</div>
-        <div>
+        <div style="position:relative">
           <div class="mm-section-label">Changes vs. CNN1</div>
-          <div style="display:flex;align-items:flex-start;gap:14px">
-            <div class="mm-changes" style="flex:1;min-width:0">
-              <div class="mm-change"><span class="mm-change-icon add">+</span><span>Data augmentation: horizontal flip, zoom, brightness shift</span></div>
-              <div class="mm-change"><span class="mm-change-icon add">+</span><span>BatchNorm after each Conv block</span></div>
-              <div class="mm-change"><span class="mm-change-icon add">+</span><span>Dropout(0.4) before output</span></div>
-              <div class="mm-change"><span class="mm-change-icon sub">&minus;</span><span>Sigmoid miscalibration: recall collapses at threshold 0.5</span></div>
-            </div>
-            <svg viewBox="0 0 64 186" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;width:64px;height:auto" aria-label="Horizontal flip augmentation illustration">
-              <!-- "original" label -->
-              <text x="32" y="9" text-anchor="middle" font-size="7.5" fill="#8a94a0" font-family="Inter,system-ui,sans-serif" letter-spacing="0.04em">original</text>
-              <!-- Top cell frame -->
-              <rect x="2" y="13" width="60" height="52" rx="6" fill="#e4f3f6" stroke="#1A6B7C" stroke-width="1.5"/>
-              <circle cx="32" cy="39" r="20" fill="none" stroke="#1A6B7C" stroke-width="1.5" opacity="0.6"/>
-              <!-- Parasite ring — upper-right -->
-              <circle cx="41" cy="31" r="6" fill="none" stroke="#E8A838" stroke-width="1.8"/>
-              <circle cx="41" cy="31" r="2.5" fill="#D95F4B"/>
-              <!-- Arrow: dashed line, gap for label, arrowhead -->
-              <line x1="32" y1="67" x2="32" y2="82" stroke="#5a6475" stroke-width="1.5" stroke-dasharray="3 2"/>
-              <text x="32" y="92" text-anchor="middle" font-size="7.5" fill="#8a94a0" font-family="Inter,system-ui,sans-serif" letter-spacing="0.05em">H-FLIP</text>
-              <line x1="32" y1="96" x2="32" y2="110" stroke="#5a6475" stroke-width="1.5" stroke-dasharray="3 2"/>
-              <polygon points="28,111 36,111 32,119" fill="#5a6475"/>
-              <!-- Bottom cell frame -->
-              <rect x="2" y="121" width="60" height="52" rx="6" fill="#e4f3f6" stroke="#1A6B7C" stroke-width="1.5"/>
-              <circle cx="32" cy="147" r="20" fill="none" stroke="#1A6B7C" stroke-width="1.5" opacity="0.6"/>
-              <!-- Parasite ring — mirrored to upper-left -->
-              <circle cx="23" cy="139" r="6" fill="none" stroke="#E8A838" stroke-width="1.8"/>
-              <circle cx="23" cy="139" r="2.5" fill="#D95F4B"/>
-              <!-- "augmented" label -->
-              <text x="32" y="183" text-anchor="middle" font-size="7.5" fill="#8a94a0" font-family="Inter,system-ui,sans-serif" letter-spacing="0.04em">augmented</text>
-            </svg>
+          <div class="mm-changes" style="padding-right:56px">
+            <div class="mm-change"><span class="mm-change-icon add">+</span><span>Data augmentation: horizontal flip, zoom, brightness shift</span></div>
+            <div class="mm-change"><span class="mm-change-icon add">+</span><span>BatchNorm after each Conv block</span></div>
+            <div class="mm-change"><span class="mm-change-icon add">+</span><span>Dropout(0.4) before output</span></div>
+            <div class="mm-change"><span class="mm-change-icon sub">&minus;</span><span>Sigmoid miscalibration: recall collapses at threshold 0.5</span></div>
           </div>
+          <svg viewBox="0 0 64 186" xmlns="http://www.w3.org/2000/svg"
+               style="position:absolute;top:18px;right:0;width:48px;height:auto;pointer-events:none"
+               aria-label="Horizontal flip augmentation illustration">
+            <text x="32" y="9" text-anchor="middle" font-size="7.5" fill="#8a94a0" font-family="Inter,system-ui,sans-serif" letter-spacing="0.04em">original</text>
+            <rect x="2" y="13" width="60" height="52" rx="6" fill="#e4f3f6" stroke="#1A6B7C" stroke-width="1.5"/>
+            <circle cx="32" cy="39" r="20" fill="none" stroke="#1A6B7C" stroke-width="1.5" opacity="0.6"/>
+            <circle cx="41" cy="31" r="6" fill="none" stroke="#E8A838" stroke-width="1.8"/>
+            <circle cx="41" cy="31" r="2.5" fill="#D95F4B"/>
+            <line x1="32" y1="67" x2="32" y2="82" stroke="#5a6475" stroke-width="1.5" stroke-dasharray="3 2"/>
+            <text x="32" y="92" text-anchor="middle" font-size="7.5" fill="#8a94a0" font-family="Inter,system-ui,sans-serif" letter-spacing="0.05em">H-FLIP</text>
+            <line x1="32" y1="96" x2="32" y2="110" stroke="#5a6475" stroke-width="1.5" stroke-dasharray="3 2"/>
+            <polygon points="28,111 36,111 32,119" fill="#5a6475"/>
+            <rect x="2" y="121" width="60" height="52" rx="6" fill="#e4f3f6" stroke="#1A6B7C" stroke-width="1.5"/>
+            <circle cx="32" cy="147" r="20" fill="none" stroke="#1A6B7C" stroke-width="1.5" opacity="0.6"/>
+            <circle cx="23" cy="139" r="6" fill="none" stroke="#E8A838" stroke-width="1.8"/>
+            <circle cx="23" cy="139" r="2.5" fill="#D95F4B"/>
+            <text x="32" y="183" text-anchor="middle" font-size="7.5" fill="#8a94a0" font-family="Inter,system-ui,sans-serif" letter-spacing="0.04em">augmented</text>
+          </svg>
         </div>
         <div>
           <div class="mm-section-label">Test set performance</div>
